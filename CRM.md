@@ -10,11 +10,25 @@
 - cd to CRM Backend directory
 - do `docker pull composer` 
 - do `docker run --rm --interactive --tty --volume $PWD:/app composer install`
+- Build the docker container `./vendor/bil/sail build --no-cache`
+- copy .env.example to .env `cp .env.example .env`
+- Run docker container for the first time `./vendor/bin/sail up -d`
+- do `./vendor/bin/sail artisan key:generate`
+- do `./vendor/bin/sail artisan migrate`
 
 ## Running the development server
 
 Refer to documentation of [sail](https://laravel.com/docs/9.x/sail)
 
-- cd to the CRM Backend directory
-- do `./vendor/bin/sail up` or `./vendor/bin/sail up -d` 
+- Change directory to the CRM Backend directory
+- do `./vendor/bin/sail up`
+
+## Database configuration
+Default database is postgresql, the configuration should be inside .env file.
+
+## Docker clean up
+- `vendor/bin/sail down`
+- `docker rm -f $(docker ps -a -q)`
+- `docker volume rm $(docker volume ls -q)`
+
 
