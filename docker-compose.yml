@@ -93,7 +93,7 @@ services:
     nextjs:
         image: 'node:16-alpine'
         build:
-            context: ../frontend/
+            context: ../crm-frontend/
             dockerfile: Dockerfile
         command: 'npm run dev'
         ports:
