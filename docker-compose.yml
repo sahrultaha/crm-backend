@@ -98,6 +98,8 @@ services:
         command: 'npm run dev'
         ports:
             - '3000:3000'
+        volumes:
+            - 'sail-nextjs:/app'
         networks:
             - sail
 networks:
@@ -109,4 +111,6 @@ volumes:
     sail-redis:
         driver: local
     sail-minio:
+        driver: local
+    sail-nextjs:
         driver: local
