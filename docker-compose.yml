@@ -92,14 +92,11 @@ services:
             - sail
     nextjs:
         image: 'node:16-alpine'
-        build:
-            context: ../crm-frontend/
-            dockerfile: Dockerfile
         command: 'npm run dev'
         ports:
             - '3000:3000'
         volumes:
-            - 'sail-nextjs:/app'
+            - '../crm-frontend:/app'
         networks:
             - sail
 networks:
