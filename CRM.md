@@ -7,6 +7,8 @@
 
 ## First Installation
 - clone CRM Backend and CRM frontend on the same directory
+- cd to CRM Frontend directory
+- do `docker run --rm --interactive --tty --volume $PWD:/app node:16-alpine npm install`
 - cd to CRM Backend directory
 - do `docker pull composer` 
 - do `docker run --rm --interactive --tty --volume $PWD:/app composer install`
