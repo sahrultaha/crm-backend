@@ -97,6 +97,7 @@ services:
             - '3000:3000'
         volumes:
             - '../crm-frontend:/app'
+        working_dir: /app
         networks:
             - sail
 networks:
