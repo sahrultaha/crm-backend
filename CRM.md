@@ -9,6 +9,7 @@
 - clone CRM Backend and CRM frontend on the same directory
 - cd to CRM Frontend directory
 - do `docker run --rm --interactive --tty --volume $PWD:/app node:16-alpine npm install`
+- copy .env.example to .env `cp .env.example .env`
 - cd to CRM Backend directory
 - do `docker pull composer` 
 - do `docker run --rm --interactive --tty --volume $PWD:/app composer install`
@@ -16,7 +17,7 @@
 - copy .env.example to .env `cp .env.example .env`
 - Run docker container for the first time `./vendor/bin/sail up -d`
 - do `./vendor/bin/sail artisan key:generate`
-- do `./vendor/bin/sail artisan migrate`
+- do `./vendor/bin/sail artisan migrate --seed`
 
 ## Running the development server
 
