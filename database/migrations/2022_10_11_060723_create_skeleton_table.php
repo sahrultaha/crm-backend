@@ -78,18 +78,20 @@ return new class extends Migration
             $table->foreign('imsi_status_id')->references('id')->on('imsi_status');
             $table->foreign('imsi_type_id')->references('id')->on('imsi_type');
         });
-        Schema::create('package_type', function (Blueprint $table) {
+        Schema::create('pack_type', function (Blueprint $table) {
             $table->smallIncrements('id');
             $table->string('name');
         });
-        Schema::create('package', function (Blueprint $table) {
+        Schema::create('pack', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('number_id');
-            $table->bigInteger('imsi_id');
+            $table->bigInteger('imsi_id')->nullable();
+            $table->smallInteger('pack_type_id')->nullable();
             $table->date('installation_date');
             $table->date('expiry_date');
             $table->foreign('number_id')->references('id')->on('number');
             $table->foreign('imsi_id')->references('id')->on('imsi');
+            $table->foreign('pack_type_id')->references('id')->on('pack_type');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -103,25 +105,39 @@ return new class extends Migration
         });
         Schema::create('subscription', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('number_id');
-            $table->bigInteger('imsi_id')->nullable();
-            $table->bigInteger('package_id')->nullable();
             $table->bigInteger('customer_id');
             $table->date('registration_date');
             $table->smallInteger('subscription_status_id');
             $table->smallInteger('subscription_type_id');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('package_id')->references('id')->on('package');
             $table->foreign('customer_id')->references('id')->on('customer');
-            $table->foreign('imsi_id')->references('id')->on('imsi');
-            $table->foreign('number_id')->references('id')->on('number');
-            $table->index('package_id');
+            $table->foreign('subscription_status_id')
+                ->references('id')
+                ->on('subscription_status');
+            $table->foreign('subscription_type_id')
+                ->references('id')
+                ->on('subscription_type');
             $table->index('customer_id');
-            $table->index('imsi_id');
-            $table->index('number_id');
             $table->index('subscription_status_id');
             $table->index('subscription_type_id');
+        });
+        Schema::create('subscription_number', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('subscription_id');
+            $table->bigInteger('number_id');
+            $table->bigInteger('imsi_id');
+            $table->date('activation_date');
+            $table->timestamps();
+            $table->softDeletes();
+            $table->foreign('subscription_id')
+                ->references('id')
+                ->on('subscription');
+            $table->foreign('number_id')->references('id')->on('number');
+            $table->foreign('imsi_id')->references('id')->on('imsi');
+            $table->index('subscription_id');
+            $table->index('number_id');
+            $table->index('imsi_id');
         });
     }
 
@@ -132,11 +148,12 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('subscription_number');
         Schema::dropIfExists('subscription_status');
         Schema::dropIfExists('subscription_type');
         Schema::dropIfExists('subscription');
-        Schema::dropIfExists('package');
-        Schema::dropIfExists('package_type');
+        Schema::dropIfExists('pack');
+        Schema::dropIfExists('pack_type');
         Schema::dropIfExists('number');
         Schema::dropIfExists('number_type');
         Schema::dropIfExists('number_status');
