@@ -10,6 +10,10 @@ class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected $seed = [
+        \Database\Seeders\User::class,
+    ];
+
     public function test_users_can_authenticate_using_the_login_screen()
     {
         $user = User::factory()->create();
@@ -17,6 +21,17 @@ class AuthenticationTest extends TestCase
         $response = $this->post('/login', [
             'email' => $user->email,
             'password' => 'password',
+        ]);
+
+        $this->assertAuthenticated();
+        $response->assertNoContent();
+    }
+
+    public function test_admin_can_authenticate_using_the_login_screen()
+    {
+        $response = $this->post('/login', [
+            'email' => env('ADMIN_EMAIL'),
+            'password' => env('ADMIN_PASSWORD'),
         ]);
 
         $this->assertAuthenticated();
