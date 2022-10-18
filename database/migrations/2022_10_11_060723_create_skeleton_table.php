@@ -21,11 +21,16 @@ return new class extends Migration
             $table->smallIncrements('id');
             $table->string('name');
         });
+        Schema::create('communication_channel', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->string('name');
+        });
         Schema::create('contact_preference', function (Blueprint $table) {
             $table->smallIncrements('id');
             $table->bigInteger('customer_id');
-            $table->string('name');
+            $table->smallInteger('communication_channel_id');
             $table->foreign('customer_id')->references('id')->on('customer');
+            $table->foreign('communication_channel_id')->references('id')->on('communication_channel');
         });
         Schema::create('country', function (Blueprint $table) {
             $table->smallIncrements('id');
@@ -181,6 +186,7 @@ return new class extends Migration
         Schema::dropIfExists('customer_title');
         Schema::dropIfExists('ic_type');
         Schema::dropIfExists('ic_color');
+        Schema::dropIfExists('communication_channel');
         Schema::dropIfExists('contact_preference');
         Schema::dropIfExists('country');
     }

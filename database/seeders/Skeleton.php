@@ -38,6 +38,20 @@ class Skeleton extends Seeder
                 'name' => 'Green',
             ],
         ]);
+        DB::table('communication_channel')->insert([
+            [
+                'id' => 1,
+                'name' => 'Sms',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Email',
+            ],
+            [
+                'id' => 3,
+                'name' => 'WhatsApp',
+            ],
+        ]);
         DB::table('country')->insert([
             [
                 'id' => 1,
