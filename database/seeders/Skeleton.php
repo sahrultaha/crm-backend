@@ -62,6 +62,16 @@ class Skeleton extends Seeder
                 'name' => 'Terminated',
             ],
         ]);
+        DB::table('number_category')->insert([
+            [
+                'id' => 1,
+                'name' => 'Normal',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Gold',
+            ],
+        ]);
         DB::table('subscription_type')->insert([
             [
                 'id' => 1,

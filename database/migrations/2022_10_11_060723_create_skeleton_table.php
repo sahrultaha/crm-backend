@@ -44,18 +44,25 @@ return new class extends Migration
             $table->smallIncrements('id');
             $table->string('name');
         });
+        Schema::create('number_category', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->string('name');
+        });
         Schema::create('number', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('number');
             $table->smallInteger('number_type_id');
             $table->smallInteger('number_status_id');
+            $table->smallInteger('number_category_id');
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('number_type_id')->references('id')->on('number_type');
             $table->foreign('number_status_id')->references('id')->on('number_status');
+            $table->foreign('number_category_id')->references('id')->on('number_category');
             $table->index('number');
             $table->index('number_type_id');
             $table->index('number_status_id');
+            $table->index('number_category_id');
         });
         Schema::create('imsi_status', function (Blueprint $table) {
             $table->smallIncrements('id');
@@ -139,6 +146,15 @@ return new class extends Migration
             $table->index('number_id');
             $table->index('imsi_id');
         });
+        Schema::create('blacklist', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->timestamps();
+            $table->string('ic_number');
+            $table->smallInteger('ic_type_id');
+            $table->string('email');
+            $table->foreign('ic_type_id')->references('id')->on('ic_type');
+            $table->index('ic_type_id');
+        });
     }
 
     /**
@@ -157,6 +173,7 @@ return new class extends Migration
         Schema::dropIfExists('number');
         Schema::dropIfExists('number_type');
         Schema::dropIfExists('number_status');
+        Schema::dropIfExists('number_category');
         Schema::dropIfExists('imsi_type');
         Schema::dropIfExists('imsi_status');
         Schema::dropIfExists('imsi');
