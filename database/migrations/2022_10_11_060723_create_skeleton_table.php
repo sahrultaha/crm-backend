@@ -85,6 +85,32 @@ return new class extends Migration
             $table->foreign('imsi_status_id')->references('id')->on('imsi_status');
             $table->foreign('imsi_type_id')->references('id')->on('imsi_type');
         });
+        Schema::create('product_network', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->string('name');
+        });
+        Schema::create('product_profile', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+        Schema::create('product', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->integer('product_profile_id');
+            $table->integer('product_network_id');
+            $table->timestamps();
+            $table->softDeletes();
+            $table->foreign('product_profile_id')
+                ->references('id')
+                ->on('product_profile');
+            $table->foreign('product_network_id')
+                ->references('id')
+                ->on('product_profile');
+            $table->index('product_profile_id');
+            $table->index('product_network_id');
+        });
         Schema::create('pack_type', function (Blueprint $table) {
             $table->smallIncrements('id');
             $table->string('name');
@@ -93,12 +119,17 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('number_id');
             $table->bigInteger('imsi_id')->nullable();
+            $table->bigInteger('product_id');
             $table->smallInteger('pack_type_id')->nullable();
             $table->date('installation_date');
             $table->date('expiry_date');
             $table->foreign('number_id')->references('id')->on('number');
             $table->foreign('imsi_id')->references('id')->on('imsi');
             $table->foreign('pack_type_id')->references('id')->on('pack_type');
+            $table->foreign('product_id')->references('id')->on('product');
+            $table->index('number_id');
+            $table->index('imsi_id');
+            $table->index('product_id');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -164,10 +195,13 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('product');
+        Schema::dropIfExists('product_profile');
+        Schema::dropIfExists('product_network');
+        Schema::dropIfExists('subscription');
         Schema::dropIfExists('subscription_number');
         Schema::dropIfExists('subscription_status');
         Schema::dropIfExists('subscription_type');
-        Schema::dropIfExists('subscription');
         Schema::dropIfExists('pack');
         Schema::dropIfExists('pack_type');
         Schema::dropIfExists('number');

@@ -100,5 +100,27 @@ class Skeleton extends Seeder
                 'name' => 'Terminated',
             ],
         ]);
+        DB::table('product_network')->insert([
+            [
+                'id' => 1,
+                'name' => '3G',
+            ],
+            [
+                'id' => 2,
+                'name' => '4G',
+            ],
+            [
+                'id' => 3,
+                'name' => '5G',
+            ],
+            [
+                'id' => 4,
+                'name' => 'Suspended',
+            ],
+            [
+                'id' => 5,
+                'name' => 'Terminated',
+            ],
+        ]);
     }
 }
