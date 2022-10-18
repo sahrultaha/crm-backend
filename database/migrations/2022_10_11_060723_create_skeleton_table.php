@@ -23,7 +23,9 @@ return new class extends Migration
         });
         Schema::create('contact_preference', function (Blueprint $table) {
             $table->smallIncrements('id');
+            $table->bigInteger('customer_id');
             $table->string('name');
+            $table->foreign('customer_id')->references('id')->on('customer');
         });
         Schema::create('country', function (Blueprint $table) {
             $table->smallIncrements('id');
@@ -45,10 +47,8 @@ return new class extends Migration
             $table->date('birth_date');
             $table->smallInteger('country_id');
             $table->smallInteger('ic_color_id');
-            $table->smallInteger('contact_preference_id');
             $table->foreign('country_id')->references('id')->on('country');
             $table->foreign('ic_color_id')->references('id')->on('ic_color');
-            $table->foreign('contact_preference_id')->references('id')->on('contact_preference');
             $table->foreign('ic_type_id')->references('id')->on('ic_type');
             $table->foreign('customer_title_id')->references('id')->on('customer_title');
             $table->index('ic_type_id');

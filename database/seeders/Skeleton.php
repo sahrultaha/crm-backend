@@ -38,16 +38,6 @@ class Skeleton extends Seeder
                 'name' => 'Green',
             ],
         ]);
-        DB::table('contact_preference')->insert([
-            [
-                'id' => 1,
-                'name' => 'Sms',
-            ],
-            [
-                'id' => 2,
-                'name' => 'Email',
-            ],
-        ]);
         DB::table('country')->insert([
             [
                 'id' => 1,
