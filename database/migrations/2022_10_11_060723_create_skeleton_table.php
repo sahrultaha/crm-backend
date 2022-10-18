@@ -17,6 +17,18 @@ return new class extends Migration
             $table->smallIncrements('id');
             $table->string('name');
         });
+        Schema::create('ic_color', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->string('name');
+        });
+        Schema::create('contact_preference', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->string('name');
+        });
+        Schema::create('country', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->string('name');
+        });
         Schema::create('customer_title', function (Blueprint $table) {
             $table->smallIncrements('id');
             $table->string('name');
@@ -31,7 +43,12 @@ return new class extends Migration
             $table->smallInteger('customer_title_id');
             $table->text('address');
             $table->date('birth_date');
-            $table->string('nationality');
+            $table->smallInteger('country_id');
+            $table->smallInteger('ic_color_id');
+            $table->smallInteger('contact_preference_id');
+            $table->foreign('country_id')->references('id')->on('country');
+            $table->foreign('ic_color_id')->references('id')->on('ic_color');
+            $table->foreign('contact_preference_id')->references('id')->on('contact_preference');
             $table->foreign('ic_type_id')->references('id')->on('ic_type');
             $table->foreign('customer_title_id')->references('id')->on('customer_title');
             $table->index('ic_type_id');
@@ -163,5 +180,8 @@ return new class extends Migration
         Schema::dropIfExists('customer');
         Schema::dropIfExists('customer_title');
         Schema::dropIfExists('ic_type');
+        Schema::dropIfExists('ic_color');
+        Schema::dropIfExists('contact_preference');
+        Schema::dropIfExists('country');
     }
 };

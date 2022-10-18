@@ -28,6 +28,36 @@ class Skeleton extends Seeder
                 'name' => 'Passport',
             ],
         ]);
+        DB::table('ic_color')->insert([
+            [
+                'id' => 1,
+                'name' => 'Yellow',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Green',
+            ],
+        ]);
+        DB::table('contact_preference')->insert([
+            [
+                'id' => 1,
+                'name' => 'Sms',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Email',
+            ],
+        ]);
+        DB::table('country')->insert([
+            [
+                'id' => 1,
+                'name' => 'Brunei',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Malaysia',
+            ],
+        ]);
         DB::table('customer_title')->insert([
             [
                 'id' => 1,
