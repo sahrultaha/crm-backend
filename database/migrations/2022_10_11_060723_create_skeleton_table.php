@@ -41,7 +41,6 @@ return new class extends Migration
             $table->smallInteger('ic_type_id');
             $table->date('ic_expiry_date');
             $table->smallInteger('customer_title_id');
-            $table->text('address');
             $table->date('birth_date');
             $table->smallInteger('country_id');
             $table->smallInteger('ic_color_id');
