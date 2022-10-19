@@ -96,6 +96,16 @@ class Skeleton extends Seeder
                 'name' => 'Terminated',
             ],
         ]);
+        DB::table('number_category')->insert([
+            [
+                'id' => 1,
+                'name' => 'Normal',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Gold',
+            ],
+        ]);
         DB::table('subscription_type')->insert([
             [
                 'id' => 1,
@@ -114,6 +124,28 @@ class Skeleton extends Seeder
             [
                 'id' => 3,
                 'name' => 'Expired',
+            ],
+            [
+                'id' => 4,
+                'name' => 'Suspended',
+            ],
+            [
+                'id' => 5,
+                'name' => 'Terminated',
+            ],
+        ]);
+        DB::table('product_network')->insert([
+            [
+                'id' => 1,
+                'name' => '3G',
+            ],
+            [
+                'id' => 2,
+                'name' => '4G',
+            ],
+            [
+                'id' => 3,
+                'name' => '5G',
             ],
             [
                 'id' => 4,
