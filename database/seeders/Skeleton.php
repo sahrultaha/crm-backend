@@ -156,5 +156,27 @@ class Skeleton extends Seeder
                 'name' => 'Terminated',
             ],
         ]);
+        DB::table('order_status')->insert([
+            [
+                'id' => 1,
+                'name' => 'Active',
+            ],
+            [
+                'id' => 2,
+                'name' =>'Submitted',
+            ],
+            [
+                'id' => 3,
+                'name' => 'Completed',
+            ],
+            [
+                'id' => 4,
+                'name' => 'Cancelled',
+            ],
+            [
+                'id' => 5,
+                'name' => 'Invoiced',
+            ],
+        ]);
     }
 }
