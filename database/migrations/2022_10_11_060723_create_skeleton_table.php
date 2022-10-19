@@ -51,6 +51,43 @@ return new class extends Migration
             $table->foreign('customer_title_id')->references('id')->on('customer_title');
             $table->index('ic_type_id');
         });
+        Schema::create('mukim', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->string('name');
+        });
+        Schema::create('district', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->string('name');
+        });
+        Schema::create('address', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('street');
+            $table->string('simpang');
+            $table->string('house_number');
+            $table->string('postal_code');
+            $table->smallInteger('district_id');
+            $table->smallInteger('mukim_id');
+            $table->timestamps();
+            $table->string('block')->nullable();
+            $table->string('floor')->nullable();
+            $table->string('unit')->nullable();
+            $table->string('building_name')->nullable();
+            $table->foreign('district_id')->references('id')->on('district');
+            $table->foreign('mukim_id')->references('id')->on('mukim');
+        });
+        Schema::create('address_type', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->string('name');
+        });
+        Schema::create('customer_address', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->bigInteger('customer_id');
+            $table->bigInteger('address_id');
+            $table->smallInteger('address_type_id');
+            $table->foreign('customer_id')->references('id')->on('customer');
+            $table->foreign('address_id')->references('id')->on('address');
+            $table->foreign('address_type_id')->references('id')->on('address');
+        });
         Schema::create('contact_preference', function (Blueprint $table) {
             $table->smallIncrements('id');
             $table->bigInteger('customer_id');
@@ -189,5 +226,10 @@ return new class extends Migration
         Schema::dropIfExists('communication_channel');
         Schema::dropIfExists('contact_preference');
         Schema::dropIfExists('country');
+        Schema::dropIfExists('mukim');
+        Schema::dropIfExists('district');
+        Schema::dropIfExists('address');
+        Schema::dropIfExists('address_type');
+        Schema::dropIfExists('customer_address');
     }
 };
