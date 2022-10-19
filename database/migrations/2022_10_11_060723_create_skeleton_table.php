@@ -49,7 +49,52 @@ return new class extends Migration
             $table->foreign('ic_color_id')->references('id')->on('ic_color');
             $table->foreign('ic_type_id')->references('id')->on('ic_type');
             $table->foreign('customer_title_id')->references('id')->on('customer_title');
+            $table->index('country_id');
+            $table->index('ic_color_id');
             $table->index('ic_type_id');
+            $table->index('customer_title_id');
+        });
+        Schema::create('mukim', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->string('name');
+        });
+        Schema::create('district', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->string('name');
+        });
+        Schema::create('address', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('street');
+            $table->string('simpang');
+            $table->string('house_number');
+            $table->string('postal_code');
+            $table->smallInteger('district_id');
+            $table->smallInteger('mukim_id');
+            $table->timestamps();
+            $table->string('block')->nullable();
+            $table->string('floor')->nullable();
+            $table->string('unit')->nullable();
+            $table->string('building_name')->nullable();
+            $table->foreign('district_id')->references('id')->on('district');
+            $table->foreign('mukim_id')->references('id')->on('mukim');
+            $table->index('district_id');
+            $table->index('mukim_id');
+        });
+        Schema::create('address_type', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->string('name');
+        });
+        Schema::create('customer_address', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->bigInteger('customer_id');
+            $table->bigInteger('address_id');
+            $table->smallInteger('address_type_id');
+            $table->foreign('customer_id')->references('id')->on('customer');
+            $table->foreign('address_id')->references('id')->on('address');
+            $table->foreign('address_type_id')->references('id')->on('address');
+            $table->index('customer_id');
+            $table->index('address_id');
+            $table->index('address_type_id');
         });
         Schema::create('contact_preference', function (Blueprint $table) {
             $table->smallIncrements('id');
@@ -57,6 +102,8 @@ return new class extends Migration
             $table->smallInteger('communication_channel_id');
             $table->foreign('customer_id')->references('id')->on('customer');
             $table->foreign('communication_channel_id')->references('id')->on('communication_channel');
+            $table->index('customer_id');
+            $table->index('communication_channel_id');
         });
         Schema::create('number_type', function (Blueprint $table) {
             $table->smallIncrements('id');
@@ -152,6 +199,7 @@ return new class extends Migration
             $table->index('number_id');
             $table->index('imsi_id');
             $table->index('product_id');
+            $table->index('pack_type_id');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -240,5 +288,10 @@ return new class extends Migration
         Schema::dropIfExists('communication_channel');
         Schema::dropIfExists('contact_preference');
         Schema::dropIfExists('country');
+        Schema::dropIfExists('mukim');
+        Schema::dropIfExists('district');
+        Schema::dropIfExists('address');
+        Schema::dropIfExists('address_type');
+        Schema::dropIfExists('customer_address');
     }
 };
