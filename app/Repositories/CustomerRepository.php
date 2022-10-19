@@ -4,11 +4,11 @@ namespace App\Repositories;
 
 use App\Models\Customer;
 
-class CustomerRepository {
-
+class CustomerRepository
+{
     public function createNewCustomer(array $validated): Customer
     {
-        $new_customer =  new Customer();
+        $new_customer = new Customer();
         $new_customer->name = $validated['name'];
         $new_customer->ic_number = $validated['ic_number'];
         $new_customer->ic_type_id = $validated['ic_type_id'];
@@ -19,6 +19,7 @@ class CustomerRepository {
         $new_customer->ic_color_id = $validated['ic_color_id'];
 
         $new_customer->save();
+
         return $new_customer;
     }
 }

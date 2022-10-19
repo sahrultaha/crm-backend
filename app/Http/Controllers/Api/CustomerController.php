@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\Api\CustomerStoreRequest;
-use App\Models\Customer;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\CustomerStoreRequest;
 use App\Repositories\CustomerRepository;
 use Illuminate\Http\JsonResponse;
 
