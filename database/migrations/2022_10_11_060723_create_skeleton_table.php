@@ -266,14 +266,17 @@ return new class extends Migration
         Schema::create('order_details', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('order_id');
+            $table->bigInteger('subscription_id');
             $table->bigInteger('product_id');
             $table->foreign('order_id')->references('id')->on('order');
             $table->foreign('product_id')->references('id')->on('product');
+            $table->foreign('subscription_id')->references('id')->on('subscription');
             $table->index('order_id');
             $table->index('product_id');
+            $table->index('subscription_id');
         });
-      
-        Schema::create('order_status_workflow', function (Blueprint $table) {
+
+        Schema::create('order_status_history', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('order_id');
             $table->smallInteger('old_status_id');
@@ -333,5 +336,6 @@ return new class extends Migration
         Schema::dropIfExists('order_details');
         Schema::dropIfExists('order_status');
         Schema::dropIfExists('order_status_workflow');
+        Schema::dropIfExists('blacklist');
     }
 };
