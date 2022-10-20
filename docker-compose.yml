@@ -27,6 +27,7 @@ services:
             - redis
             - minio
             - mailhog
+            - selenium
     pgsql:
         image: 'postgres:14'
         ports:
@@ -79,6 +80,14 @@ services:
         ports:
             - '${FORWARD_MAILHOG_PORT:-1025}:1025'
             - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
+        networks:
+            - sail
+    selenium:
+        image: 'selenium/standalone-chrome'
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        volumes:
+            - '/dev/shm:/dev/shm'
         networks:
             - sail
     nextjs:
