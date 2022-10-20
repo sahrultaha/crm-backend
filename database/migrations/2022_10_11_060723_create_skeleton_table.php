@@ -246,11 +246,15 @@ return new class extends Migration
             $table->index('number_id');
             $table->index('imsi_id');
         });
+        Schema::create('order_status', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->string('name');
+        });
         Schema::create('order', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('customer_id');
             $table->bigInteger('order_status_id');
-            $table->dateTime('order_created')->nullable()->default(new DateTime());
+            $table->dateTime('order_created');
             $table->timestamps();
             $table->foreign('customer_id')->references('id')->on('customer');
             $table->foreign('order_status_id')->references('id')->on('order_status');
@@ -268,19 +272,16 @@ return new class extends Migration
             $table->index('order_id');
             $table->index('product_id');
         });
-        Schema::create('order_status', function (Blueprint $table) {
-            $table->smallIncrements('id');
-            $table->string('status_name');
-        });
+      
         Schema::create('order_status_workflow', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('order_id');
             $table->smallInteger('old_status_id');
             $table->smallInteger('new_status_id');
-            $table->dateTime('status_changed_date')->nullable()->default(new DateTime());
+            $table->dateTime('status_changed_date');
             $table->timestamps();
-            $table->foreign('order_id')->reference('id')->on('order')
-            $table->index('order_id')
+            $table->foreign('order_id')->references('id')->on('order');
+            $table->index('order_id');
         });
         Schema::create('blacklist', function (Blueprint $table) {
             $table->bigIncrements('id');
