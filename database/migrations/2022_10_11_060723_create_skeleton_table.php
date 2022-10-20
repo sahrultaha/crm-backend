@@ -256,6 +256,31 @@ return new class extends Migration
             $table->foreign('ic_type_id')->references('id')->on('ic_type');
             $table->index('ic_type_id');
         });
+        Schema::create('order_status', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+        });
+        Schema::create('order', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('customer_id');
+            $table->bigInteger('product_id');
+            $table->bigInteger('number_id');
+            $table->bigInteger('imsi_id');
+            $table->bigInteger('pack_id');
+            $table->date('activation_date');
+            $table->timestamps();
+            $table->softDeletes();
+            $table->foreign('customer_id')->references('id')->on('customer');
+            $table->foreign('product_id')->references('id')->on('product');
+            $table->foreign('number_id')->references('id')->on('number');
+            $table->foreign('imsi_id')->references('id')->on('imsi');
+            $table->foreign('pack_id')->references('id')->on('pack');
+            $table->index('customer_id');
+            $table->index('product_id');
+            $table->index('number_id');
+            $table->index('imsi_id');
+            $table->index('pack_id');
+        });
     }
 
     /**
@@ -288,6 +313,9 @@ return new class extends Migration
         Schema::dropIfExists('communication_channel');
         Schema::dropIfExists('contact_preference');
         Schema::dropIfExists('country');
+        Schema::dropIfExists('blacklist');
+        Schema::dropIfExists('order');
+        Schema::dropIfExists('order_status');
         Schema::dropIfExists('mukim');
         Schema::dropIfExists('district');
         Schema::dropIfExists('address');
