@@ -246,6 +246,46 @@ return new class extends Migration
             $table->index('number_id');
             $table->index('imsi_id');
         });
+        Schema::create('order_status', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->string('name');
+        });
+        Schema::create('order', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('customer_id');
+            $table->bigInteger('order_status_id');
+            $table->dateTime('order_created');
+            $table->timestamps();
+            $table->foreign('customer_id')->references('id')->on('customer');
+            $table->foreign('order_status_id')->references('id')->on('order_status');
+            $table->bigInteger('product_id');
+            $table->index('customer_id');
+            $table->index('order_status_id');
+            $table->index('product_id'); 
+        });
+        Schema::create('order_details', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('order_id');
+            $table->bigInteger('subscription_id');
+            $table->bigInteger('product_id');
+            $table->foreign('order_id')->references('id')->on('order');
+            $table->foreign('product_id')->references('id')->on('product');
+            $table->foreign('subscription_id')->references('id')->on('subscription');
+            $table->index('order_id');
+            $table->index('product_id');
+            $table->index('subscription_id');
+        });
+
+        Schema::create('order_status_history', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('order_id');
+            $table->smallInteger('old_status_id');
+            $table->smallInteger('new_status_id');
+            $table->dateTime('status_changed_date');
+            $table->timestamps();
+            $table->foreign('order_id')->references('id')->on('order');
+            $table->index('order_id');
+        });
         Schema::create('blacklist', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
@@ -254,31 +294,6 @@ return new class extends Migration
             $table->string('email');
             $table->foreign('ic_type_id')->references('id')->on('ic_type');
             $table->index('ic_type_id');
-        });
-        Schema::create('order_status', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name');
-        });
-        Schema::create('order', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('customer_id');
-            $table->bigInteger('product_id');
-            $table->bigInteger('number_id');
-            $table->bigInteger('imsi_id');
-            $table->bigInteger('pack_id');
-            $table->date('activation_date');
-            $table->timestamps();
-            $table->softDeletes();
-            $table->foreign('customer_id')->references('id')->on('customer');
-            $table->foreign('product_id')->references('id')->on('product');
-            $table->foreign('number_id')->references('id')->on('number');
-            $table->foreign('imsi_id')->references('id')->on('imsi');
-            $table->foreign('pack_id')->references('id')->on('pack');
-            $table->index('customer_id');
-            $table->index('product_id');
-            $table->index('number_id');
-            $table->index('imsi_id');
-            $table->index('pack_id');
         });
     }
 
@@ -312,13 +327,15 @@ return new class extends Migration
         Schema::dropIfExists('communication_channel');
         Schema::dropIfExists('contact_preference');
         Schema::dropIfExists('country');
-        Schema::dropIfExists('blacklist');
-        Schema::dropIfExists('order');
-        Schema::dropIfExists('order_status');
         Schema::dropIfExists('mukim');
         Schema::dropIfExists('district');
         Schema::dropIfExists('address');
         Schema::dropIfExists('address_type');
         Schema::dropIfExists('customer_address');
+        Schema::dropIfExists('order');
+        Schema::dropIfExists('order_details');
+        Schema::dropIfExists('order_status');
+        Schema::dropIfExists('order_status_workflow');
+        Schema::dropIfExists('blacklist');
     }
 };
