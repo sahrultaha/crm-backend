@@ -24,8 +24,22 @@ class CustomerStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string'],
-            'ic_number' => ['required', 'string'],
+            'name' => [
+                'required',
+                'string',
+            ],
+            'email' => [
+                'required',
+                'email',
+            ],
+            'mobile_number' => [
+                'required',
+                'string',
+            ],
+            'ic_number' => [
+                'required',
+                'string',
+            ],
             'ic_type_id' => [
                 'required',
                 'numeric',
@@ -43,6 +57,10 @@ class CustomerStoreRequest extends FormRequest
             'country_id' => [
                 'required',
                 'exists:country,id',
+            ],
+            'account_category_id' => [
+                'required',
+                'exists:account_category,id',
             ],
             'customer_title_id' => [
                 'required',

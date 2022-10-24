@@ -33,10 +33,16 @@ return new class extends Migration
             $table->smallIncrements('id');
             $table->string('name');
         });
+        Schema::create('account_category', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->string('name');
+        });
         Schema::create('customer', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
             $table->string('name');
+            $table->string('email');
+            $table->string('mobile_number');
             $table->string('ic_number');
             $table->smallInteger('ic_type_id');
             $table->date('ic_expiry_date');
@@ -44,14 +50,17 @@ return new class extends Migration
             $table->date('birth_date');
             $table->smallInteger('country_id');
             $table->smallInteger('ic_color_id');
+            $table->smallInteger('account_category_id');
             $table->foreign('country_id')->references('id')->on('country');
             $table->foreign('ic_color_id')->references('id')->on('ic_color');
             $table->foreign('ic_type_id')->references('id')->on('ic_type');
             $table->foreign('customer_title_id')->references('id')->on('customer_title');
+            $table->foreign('account_category_id')->references('id')->on('account_category');
             $table->index('country_id');
             $table->index('ic_color_id');
             $table->index('ic_type_id');
             $table->index('customer_title_id');
+            $table->index('account_category_id');
         });
         Schema::create('mukim', function (Blueprint $table) {
             $table->smallIncrements('id');
@@ -327,6 +336,7 @@ return new class extends Migration
         Schema::dropIfExists('communication_channel');
         Schema::dropIfExists('contact_preference');
         Schema::dropIfExists('country');
+        Schema::dropIfExists('account_category');
         Schema::dropIfExists('mukim');
         Schema::dropIfExists('district');
         Schema::dropIfExists('address');

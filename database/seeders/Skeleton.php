@@ -62,6 +62,28 @@ class Skeleton extends Seeder
                 'name' => 'Malaysia',
             ],
         ]);
+        DB::table('account_category')->insert([
+            [
+                'id' => 1,
+                'name' => 'Brunei Personal',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Foreign Personal',
+            ],
+            [
+                'id' => 3,
+                'name' => 'Company',
+            ],
+            [
+                'id' => 4,
+                'name' => 'Embassy',
+            ],
+            [
+                'id' => 5,
+                'name' => 'Government',
+            ],
+        ]);
         DB::table('customer_title')->insert([
             [
                 'id' => 1,

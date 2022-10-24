@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use App\Models\AccountCategory;
 use App\Models\Country;
 use App\Models\Customer;
 use App\Models\CustomerTitle;
@@ -33,14 +34,18 @@ class CustomerControllerTest extends TestCase
         $ic_color = IcColor::factory()->create();
         $country = Country::factory()->create();
         $customer_title = CustomerTitle::factory()->create();
+        $account_category = AccountCategory::factory()->create();
 
         $customer_name = 'Abc';
+        $customer_email = 'test@mail.com';
+        $customer_mobile_number = '8765432';
         $customer_ic_number = '00000001';
         $customer_ic_type_id = $ic_type->id;
         $customer_ic_color_id = $ic_color->id;
         $customer_ic_expiry_date = '2100-01-20';
         $customer_country_id = $country->id;
         $customer_title_id = $customer_title->id;
+        $customer_account_category_id = $account_category->id;
         $customer_birth_date = '2100-01-20';
 
         Sanctum::actingAs($user);
@@ -48,12 +53,15 @@ class CustomerControllerTest extends TestCase
 
         $response = $this->postJson('/api/customers', [
             'name' => $customer_name,
+            'email' => $customer_email,
+            'mobile_number' => $customer_mobile_number,
             'ic_number' => $customer_ic_number,
             'ic_type_id' => $customer_ic_type_id,
             'ic_color_id' => $customer_ic_color_id,
             'ic_expiry_date' => $customer_ic_expiry_date,
             'country_id' => $customer_country_id,
             'customer_title_id' => $customer_title_id,
+            'account_category_id' => $customer_account_category_id,
             'birth_date' => $customer_birth_date,
         ]);
 
@@ -61,12 +69,15 @@ class CustomerControllerTest extends TestCase
         $this->assertDatabaseCount('customer', 1);
         $customer = Customer::first();
         $this->assertEquals($customer->name, $customer_name);
+        $this->assertEquals($customer->email, $customer_email);
+        $this->assertEquals($customer->mobile_number, $customer_mobile_number);
         $this->assertEquals($customer->ic_number, $customer_ic_number);
         $this->assertEquals($customer->ic_type_id, $customer_ic_type_id);
         $this->assertEquals($customer->ic_color_id, $customer_ic_color_id);
         $this->assertEquals($customer->ic_expiry_date, $customer_ic_expiry_date);
         $this->assertEquals($customer->country_id, $customer_country_id);
         $this->assertEquals($customer->customer_title_id, $customer_title_id);
+        $this->assertEquals($customer->account_category_id, $customer_account_category_id);
         $this->assertEquals($customer->birth_date, $customer_birth_date);
     }
 
@@ -77,14 +88,18 @@ class CustomerControllerTest extends TestCase
         $ic_color = IcColor::factory()->create();
         $country = Country::factory()->create();
         $customer_title = CustomerTitle::factory()->create();
+        $account_category = AccountCategory::factory()->create();
 
         $customer_name = 'Abc';
+        $customer_email = 'test@mail.com';
+        $customer_mobile_number = '8765432';
         $customer_ic_number = '00000001';
         $customer_ic_type_id = $ic_type->id;
         $customer_ic_color_id = $ic_color->id;
         $customer_ic_expiry_date = '2100-01-20';
         $customer_country_id = $country->id;
         $customer_title_id = $customer_title->id;
+        $customer_account_category_id = $account_category->id;
         $customer_birth_date = '2100-01-20';
 
         Sanctum::actingAs($user);
@@ -92,12 +107,15 @@ class CustomerControllerTest extends TestCase
 
         $response = $this->postJson('/api/customers', [
             'name' => $customer_name,
+            'email' => $customer_email,
+            'mobile_number' => $customer_mobile_number,
             'ic_number' => $customer_ic_number,
             'ic_type_id' => $customer_ic_type_id,
             'ic_color_id' => $customer_ic_color_id,
             'ic_expiry_date' => $customer_ic_expiry_date,
             'country_id' => $customer_country_id,
             'customer_title_id' => $customer_title_id,
+            'account_category_id' => $customer_account_category_id,
             'birth_date' => $customer_birth_date,
         ]);
 
