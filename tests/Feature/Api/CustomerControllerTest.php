@@ -3,6 +3,7 @@
 namespace Tests\Feature\Api;
 
 use App\Models\Country;
+use App\Models\Customer;
 use App\Models\CustomerTitle;
 use App\Models\IcColor;
 use App\Models\IcType;
@@ -33,21 +34,77 @@ class CustomerControllerTest extends TestCase
         $country = Country::factory()->create();
         $customer_title = CustomerTitle::factory()->create();
 
+        $customer_name = 'Abc';
+        $customer_ic_number = '00000001';
+        $customer_ic_type_id = $ic_type->id;
+        $customer_ic_color_id = $ic_color->id;
+        $customer_ic_expiry_date = '2100-01-20';
+        $customer_country_id = $country->id;
+        $customer_title_id = $customer_title->id;
+        $customer_birth_date = '2100-01-20';
+
         Sanctum::actingAs($user);
         $this->assertDatabaseCount('customer', 0);
 
         $response = $this->postJson('/api/customers', [
-            'name' => 'Abc',
-            'ic_number' => '00000001',
-            'ic_type_id' => $ic_type->id,
-            'ic_color_id' => $ic_color->id,
-            'ic_expiry_date' => '01/01/01',
-            'country_id' => $country->id,
-            'customer_title_id' => $customer_title->id,
-            'birth_date' => '01/01/02',
+            'name' => $customer_name,
+            'ic_number' => $customer_ic_number,
+            'ic_type_id' => $customer_ic_type_id,
+            'ic_color_id' => $customer_ic_color_id,
+            'ic_expiry_date' => $customer_ic_expiry_date,
+            'country_id' => $customer_country_id,
+            'customer_title_id' => $customer_title_id,
+            'birth_date' => $customer_birth_date,
         ]);
 
         $response->assertCreated();
         $this->assertDatabaseCount('customer', 1);
+        $customer = Customer::first();
+        $this->assertEquals($customer->name, $customer_name);
+        $this->assertEquals($customer->ic_number, $customer_ic_number);
+        $this->assertEquals($customer->ic_type_id, $customer_ic_type_id);
+        $this->assertEquals($customer->ic_color_id, $customer_ic_color_id);
+        $this->assertEquals($customer->ic_expiry_date, $customer_ic_expiry_date);
+        $this->assertEquals($customer->country_id, $customer_country_id);
+        $this->assertEquals($customer->customer_title_id, $customer_title_id);
+        $this->assertEquals($customer->birth_date, $customer_birth_date);
+    }
+
+    public function test_after_creating_new_customer_endpoint_returns_id_of_new_customer()
+    {
+        $user = User::factory()->create();
+        $ic_type = IcType::factory()->create();
+        $ic_color = IcColor::factory()->create();
+        $country = Country::factory()->create();
+        $customer_title = CustomerTitle::factory()->create();
+
+        $customer_name = 'Abc';
+        $customer_ic_number = '00000001';
+        $customer_ic_type_id = $ic_type->id;
+        $customer_ic_color_id = $ic_color->id;
+        $customer_ic_expiry_date = '2100-01-20';
+        $customer_country_id = $country->id;
+        $customer_title_id = $customer_title->id;
+        $customer_birth_date = '2100-01-20';
+
+        Sanctum::actingAs($user);
+        $this->assertDatabaseCount('customer', 0);
+
+        $response = $this->postJson('/api/customers', [
+            'name' => $customer_name,
+            'ic_number' => $customer_ic_number,
+            'ic_type_id' => $customer_ic_type_id,
+            'ic_color_id' => $customer_ic_color_id,
+            'ic_expiry_date' => $customer_ic_expiry_date,
+            'country_id' => $customer_country_id,
+            'customer_title_id' => $customer_title_id,
+            'birth_date' => $customer_birth_date,
+        ]);
+
+        $this->assertDatabaseCount('customer', 1);
+        $customer = Customer::first();
+        $response
+            ->assertCreated()
+            ->assertJsonPath('id', $customer->id);
     }
 }
