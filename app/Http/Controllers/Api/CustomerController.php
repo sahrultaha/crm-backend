@@ -22,6 +22,8 @@ class CustomerController extends Controller
 
         $customer = $this->repository->createNewCustomer($validated);
 
-        return response()->json($customer->id, 201);
+        return response()->json([
+            'id' => $customer->id
+        ], 201);
     }
 }
