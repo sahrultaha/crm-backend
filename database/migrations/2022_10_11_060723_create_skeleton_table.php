@@ -61,6 +61,10 @@ return new class extends Migration
             $table->smallIncrements('id');
             $table->string('name');
         });
+        Schema::create('village', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->string('name');
+        });
         Schema::create('address', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('street');
@@ -261,7 +265,7 @@ return new class extends Migration
             $table->bigInteger('product_id');
             $table->index('customer_id');
             $table->index('order_status_id');
-            $table->index('product_id'); 
+            $table->index('product_id');
         });
         Schema::create('order_details', function (Blueprint $table) {
             $table->bigIncrements('id');
@@ -329,6 +333,7 @@ return new class extends Migration
         Schema::dropIfExists('country');
         Schema::dropIfExists('mukim');
         Schema::dropIfExists('district');
+        Schema::dropIfExists('village');
         Schema::dropIfExists('address');
         Schema::dropIfExists('address_type');
         Schema::dropIfExists('customer_address');
