@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\District;
+use App\Models\Mukim;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,12 +16,41 @@ class AddressSeeder extends Seeder
      */
     public function run()
     {
-        $districts = ['Brunei-Muara', 'Tutong', 'Kuala Belait', 'Temburong'];
+        $districts = [
+            [
+                'name' => 'Brunei-Muara',
+                'mukim' => [
+                    ['name' => 'Gadong A'],
+                    ['name' => 'Gadong B'],
+                    ['name' => 'Serasa'],
+                ],
+
+            ],
+            // [
+            //     'name' => 'Tutong'
+            //     'mukim' => ['']
+            // ],
+            // [
+            //     'name' => 'Kuala Belait'
+            //     'mukim' => ['']
+            // ],
+            // [
+            //     'name' => 'Temburong'
+            //     'mukim' => ['']
+            // ],
+        ];
 
         foreach ($districts as $district) {
-            $row = District::create([
-                'name' => $district, // 1st iteration Brunei-muara
+            $district_row = District::create([
+                'name' => $district['name'], // 1st iteration Brunei-muara
+
             ]);
+
+            foreach ($district['mukim'] as $mukim) {
+                $mukim_row = Mukim::create([
+                    'name' => $mukim['name'],
+                ]);
+            }
         }
 
         // DB::table('district')->insert([
