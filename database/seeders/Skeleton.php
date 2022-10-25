@@ -87,10 +87,26 @@ class Skeleton extends Seeder
         DB::table('customer_title')->insert([
             [
                 'id' => 1,
-                'name' => 'Haji',
+                'name' => 'Mr',
             ],
             [
                 'id' => 2,
+                'name' => 'Ms',
+            ],
+            [
+                'id' => 3,
+                'name' => 'Mrs',
+            ],
+            [
+                'id' => 4,
+                'name' => 'Haji',
+            ],
+            [
+                'id' => 5,
+                'name' => 'Hajah',
+            ],
+            [
+                'id' => 6,
                 'name' => 'Dr',
             ],
         ]);
