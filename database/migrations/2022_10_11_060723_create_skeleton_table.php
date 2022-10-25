@@ -53,17 +53,23 @@ return new class extends Migration
             $table->index('ic_type_id');
             $table->index('customer_title_id');
         });
-        Schema::create('mukim', function (Blueprint $table) {
-            $table->smallIncrements('id');
-            $table->string('name');
-        });
         Schema::create('district', function (Blueprint $table) {
             $table->smallIncrements('id');
             $table->string('name');
         });
+        Schema::create('mukim', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->smallInteger('district_id');
+            $table->string('name');
+            $table->foreign('district_id')->references('id')->on('district');
+            $table->index('district_id');
+        });
         Schema::create('village', function (Blueprint $table) {
             $table->smallIncrements('id');
             $table->string('name');
+            $table->smallInteger('mukim_id');
+            $table->foreign('mukim_id')->references('id')->on('mukim');
+            $table->index('mukim_id');
         });
         Schema::create('address', function (Blueprint $table) {
             $table->bigIncrements('id');

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\District;
 use App\Models\Mukim;
+use App\Models\Village;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -20,16 +21,46 @@ class AddressSeeder extends Seeder
             [
                 'name' => 'Brunei-Muara',
                 'mukim' => [
-                    ['name' => 'Gadong A'],
-                    ['name' => 'Gadong B'],
-                    ['name' => 'Serasa'],
+                    [
+                        'name' => 'Gadong A',
+                        'village' => [
+                            ['name' => 'Kampong Katok'],
+                            ['name' => 'Kampong Rimba'],
+                            ['name' => 'Kampong Tungku'],
+                            ['name' => 'RPN Kampong Rimba'],
+                            ['name' => 'STKRJ Kampong Katok A'],
+                            ['name' => 'STKRJ Kampong Rimba'],
+                            ['name' => 'STKRJ Kampong Tungku Area 1'],
+                            ['name' => 'STKRJ Kampong Tungku Area 2'],
+                        ],
+                    ],
+                    [
+                        'name' => 'Gadong B',
+                        'village' => [
+                            ['name' => 'Kampong Beribi'],
+                            ['name' => 'Kampong Kiarong'],
+                            ['name' => 'Kampong Kiulap'],
+                            ['name' => 'Kampong Mata-Mata'],
+                            ['name' => 'Kampong Menglait'],
+                            ['name' => 'Kampong Pengkalan Gadong'],
+                            ['name' => 'Kampong Perpindahan Mata-mata'],
+                            ['name' => 'STKRJ Katok B'],
+                        ],
+                    ],
                 ],
-
             ],
-            // [
-            //     'name' => 'Tutong'
-            //     'mukim' => ['']
-            // ],
+            [
+                'name' => 'Tutong',
+                'mukim' => [
+                    [
+                        'name' => 'Keriam',
+                        'village' => [
+                            ['name' => 'Kampong Bukit Panggal'],
+                            ['name' => 'Kampong Ikas'],
+                        ],
+                    ],
+                ],
+            ],
             // [
             //     'name' => 'Kuala Belait'
             //     'mukim' => ['']
@@ -45,11 +76,17 @@ class AddressSeeder extends Seeder
                 'name' => $district['name'], // 1st iteration Brunei-muara
 
             ]);
-
             foreach ($district['mukim'] as $mukim) {
                 $mukim_row = Mukim::create([
                     'name' => $mukim['name'],
+                    'district_id' => $district_row->id,
                 ]);
+                foreach ($mukim['village'] as $village) {
+                    $village_row = Village::create([
+                        'name' => $village['name'],
+                        'mukim_id' => $mukim_row->id,
+                    ]);
+                }
             }
         }
 
