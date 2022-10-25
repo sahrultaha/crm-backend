@@ -12,7 +12,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/customers', 'store');
     });
     Route::controller(CustomerController::class)->group(function (){
-        Route::get('/customers/{id}', 'get');
+        Route::get('/customers/{id}', 'show');
     });
 });
 

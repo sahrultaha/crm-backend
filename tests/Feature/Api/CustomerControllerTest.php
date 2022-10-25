@@ -401,29 +401,56 @@ class CustomerControllerTest extends TestCase
             ->assertCreated()
             ->assertJsonPath('id', $customer->id);
     }
-    public function test_users_can_show_customer()
+    public function test_users_can_view_customer_details()
     {
         $user = User::factory()->create();
-        $ic_type = IcType::factory()->create();
-        $ic_color = IcColor::factory()->create();
-        $country = Country::factory()->create();
-        $customer_title = CustomerTitle::factory()->create();
+
+        [
+            $customer_name,
+            $customer_email,
+            $customer_mobile_number,
+            $customer_ic_number,
+            $customer_ic_type_id,
+            $customer_ic_color_id,
+            $customer_ic_expiry_date,
+            $customer_country_id,
+            $customer_title_id,
+            $customer_account_category_id,
+            $customer_birth_date,
+        ] = $this->generateCustomerPostData();
 
         Sanctum::actingAs($user);
         $this->assertDatabaseCount('customer', 0);
 
         $response = $this->postJson('/api/customers', [
-            'name' => 'Abc',
-            'ic_number' => '00000001',
-            'ic_type_id' => $ic_type->id,
-            'ic_color_id' => $ic_color->id,
-            'ic_expiry_date' => '01/01/01',
-            'country_id' => $country->id,
-            'customer_title_id' => $customer_title->id,
-            'birth_date' => '01/01/02',
+            'name' => $customer_name,
+            'email' => $customer_email,
+            'mobile_number' => $customer_mobile_number,
+            'ic_number' => $customer_ic_number,
+            'ic_type_id' => $customer_ic_type_id,
+            'ic_color_id' => $customer_ic_color_id,
+            'ic_expiry_date' => $customer_ic_expiry_date,
+            'country_id' => $customer_country_id,
+            'customer_title_id' => $customer_title_id,
+            'account_category_id' => $customer_account_category_id,
+            'birth_date' => $customer_birth_date,
         ]);
 
         $response->assertCreated();
         $this->assertDatabaseCount('customer', 1);
+        $customer = Customer::first();
+        $response = $this->getJson('/api/customers/'.$customer->id);
+        $response
+        ->assertOk()
+        ->assertJsonPath('email',$customer_email)
+        ->assertJsonPath('mobile_number',$customer_mobile_number)
+        ->assertJsonPath('ic_number',$customer_ic_number)
+        ->assertJsonPath('ic_type_id',$customer_ic_type_id)
+        ->assertJsonPath('ic_color_id',$customer_ic_color_id)
+        ->assertJsonPath('ic_expiry_date',$customer_ic_expiry_date)
+        ->assertJsonPath('country_id',$customer_country_id)
+        ->assertJsonPath('customer_title_id',$customer_title_id)
+        ->assertJsonPath('account_category_id',$customer_account_category_id)
+        ->assertJsonPath('birth_date',$customer_birth_date);
     }
 }
