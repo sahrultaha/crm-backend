@@ -29,11 +29,11 @@ class CustomerStoreRequest extends FormRequest
                 'string',
             ],
             'email' => [
-                'required',
+                'nullable',
                 'email',
             ],
             'mobile_number' => [
-                'required',
+                'nullable',
                 'string',
             ],
             'ic_number' => [
@@ -47,7 +47,7 @@ class CustomerStoreRequest extends FormRequest
                 'exists:ic_type,id',
             ],
             'ic_color_id' => [
-                'required',
+                'nullable',
                 'exists:ic_color,id',
             ],
             'ic_expiry_date' => [
@@ -63,7 +63,7 @@ class CustomerStoreRequest extends FormRequest
                 'exists:account_category,id',
             ],
             'customer_title_id' => [
-                'required',
+                'nullable',
                 'numeric',
                 'integer',
                 'exists:customer_title,id',
