@@ -22,7 +22,7 @@ class AddressSeeder extends Seeder
                 'name' => 'Brunei-Muara',
                 'mukim' => [
                     [
-                        'name' => 'Gadong A',
+                        'name' => 'Mukim Gadong A',
                         'village' => [
                             ['name' => 'Kampong Katok'],
                             ['name' => 'Kampong Rimba'],
@@ -35,7 +35,7 @@ class AddressSeeder extends Seeder
                         ],
                     ],
                     [
-                        'name' => 'Gadong B',
+                        'name' => 'Mukim Gadong B',
                         'village' => [
                             ['name' => 'Kampong Beribi'],
                             ['name' => 'Kampong Kiarong'],
@@ -47,13 +47,45 @@ class AddressSeeder extends Seeder
                             ['name' => 'STKRJ Katok B'],
                         ],
                     ],
+                    [
+                        'name' => 'Mukim Berakas A',
+                        'village' => [
+                            ['name' => 'Kampong Anggerek Desa'],
+                            ['name' => 'Kampong Burong Pingai Berakas'],
+                            ['name' => 'Kampong Jaya Bakti'],
+                            ['name' => 'Kampong Jaya Setia'],
+                            ['name' => 'Kampong Lambak'],
+                            ['name' => 'Kampong Lambak Kiri'],
+                            ['name' => 'Kampong Orang Kaya Besar Imas'],
+                            ['name' => 'Kampong Pancha Delima'],
+                            ['name' => 'Kampong Pengiran Siraja Muda Delima Satu'],
+                            ['name' => 'Kampong Pulaie'],
+                            ['name' => 'Kampong Serusop'],
+                            ['name' => 'Kampong Terunjing'],
+                            ['name' => 'Kawasan Jabatan-Jabatan dan Perumahan Kerajaan'],
+                            ['name' => 'Perkhemahan Berakas'],
+                        ],
+                    ],
+                    [
+                        'name' => 'Mukim Berakas B',
+                        'village' => [
+                            ['name' => 'Kampong Lambak Kanan'],
+                            ['name' => 'Kampong Madang'],
+                            ['name' => 'Kampong Manggis'],
+                            ['name' => 'Kampong Salambigar'],
+                            ['name' => 'Kampong Sungai Akar'],
+                            ['name' => 'Kampong Sungai Hanching'],
+                            ['name' => 'Kampong Sungai Orok'],
+                            ['name' => 'Kampong Sungai Tilong'],
+                        ],
+                    ],
                 ],
             ],
             [
                 'name' => 'Tutong',
                 'mukim' => [
                     [
-                        'name' => 'Keriam',
+                        'name' => 'Mukim Keriam',
                         'village' => [
                             ['name' => 'Kampong Bukit Panggal'],
                             ['name' => 'Kampong Ikas'],
@@ -61,14 +93,46 @@ class AddressSeeder extends Seeder
                     ],
                 ],
             ],
-            // [
-            //     'name' => 'Kuala Belait'
-            //     'mukim' => ['']
-            // ],
-            // [
-            //     'name' => 'Temburong'
-            //     'mukim' => ['']
-            // ],
+            [
+                'name' => 'Belait',
+                'mukim' => [
+                    [
+                        'name' => 'Mukim Bukit Sawat',
+                        'village' => [
+                            ['name' => 'Kampong Bisut'],
+                            ['name' => 'Kampong Bukit Kandol'],
+                            ['name' => 'Kampong Bukit Sawat'],
+                            ['name' => 'Kampong Melayan'],
+                            ['name' => 'Kampong Merangking'],
+                            ['name' => 'Kampong Merangking Hilir'],
+                            ['name' => 'Kampong Merangking Ulu'],
+                            ['name' => 'Kampong Sungai Mau'],
+                            ['name' => 'Kampong Pulau Apil'],
+                            ['name' => 'Kampong Tarap'],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'Temburong',
+                'mukim' => [
+                    [
+                        'name' => 'Mukim Amo',
+                        'village' => [
+                            ['name' => 'Kampong Amo'],
+                            ['name' => 'Kampong Batang Duri'],
+                            ['name' => 'Kampong Belaban'],
+                            ['name' => 'Kampong Biang'],
+                            ['name' => 'Kampong Parit'],
+                            ['name' => 'Kampong Selangan'],
+                            ['name' => 'Kampong Sibulu'],
+                            ['name' => 'Kampong Sibut'],
+                            ['name' => 'Kampong Sumbiling Baru'],
+                            ['name' => 'Kampong Sumbiling Lama'],
+                        ],
+                    ],
+                ],
+            ],
         ];
 
         foreach ($districts as $district) {
