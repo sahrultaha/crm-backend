@@ -401,4 +401,29 @@ class CustomerControllerTest extends TestCase
             ->assertCreated()
             ->assertJsonPath('id', $customer->id);
     }
+    public function test_users_can_show_customer()
+    {
+        $user = User::factory()->create();
+        $ic_type = IcType::factory()->create();
+        $ic_color = IcColor::factory()->create();
+        $country = Country::factory()->create();
+        $customer_title = CustomerTitle::factory()->create();
+
+        Sanctum::actingAs($user);
+        $this->assertDatabaseCount('customer', 0);
+
+        $response = $this->postJson('/api/customers', [
+            'name' => 'Abc',
+            'ic_number' => '00000001',
+            'ic_type_id' => $ic_type->id,
+            'ic_color_id' => $ic_color->id,
+            'ic_expiry_date' => '01/01/01',
+            'country_id' => $country->id,
+            'customer_title_id' => $customer_title->id,
+            'birth_date' => '01/01/02',
+        ]);
+
+        $response->assertCreated();
+        $this->assertDatabaseCount('customer', 1);
+    }
 }

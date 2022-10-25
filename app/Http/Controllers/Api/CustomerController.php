@@ -26,4 +26,10 @@ class CustomerController extends Controller
             'id' => $customer->id
         ], 201);
     }
+
+    public function show($id){
+        $customer = $this->repository->showCustomer($id);
+        return response()->json($customer->toArray());
+
+    }
 }
