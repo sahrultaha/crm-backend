@@ -25,4 +25,11 @@ class CustomerRepository
 
         return $new_customer;
     }
+
+    public function showCustomer($id): Customer
+    {
+        $customer = Customer::find($id);
+
+        return $customer;
+    }
 }
