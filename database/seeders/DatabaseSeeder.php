@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             Skeleton::class,
             User::class,
+            AddressSeeder::class,
         ]);
     }
 }
