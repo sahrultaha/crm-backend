@@ -2,7 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CustomerRepository
 {
@@ -24,6 +26,25 @@ class CustomerRepository
         $new_customer->save();
 
         return $new_customer;
+    }
+
+    public function getListOfCustomers($query): AnonymousResourceCollection
+    {
+        $limit = $query['limit'] ?? 10;
+        if (! is_numeric($limit) || intval($limit) === 0) {
+            $limit = 10;
+        }
+
+        $sort = $query['sort'] ?? 'desc';
+        if ($sort !== 'asc' && $sort !== 'desc') {
+            $sort = 'desc';
+        }
+
+        return CustomerResource::collection(
+            Customer::query()
+                ->orderBy('id', $sort)
+                ->paginate($limit)
+        );
     }
 
     public function showCustomer($id): Customer

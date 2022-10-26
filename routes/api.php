@@ -9,9 +9,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         return $request->user();
     });
     Route::controller(CustomerController::class)->group(function () {
+        Route::get('/customers', 'index');
         Route::post('/customers', 'store');
-    });
-    Route::controller(CustomerController::class)->group(function () {
         Route::get('/customers/{id}', 'show');
     });
 });
