@@ -1,7 +1,7 @@
 # For more information: https://laravel.com/docs/sail
 version: '3'
 services:
-    laravel.test:
+    api.crm.test:
         build:
             context: ./vendor/laravel/sail/runtimes/8.1
             dockerfile: Dockerfile
@@ -90,7 +90,7 @@ services:
             - '/dev/shm:/dev/shm'
         networks:
             - sail
-    nextjs:
+    www.crm.test:
         image: 'node:16-alpine'
         command: 'npm run dev'
         ports:

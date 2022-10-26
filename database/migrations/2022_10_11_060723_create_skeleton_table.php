@@ -323,40 +323,44 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('subscription_number');
+        Schema::dropIfExists('pack');
+        Schema::dropIfExists('pack_type');
+        Schema::dropIfExists('imsi');
+        Schema::dropIfExists('imsi_type');
+        Schema::dropIfExists('imsi_status');
+        Schema::dropIfExists('contact_preference');
+        Schema::dropIfExists('customer_address');
+        Schema::dropIfExists('address');
+        Schema::dropIfExists('address_type');
+        Schema::dropIfExists('order_details');
+        Schema::dropIfExists('order_status_history');
+        Schema::dropIfExists('order');
+        Schema::dropIfExists('order_status');
         Schema::dropIfExists('product');
         Schema::dropIfExists('product_profile');
         Schema::dropIfExists('product_network');
         Schema::dropIfExists('subscription');
-        Schema::dropIfExists('subscription_number');
         Schema::dropIfExists('subscription_status');
         Schema::dropIfExists('subscription_type');
-        Schema::dropIfExists('pack');
-        Schema::dropIfExists('pack_type');
         Schema::dropIfExists('number');
         Schema::dropIfExists('number_type');
         Schema::dropIfExists('number_status');
         Schema::dropIfExists('number_category');
-        Schema::dropIfExists('imsi_type');
-        Schema::dropIfExists('imsi_status');
-        Schema::dropIfExists('imsi');
         Schema::dropIfExists('customer');
         Schema::dropIfExists('customer_title');
+        Schema::dropIfExists('blacklist');
         Schema::dropIfExists('ic_type');
         Schema::dropIfExists('ic_color');
         Schema::dropIfExists('communication_channel');
-        Schema::dropIfExists('contact_preference');
         Schema::dropIfExists('country');
         Schema::dropIfExists('account_category');
+        Schema::dropIfExists('village');
         Schema::dropIfExists('mukim');
         Schema::dropIfExists('district');
-        Schema::dropIfExists('village');
         Schema::dropIfExists('address');
         Schema::dropIfExists('address_type');
         Schema::dropIfExists('customer_address');
-        Schema::dropIfExists('order');
-        Schema::dropIfExists('order_details');
-        Schema::dropIfExists('order_status');
-        Schema::dropIfExists('order_status_workflow');
         Schema::dropIfExists('blacklist');
     }
 };
