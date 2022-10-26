@@ -1,4 +1,5 @@
 
+
 # CRM
 
 ## Requirements:
@@ -20,6 +21,21 @@
 - do `./vendor/bin/sail artisan key:generate`
 - do `./vendor/bin/sail artisan migrate --seed`
 
+## Configuration (.env)
+Please make sure `ADMIN_EMAIL` and `ADMIN_PASSWORD` is not empty
+
+To use separate environment for dusk please copy `.env` to `.env.dusk.local` and modifies the `DB_DATABASE=testing` value.
+
+## /etc/hosts
+Add below lines to your /etc/hosts
+    127.0.0.1     crm.test
+    127.0.0.1     api.crm.test
+    127.0.0.1     www.crm.test
+
+## URLs
+- Frontend http://www.crm.test:3000/
+- Backend http://api.crm.test/
+
 ## Running the development server
 
 Refer to documentation of [sail](https://laravel.com/docs/9.x/sail)
@@ -27,18 +43,11 @@ Refer to documentation of [sail](https://laravel.com/docs/9.x/sail)
 - Change directory to the CRM Backend directory
 - do `./vendor/bin/sail up`
 
-## /etc/hosts
-Add below lines to your /etc/hosts
-`127.0.0.1	crm.test`
-`127.0.0.1	api.crm.test`
-`127.0.0.1	www.crm.test`
-
-## Configuration (.env)
-Please make sure `ADMIN_EMAIL` and `ADMIN_PASSWORD` is not empty
-
-## URLs
- - Frontend http://www.crm.test:3000/
- - Backend http://api.crm.test/
+## Before pull request
+- `vendor/bin/sail artisan test`
+- `vendor/bin/sail pint --test`
+- `vendor/bin/sail dusk`
+- `vendor/bin/sail artisan migrate:fresh --seed`
 
 ## Docker clean up
 - `vendor/bin/sail down`
