@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CustomerStoreRequest;
 use App\Repositories\CustomerRepository;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CustomerController extends Controller
 {
@@ -14,6 +16,11 @@ class CustomerController extends Controller
     public function __construct(CustomerRepository $repository)
     {
         $this->repository = $repository;
+    }
+
+    public function index(Request $request): AnonymousResourceCollection
+    {
+        return $this->repository->getListOfCustomers($request->query());
     }
 
     public function store(CustomerStoreRequest $request): JsonResponse
