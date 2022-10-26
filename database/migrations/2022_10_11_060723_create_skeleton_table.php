@@ -355,9 +355,9 @@ return new class extends Migration
         Schema::dropIfExists('communication_channel');
         Schema::dropIfExists('country');
         Schema::dropIfExists('account_category');
+        Schema::dropIfExists('village');
         Schema::dropIfExists('mukim');
         Schema::dropIfExists('district');
-        Schema::dropIfExists('village');
         Schema::dropIfExists('address');
         Schema::dropIfExists('address_type');
         Schema::dropIfExists('customer_address');
