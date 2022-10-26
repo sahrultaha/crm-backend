@@ -201,7 +201,7 @@ class Skeleton extends Seeder
             ],
             [
                 'id' => 2,
-                'name' =>'Submitted',
+                'name' => 'Submitted',
             ],
             [
                 'id' => 3,

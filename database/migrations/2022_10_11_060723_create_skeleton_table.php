@@ -270,7 +270,7 @@ return new class extends Migration
             $table->bigInteger('product_id');
             $table->index('customer_id');
             $table->index('order_status_id');
-            $table->index('product_id'); 
+            $table->index('product_id');
         });
         Schema::create('order_details', function (Blueprint $table) {
             $table->bigIncrements('id');

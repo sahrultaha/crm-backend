@@ -401,6 +401,7 @@ class CustomerControllerTest extends TestCase
             ->assertCreated()
             ->assertJsonPath('id', $customer->id);
     }
+
     public function test_users_can_view_customer_details()
     {
         $user = User::factory()->create();
@@ -442,15 +443,15 @@ class CustomerControllerTest extends TestCase
         $response = $this->getJson('/api/customers/'.$customer->id);
         $response
         ->assertOk()
-        ->assertJsonPath('email',$customer_email)
-        ->assertJsonPath('mobile_number',$customer_mobile_number)
-        ->assertJsonPath('ic_number',$customer_ic_number)
-        ->assertJsonPath('ic_type_id',$customer_ic_type_id)
-        ->assertJsonPath('ic_color_id',$customer_ic_color_id)
-        ->assertJsonPath('ic_expiry_date',$customer_ic_expiry_date)
-        ->assertJsonPath('country_id',$customer_country_id)
-        ->assertJsonPath('customer_title_id',$customer_title_id)
-        ->assertJsonPath('account_category_id',$customer_account_category_id)
-        ->assertJsonPath('birth_date',$customer_birth_date);
+        ->assertJsonPath('email', $customer_email)
+        ->assertJsonPath('mobile_number', $customer_mobile_number)
+        ->assertJsonPath('ic_number', $customer_ic_number)
+        ->assertJsonPath('ic_type_id', $customer_ic_type_id)
+        ->assertJsonPath('ic_color_id', $customer_ic_color_id)
+        ->assertJsonPath('ic_expiry_date', $customer_ic_expiry_date)
+        ->assertJsonPath('country_id', $customer_country_id)
+        ->assertJsonPath('customer_title_id', $customer_title_id)
+        ->assertJsonPath('account_category_id', $customer_account_category_id)
+        ->assertJsonPath('birth_date', $customer_birth_date);
     }
 }
