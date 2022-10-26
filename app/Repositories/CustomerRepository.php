@@ -30,14 +30,14 @@ class CustomerRepository
 
     public function getListOfCustomers($query): AnonymousResourceCollection
     {
-        $limit = 10;
-        if (array_key_exists('limit', $query) && is_numeric($query['limit'])) {
-            $limit = intval($query['limit']);
+        $limit = $query['limit'] ?? 10;
+        if (! is_numeric($limit) || intval($limit) === 0) {
+            $limit = 10;
         }
 
-        $sort = 'desc';
-        if (array_key_exists('sort', $query) && $query['sort'] === 'asc') {
-            $sort = 'asc';
+        $sort = $query['sort'] ?? 'desc';
+        if ($sort !== 'asc' && $sort !== 'desc') {
+            $sort = 'desc';
         }
 
         return CustomerResource::collection(
