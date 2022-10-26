@@ -323,10 +323,6 @@ return new class extends Migration
         Schema::dropIfExists('customer_address');
         Schema::dropIfExists('address');
         Schema::dropIfExists('address_type');
-        Schema::dropIfExists('order_details');
-        Schema::dropIfExists('order_status_history');
-        Schema::dropIfExists('order');
-        Schema::dropIfExists('order_status');
         Schema::dropIfExists('product');
         Schema::dropIfExists('product_profile');
         Schema::dropIfExists('product_network');
@@ -347,9 +343,16 @@ return new class extends Migration
         Schema::dropIfExists('account_category');
         Schema::dropIfExists('mukim');
         Schema::dropIfExists('district');
+<<<<<<< HEAD
+=======
         Schema::dropIfExists('address');
         Schema::dropIfExists('address_type');
         Schema::dropIfExists('customer_address');
+        Schema::dropIfExists('order');
+        Schema::dropIfExists('order_details');
+        Schema::dropIfExists('order_status');
+        Schema::dropIfExists('order_status_workflow');
         Schema::dropIfExists('blacklist');
+>>>>>>> crm
     }
 };
