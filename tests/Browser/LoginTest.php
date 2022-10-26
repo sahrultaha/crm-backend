@@ -5,11 +5,10 @@ namespace Tests\Browser;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class LoginTest extends DuskTestCase
 {
-    use RefreshDatabase;
+    use DatabaseMigrations;
 
     public $seed = true;
 
