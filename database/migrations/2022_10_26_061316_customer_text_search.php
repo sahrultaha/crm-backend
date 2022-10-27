@@ -13,12 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        DB::statement("ALTER TABLE customer
+        // @TODO support more database, sqlite, mysql
+        if (env('DB_CONNECTION') === 'pgsql') {
+            DB::statement("ALTER TABLE customer
             ADD COLUMN fulltext tsvector
             GENERATED ALWAYS AS (to_tsvector('english', 
             coalesce(name, '') || ' ' || coalesce(email, '') || ' ' || coalesce(mobile_number, '')  
-            )) STORED;");
-        DB::statement('CREATE INDEX fulltext_idx ON customer USING GIN (fulltext);');
+            )) STORED");
+            DB::statement('CREATE INDEX IF NOT EXISTS fulltext_idx ON customer USING GIN (fulltext)');
+        } 
     }
 
     /**
@@ -28,6 +31,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropColumns('customer', 'fulltext');
+        // @TODO support more database, sqlite, mysql
+        if (env('DB_CONNECTION') === 'pgsql') {
+            DB::statement('CREATE INDEX fulltext_idx ON customer USING GIN (fulltext)');
+            Schema::dropColumns('customer', 'fulltext');
+        }
     }
 };
