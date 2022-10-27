@@ -6,9 +6,9 @@ use Laravel\Dusk\Browser;
 
 class CustomDuskTestCase extends DuskTestCase
 {
-    public function loginAsAdmin(Browser $browser): Browser
+    public function loginAsAdmin(Browser $browser): void
     {
-        return $browser
+        $browser
             ->visit(env('FRONTEND_URL').'/login')
             ->waitForText('Email')
             ->waitForText('Remember me')
@@ -19,11 +19,11 @@ class CustomDuskTestCase extends DuskTestCase
             ->assertPathIs('/dashboard');
     }
 
-    public function createNewCustomer(Browser $browser): Browser
+    public function createNewCustomer(Browser $browser): void
     {
         $today = now();
 
-        return $browser
+        $browser
             ->visit(env('FRONTEND_URL').'/customers/create')
             ->waitForText('CREATE')
             ->type('#name', 'Lorem')
@@ -41,20 +41,16 @@ class CustomDuskTestCase extends DuskTestCase
             ->waitForText('Customer');
     }
 
-    public function changeCustomersListDropdownSort(Browser $browser, $sort = 'asc'): Browser
+    public function changeCustomersListDropdownSort(Browser $browser, $sort = 'asc'): void
     {
-        return $browser
-            ->visit(env('FRONTEND_URL').'/customers')
-            ->waitForText('Customers Index')
+        $browser
             ->select('#sort', $sort)
             ->waitForText('Customers Index');
     }
 
-    public function changeCustomersListDropdownLimit(Browser $browser, $limit = 10): Browser
+    public function changeCustomersListDropdownLimit(Browser $browser, $limit = 10): void
     {
-        return $browser
-            ->visit(env('FRONTEND_URL').'/customers')
-            ->waitForText('Customers Index')
+        $browser
             ->select('#limit', $limit)
             ->waitForText('Customers Index');
     }

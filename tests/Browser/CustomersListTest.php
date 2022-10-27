@@ -15,10 +15,10 @@ class CustomersListTest extends CustomDuskTestCase
     public function test_can_view_list_of_customers()
     {
         $this->browse(function (Browser $browser) {
-            $browser = $this->loginAsAdmin($browser);
+            $this->loginAsAdmin($browser);
 
-            $browser = $this->createNewCustomer($browser);
-            $browser = $this->createNewCustomer($browser);
+            $this->createNewCustomer($browser);
+            $this->createNewCustomer($browser);
 
             $browser
                 ->visit(env('FRONTEND_URL').'/customers')
@@ -26,19 +26,21 @@ class CustomersListTest extends CustomDuskTestCase
                 ->assertSee('1 -')
                 ->assertSee('2 -');
 
-            $browser = $this->changeCustomersListDropdownSort($browser, 'desc');
+            $this->changeCustomersListDropdownSort($browser, 'desc');
 
             $browser
-                ->visit(env('FRONTEND_URL').'/customers')
-                ->waitForText('Customers Index')
                 ->assertSee('2 -')
                 ->assertSee('1 -');
 
-            $browser = $this->changeCustomersListDropdownLimit($browser, 1);
+            $this->changeCustomersListDropdownSort($browser, 'asc');
 
             $browser
-                ->visit(env('FRONTEND_URL').'/customers')
-                ->waitForText('Customers Index')
+                ->assertSee('1 -')
+                ->assertSee('2 -');
+
+            $this->changeCustomersListDropdownLimit($browser, 1);
+
+            $browser
                 ->assertSee('1 -')
                 ->assertNotPresent('2 -');
         });
