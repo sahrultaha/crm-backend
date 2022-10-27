@@ -80,14 +80,22 @@ return new class extends Migration
             $table->foreign('mukim_id')->references('id')->on('mukim');
             $table->index('mukim_id');
         });
+        Schema::create('postal_code', function (Blueprint $table) {
+            $table->smallIncrements('id');
+            $table->string('name');
+            $table->smallInteger('village_id');
+            $table->foreign('village_id')->references('id')->on('village');
+            $table->index('village_id');
+        });
         Schema::create('address', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('street');
             $table->string('simpang');
             $table->string('house_number');
-            $table->string('postal_code');
             $table->smallInteger('district_id');
             $table->smallInteger('mukim_id');
+            $table->smallInteger('village_id');
+            $table->smallInteger('postal_code_id');
             $table->timestamps();
             $table->string('block')->nullable();
             $table->string('floor')->nullable();
@@ -95,8 +103,12 @@ return new class extends Migration
             $table->string('building_name')->nullable();
             $table->foreign('district_id')->references('id')->on('district');
             $table->foreign('mukim_id')->references('id')->on('mukim');
+            $table->foreign('village_id')->references('id')->on('village');
+            $table->foreign('postal_code_id')->references('id')->on('postal_code');
             $table->index('district_id');
             $table->index('mukim_id');
+            $table->index('village_id');
+            $table->index('postal_code_id');
         });
         Schema::create('address_type', function (Blueprint $table) {
             $table->smallIncrements('id');
