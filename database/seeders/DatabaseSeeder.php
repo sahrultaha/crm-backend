@@ -19,5 +19,11 @@ class DatabaseSeeder extends Seeder
             User::class,
             AddressSeeder::class,
         ]);
+
+        if (env('APP_ENV') === 'local') {
+            $this->call([
+                CustomerSeeder::class,
+            ]);
+        }
     }
 }
