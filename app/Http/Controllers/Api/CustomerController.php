@@ -23,7 +23,7 @@ class CustomerController extends Controller
         $customer = $this->repository->createNewCustomer($validated);
 
         return response()->json([
-            'id' => $customer->id
+            'id' => $customer->id,
         ], 201);
     }
 }
