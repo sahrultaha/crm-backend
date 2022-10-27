@@ -29,11 +29,11 @@ return new class extends Migration
         });
         DB::statement("CREATE TRIGGER IF NOT EXISTS customer_insert_trigger AFTER INSERT ON customer
 BEGIN
-	update customer set fulltext = NEW.name || ' ' || NEW.email || ' ' || NEW.mobile_number WHERE id = NEW.id;
+	update customer set fulltext = NEW.name || ' ' || NEW.email || ' ' || NEW.mobile_number || ' ' || NEW.ic_number WHERE id = NEW.id;
 END;");
         DB::statement("CREATE TRIGGER IF NOT EXISTS customer_update_trigger UPDATE ON customer
 BEGIN
-	update customer set fulltext = NEW.name || ' ' || NEW.email || ' ' || NEW.mobile_number WHERE id = OLD.id;
+	update customer set fulltext = NEW.name || ' ' || NEW.email || ' ' || NEW.mobile_number || ' ' || NEW.ic_number WHERE id = NEW.id;
 END;");
     }
 
