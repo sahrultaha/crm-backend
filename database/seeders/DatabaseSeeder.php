@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             Skeleton::class,
             User::class,
             AddressSeeder::class,
+            FileSeeder::class,
         ]);
     }
 }
