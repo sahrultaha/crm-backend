@@ -15,7 +15,7 @@ class ViewCustomersTest extends DuskTestCase
     public function test_can_view_customers()
     {
         $today = now();
-        $this->browse(function (Browser $browser) use ($today) {
+        $this->browse(function (Browser $browser) {
             $browser
                 ->visit(env('FRONTEND_URL').'/login')
                 ->waitForText('Email')
