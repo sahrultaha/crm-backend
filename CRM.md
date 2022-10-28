@@ -35,6 +35,7 @@ Add below lines to your /etc/hosts
 ## URLs
 - Frontend http://www.crm.test:3000/
 - Backend http://api.crm.test/
+- Dusk Testing http://localhost:7900
 
 ## Running the development server
 
