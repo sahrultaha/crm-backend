@@ -40,7 +40,7 @@ class CreateNewCustomerTest extends DuskTestCase
                 ->keys('#birthDate', $today->year)
                 ->press('CREATE')
                 ->waitForText('Customer with')
-                ->assertPathIs('/customers/1');
+                ->assertPathIs('/customers/*');
         });
     }
 }
