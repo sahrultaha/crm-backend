@@ -58,8 +58,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('file');
         Schema::dropIfExists('file_relation');
+        Schema::dropIfExists('file');
         Schema::dropIfExists('file_category');
         Schema::dropIfExists('file_relation_type');
     }
