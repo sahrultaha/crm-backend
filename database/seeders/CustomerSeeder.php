@@ -15,7 +15,7 @@ class CustomerSeeder extends Seeder
     public function run()
     {
         $insert = [];
-        for ($i =0; $i < 30; $i++) {
+        for ($i = 0; $i < 30; $i++) {
             $insert[] = [
                 'name' => fake()->name(),
                 'email' => fake()->unique()->safeEmail(),
