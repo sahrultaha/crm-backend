@@ -16,6 +16,7 @@ class CustomersListTest extends CustomDuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $this->loginAsAdmin($browser);
+            \Illuminate\Support\Facades\DB::statement('delete from customer');
 
             $this->createNewCustomer($browser);
             $this->createNewCustomer($browser);

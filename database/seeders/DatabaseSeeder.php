@@ -17,8 +17,15 @@ class DatabaseSeeder extends Seeder
         $this->call([
             Skeleton::class,
             User::class,
+            CountrySeeder::class,
             AddressSeeder::class,
             FileSeeder::class,
         ]);
+
+        if (env('APP_ENV') === 'local') {
+            $this->call([
+                CustomerSeeder::class,
+            ]);
+        }
     }
 }
