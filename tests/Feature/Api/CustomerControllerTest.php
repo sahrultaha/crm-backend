@@ -606,4 +606,16 @@ class CustomerControllerTest extends TestCase
             ->assertJsonPath('meta.total', 11)
             ->assertJsonPath('meta.per_page', 10);
     }
+
+    public function test_users_can_search()
+    {
+        $user = User::factory()->create();
+        $customers = Customer::factory()->count(10)->create();
+        $customer = $customers->first();
+        $names = explode(' ', $customer->name);
+        Sanctum::actingAs($user);
+        $response = $this->getJson("/api/customers?search={$names[1]}");
+        $response->assertOk();
+        $this->assertGreaterThanOrEqual(1, count($response['data']));
+    }
 }

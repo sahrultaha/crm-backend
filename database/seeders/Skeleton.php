@@ -52,16 +52,6 @@ class Skeleton extends Seeder
                 'name' => 'WhatsApp',
             ],
         ]);
-        DB::table('country')->insert([
-            [
-                'id' => 1,
-                'name' => 'Brunei',
-            ],
-            [
-                'id' => 2,
-                'name' => 'Malaysia',
-            ],
-        ]);
         DB::table('account_category')->insert([
             [
                 'id' => 1,
