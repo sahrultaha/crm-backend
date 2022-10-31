@@ -39,11 +39,17 @@ class CustomerRepository
         if ($sort !== 'asc' && $sort !== 'desc') {
             $sort = 'desc';
         }
+        $builder = Customer::query()->orderBy('id', $sort);
+        if (isset($query['search']) && mb_strlen($query['search']) > 3) {
+            if (env('DB_CONNECTION') === 'pgsql') {
+                $builder->whereRaw('fulltext @@ to_tsquery(?)', [$query['search']]);
+            } else {
+                $builder->where('fulltext', 'like', "%{$query['search']}%");
+            }
+        }
 
         return CustomerResource::collection(
-            Customer::query()
-                ->orderBy('id', $sort)
-                ->paginate($limit)
+            $builder->paginate($limit)
         );
     }
 
