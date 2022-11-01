@@ -37,6 +37,8 @@ class CustomDuskTestCase extends DuskTestCase
             ->keys('#birthDate', $today->day)
             ->keys('#birthDate', $today->month)
             ->keys('#birthDate', $today->year)
+            ->attach('#icFront', base_path('tests/Browser/photos/600x300.png'))
+            ->attach('#icBack', base_path('tests/Browser/photos/600x300.png'))
             ->press('CREATE')
             ->waitForText('Customer');
     }
@@ -46,6 +48,7 @@ class CustomDuskTestCase extends DuskTestCase
         $browser
             ->select('#sort', $sort)
             ->waitForText('Customers Index');
+        sleep(1);
     }
 
     public function changeCustomersListDropdownLimit(Browser $browser, $limit = 10): void
@@ -53,5 +56,6 @@ class CustomDuskTestCase extends DuskTestCase
         $browser
             ->select('#limit', $limit)
             ->waitForText('Customers Index');
+        sleep(1);
     }
 }

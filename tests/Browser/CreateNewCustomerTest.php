@@ -38,6 +38,8 @@ class CreateNewCustomerTest extends DuskTestCase
                 ->keys('#birthDate', $today->day)
                 ->keys('#birthDate', $today->month)
                 ->keys('#birthDate', $today->year)
+                ->attach('#icFront', base_path('tests/Browser/photos/600x300.png'))
+                ->attach('#icBack', base_path('tests/Browser/photos/600x300.png'))
                 ->press('CREATE')
                 ->waitForText('Customer with')
                 ->assertPathIs('/customers/*');
