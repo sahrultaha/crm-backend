@@ -34,10 +34,17 @@ class CustomerController extends Controller
         ], 201);
     }
 
-    public function show($id)
+    public function show($id): JsonResponse
     {
         $customer = $this->repository->showCustomer($id);
 
-        return response()->json($customer->toArray());
+        $file_ids = $this->repository->getFileIds($customer->id);
+
+        $data_to_return = $customer->toArray();
+        $data_to_return = array_merge($data_to_return, [
+            'file_ids' => $file_ids->isNotEmpty() ? $file_ids->pluck('file_id')->toArray() : [],
+        ]);
+
+        return response()->json($data_to_return);
     }
 }
