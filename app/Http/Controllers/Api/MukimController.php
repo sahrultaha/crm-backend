@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Mukim;
 use App\Repositories\MukimRepository;
+use App\Models\Mukim;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -16,13 +17,13 @@ class MukimController extends Controller
     {
         $this->repository = $repository;
     }
-
+   
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(Request $request) : AnonymousResourceCollection
     {
         // return $this->repository->getListOfVillages($request->query());
     }
@@ -44,11 +45,12 @@ class MukimController extends Controller
     public function mukim(Request $request)
     {
         $data = Mukim::with('district')
-                    ->select('id', 'name', 'district_id')
-                    ->where('id', 'iLIKE', '%'.$request->get('search').'%')
+                    ->select("id", "name", "district_id")
+                    ->where('id', 'iLIKE', '%'. $request->get('search'). '%')
                     ->take(1)
                     ->get();
-
+                    
         return response()->json($data);
     }
+ 
 }
