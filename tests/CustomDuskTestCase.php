@@ -59,4 +59,15 @@ class CustomDuskTestCase extends DuskTestCase
             ->waitForText('Customers Index');
         sleep(1);
     }
+
+    public function checkCustomerIcExist(Browser $browser): void
+    {
+        $browser
+        ->visit(env('FRONTEND_URL').'/customers/create')
+        ->waitForText('CREATE')
+        ->type('#name', 'Lorem')
+        ->type('#icNumber', '98909584')
+        ->select('#icTypeId', '1')
+        ->waitForText('Customer Already Exist');
+    }
 }
