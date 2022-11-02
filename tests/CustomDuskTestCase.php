@@ -40,7 +40,8 @@ class CustomDuskTestCase extends DuskTestCase
             ->attach('#icFront', base_path('tests/Browser/photos/600x300.png'))
             ->attach('#icBack', base_path('tests/Browser/photos/600x300.png'))
             ->press('CREATE')
-            ->waitForText('Customer');
+            ->waitForText('Customer with')
+            ->assertPathIs('/customers/*');
     }
 
     public function changeCustomersListDropdownSort(Browser $browser, $sort = 'asc'): void
