@@ -61,6 +61,7 @@ return new class extends Migration
             $table->index('ic_type_id');
             $table->index('customer_title_id');
             $table->index('account_category_id');
+            $table->softDeletes();
         });
         Schema::create('district', function (Blueprint $table) {
             $table->smallIncrements('id');

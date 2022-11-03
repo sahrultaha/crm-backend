@@ -14,6 +14,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/customers', 'store');
         Route::get('/customers/search', 'checkIc');
         Route::get('/customers/{id}', 'show');
+        Route::delete('/customers/{customer}', 'destroy');
     });
     Route::controller(FileController::class)->group(function () {
         Route::post('/files', 'store');

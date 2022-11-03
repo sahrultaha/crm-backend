@@ -662,4 +662,18 @@ class CustomerControllerTest extends TestCase
         $response = $this->getJson('/api/customers/search?ic_number=89522452&ic_type_id=1');
         $response->assertOk();
     }
+
+    public function test_users_can_soft_delete_customers()
+    {
+        $user = User::factory()->create();
+        $customer = Customer::factory()->create();
+        $id = $customer->id;
+        $this->assertFalse($customer->fresh()->trashed());
+
+        Sanctum::actingAs($user);
+        $this->deleteJson("/api/customers/{$customer->id}")
+            ->assertOk()
+            ->assertJsonPath('id', $id);
+        $this->assertTrue($customer->fresh()->trashed());
+    }
 }
