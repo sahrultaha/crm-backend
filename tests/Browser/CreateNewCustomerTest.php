@@ -4,9 +4,9 @@ namespace Tests\Browser;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
-use Tests\DuskTestCase;
+use Tests\CustomDuskTestCase;
 
-class CreateNewCustomerTest extends DuskTestCase
+class CreateNewCustomerTest extends CustomDuskTestCase
 {
     use DatabaseMigrations;
 
@@ -16,6 +16,7 @@ class CreateNewCustomerTest extends DuskTestCase
     {
         $today = now();
         $this->browse(function (Browser $browser) use ($today) {
+            // $this->createNewCustomer($browser, '00999999');
             $browser
                 ->visit(env('FRONTEND_URL').'/login')
                 ->waitForText('Email')
@@ -28,7 +29,7 @@ class CreateNewCustomerTest extends DuskTestCase
                 ->visit(env('FRONTEND_URL').'/customers/create')
                 ->waitForText('CREATE')
                 ->type('#name', 'Lorem')
-                ->type('#icNumber', '01123456')
+                ->type('#icNumber', '77661234')
                 ->select('#icTypeId', '1')
                 ->keys('#icExpiryDate', $today->day)
                 ->keys('#icExpiryDate', $today->month)

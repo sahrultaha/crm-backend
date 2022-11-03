@@ -19,7 +19,7 @@ class CustomDuskTestCase extends DuskTestCase
             ->assertPathIs('/dashboard');
     }
 
-    public function createNewCustomer(Browser $browser): void
+    public function createNewCustomer(Browser $browser, $ic_number = '01987651'): void
     {
         $today = now();
 
@@ -27,7 +27,7 @@ class CustomDuskTestCase extends DuskTestCase
             ->visit(env('FRONTEND_URL').'/customers/create')
             ->waitForText('CREATE')
             ->type('#name', 'Lorem')
-            ->type('#icNumber', '01123456')
+            ->type('#icNumber', $ic_number)
             ->select('#icTypeId', '1')
             ->keys('#icExpiryDate', $today->day)
             ->keys('#icExpiryDate', $today->month)
@@ -58,16 +58,5 @@ class CustomDuskTestCase extends DuskTestCase
             ->select('#limit', $limit)
             ->waitForText('Customers Index');
         sleep(1);
-    }
-
-    public function checkCustomerIcExist(Browser $browser): void
-    {
-        $browser
-        ->visit(env('FRONTEND_URL').'/customers/create')
-        ->waitForText('CREATE')
-        ->type('#name', 'Lorem')
-        ->type('#icNumber', '98909584')
-        ->select('#icTypeId', '1')
-        ->waitForText('Customer Already Exist');
     }
 }

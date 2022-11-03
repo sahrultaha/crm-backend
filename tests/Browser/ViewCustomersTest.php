@@ -17,7 +17,7 @@ class ViewCustomersTest extends CustomDuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $this->loginAsAdmin($browser);
-            $this->createNewCustomer($browser);
+            $this->createNewCustomer($browser, '00000004');
 
             sleep(1);
 
