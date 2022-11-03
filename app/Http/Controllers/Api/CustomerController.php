@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CustomerStoreRequest;
+use App\Models\Customer;
 use App\Repositories\CustomerRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -51,5 +52,16 @@ class CustomerController extends Controller
     public function checkIc(Request $request): JsonResponse
     {
         return response()->json($this->repository->checkCustomerByIc($request->query())->toArray());
+    }
+
+    public function destroy(Customer $customer): JsonResponse
+    {
+        $id = $customer->id;
+
+        $customer->delete();
+
+        return response()->json([
+            'id' => $id,
+        ]);
     }
 }
