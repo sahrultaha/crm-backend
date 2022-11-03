@@ -22,6 +22,7 @@ class FileController extends Controller
         $validated = $request->validated();
 
         $file = $this->repository->createNewFile($validated);
+        logger($file->id);
 
         return response()->json([
             'id' => $file->id,
