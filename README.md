@@ -1,5 +1,3 @@
-
-
 # CRM
 
 ## Requirements:
@@ -28,9 +26,12 @@ To use separate environment for dusk please copy `.env` to `.env.dusk.local` and
 
 ## /etc/hosts
 Add below lines to your /etc/hosts
-    127.0.0.1     crm.test
-    127.0.0.1     api.crm.test
-    127.0.0.1     www.crm.test
+```
+127.0.0.1     crm.test
+127.0.0.1     api.crm.test
+127.0.0.1     www.crm.test
+127.0.0.1     minio.test
+```
 
 ## URLs
 - Frontend http://www.crm.test:3000/
@@ -38,7 +39,6 @@ Add below lines to your /etc/hosts
 - Dusk Testing http://localhost:7900
 
 ## Running the development server
-
 Refer to documentation of [sail](https://laravel.com/docs/9.x/sail)
 
 - Change directory to the CRM Backend directory
@@ -59,6 +59,4 @@ Refer to documentation of [sail](https://laravel.com/docs/9.x/sail)
 - Go to crm.test:8900
 - Login with username `sail` and password `password`
 - Create a bucket with the name `photos`
-- Copy `FILESYSTEM_DISK` and all the `AWS_X` values into your `.env` and `.env.dusk.local`
-- On your `.env` the `AWS_ENDPOINT` should be `http://crm.test:9000/photos`
-- On your `.env.dusk.local` the `AWS_ENDPOINT` should be `http://minio:9000/photos`
+- Copy `FILESYSTEM_DISK` and all the `AWS_X` values from your `.env.example` into your `.env` and `.env.dusk.local`

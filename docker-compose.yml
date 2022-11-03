@@ -25,7 +25,7 @@ services:
         depends_on:
             - pgsql
             - redis
-            - minio
+            - minio.test
             - mailhog
             - selenium
     pgsql:
@@ -59,7 +59,7 @@ services:
             test: ["CMD", "redis-cli", "ping"]
             retries: 3
             timeout: 5s
-    minio:
+    minio.test:
         image: 'minio/minio:latest'
         ports:
             - '${FORWARD_MINIO_PORT:-9000}:9000'
@@ -92,7 +92,7 @@ services:
         networks:
             - sail
         ports:
-            - 7900:7900
+            - '7900:7900'
     www.crm.test:
         image: 'node:16-alpine'
         command: 'npm run dev'
