@@ -13,18 +13,13 @@ class Mukim extends Model
 
     protected $table = 'mukim';
 
-    // public function district()
-    // {
-    //     return $this->belongsTo(District::class);
-    // }
-
-    public function district() 
+    public function district()
     {
         return $this->belongsTo('App\Models\District', 'district_id');
     }
 
-    public function village() 
+    public function village()
     {
-        return $this->hasMany('App\Models\Village', 'mukim_id');       
+        return $this->hasMany('App\Models\Village', 'mukim_id');
     }
 }
