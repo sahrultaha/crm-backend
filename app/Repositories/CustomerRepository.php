@@ -71,4 +71,9 @@ class CustomerRepository
             ->where('relation_id', $id)
             ->get();
     }
+
+    public function checkCustomerByIc($query)
+    {
+        return Customer::where('ic_number', $query['ic_number'])->where('ic_type_id', $query['ic_type_id'])->get();
+    }
 }

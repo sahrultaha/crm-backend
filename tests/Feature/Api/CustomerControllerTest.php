@@ -651,4 +651,15 @@ class CustomerControllerTest extends TestCase
         $response->assertOk();
         $this->assertGreaterThanOrEqual(1, count($response['data']));
     }
+
+    public function test_users_can_check_ic()
+    {
+        $this->withoutExceptionHandling();
+        $user = User::factory()->create();
+        $customers = Customer::factory()->count(10)->create();
+        $customer = $customers->first();
+        Sanctum::actingAs($user);
+        $response = $this->getJson('/api/customers/search?ic_number=89522452&ic_type_id=1');
+        $response->assertOk();
+    }
 }

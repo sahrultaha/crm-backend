@@ -19,8 +19,8 @@ class CustomersListTest extends CustomDuskTestCase
             $this->loginAsAdmin($browser);
             \Illuminate\Support\Facades\DB::statement('delete from customer');
 
-            $this->createNewCustomer($browser);
-            $this->createNewCustomer($browser);
+            $this->createNewCustomer($browser, '00000001');
+            $this->createNewCustomer($browser, '00000003');
 
             $this->assertDatabaseCount('customer', 2);
             $customers = Customer::all()->toArray();
