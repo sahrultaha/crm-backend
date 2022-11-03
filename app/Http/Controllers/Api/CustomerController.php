@@ -50,8 +50,6 @@ class CustomerController extends Controller
 
     public function checkIc(Request $request): JsonResponse
     {
-        $customer = $this->repository->checkCustomerByIc($request->query());
-
-        return response()->json($customer->toArray());
+        return response()->json($this->repository->checkCustomerByIc($request->query())->toArray());
     }
 }
