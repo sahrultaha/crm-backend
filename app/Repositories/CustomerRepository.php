@@ -50,6 +50,15 @@ class CustomerRepository
                 $builder->where('fulltext', 'like', "%{$query['search']}%");
             }
         }
+        if (isset($query['name'])) {
+            $builder->where('name', 'ilike', $query['name']);
+        }
+        if (isset($query['email'])) {
+            $builder->where('email', $query['email']);
+        }
+        if (isset($query['ic'])) {
+            $builder->where('ic_number', $query['ic']);
+        }
 
         return CustomerResource::collection(
             $builder->paginate($limit)
