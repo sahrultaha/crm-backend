@@ -2,11 +2,13 @@
 
 namespace Tests\Browser;
 
+use Facebook\WebDriver\WebDriverBy;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Http;
 use Laravel\Dusk\Browser;
-use Tests\DuskTestCase;
+use Tests\CustomDuskTestCase;
 
-class ViewCustomersTest extends DuskTestCase
+class ViewCustomersTest extends CustomDuskTestCase
 {
     use DatabaseMigrations;
 
@@ -14,20 +16,35 @@ class ViewCustomersTest extends DuskTestCase
 
     public function test_can_view_customers()
     {
-        $today = now();
         $this->browse(function (Browser $browser) {
-            $browser
-                ->visit(env('FRONTEND_URL').'/login')
-                ->waitForText('Email')
-                ->waitForText('Remember me')
-                ->type('#email', env('ADMIN_EMAIL'))
-                ->type('#password', env('ADMIN_PASSWORD'))
-                ->press('LOGIN')
-                ->waitForText('Dashboard')
-                ->assertPathIs('/dashboard')
-                ->visit(env('FRONTEND_URL').'/customers/1')
-                ->waitForText('Customer')
-                ->assertPathIs('/customers/1');
+            $this->loginAsAdmin($browser);
+            $this->createNewCustomer($browser, '00000004');
+
+            $browser->pause(1000);
+
+            $elements = $browser->driver->findElements(WebDriverBy::tagName('img'));
+            $this->assertCount(2, $elements);
+
+            $img_elements = $browser->elements('img');
+
+            $sample_file = base_path('tests/Browser/photos/600x300.png');
+            $sample_file_size = filesize($sample_file);
+            $sample_file_hash = hash_file('sha1', $sample_file);
+            $temp_dir = sys_get_temp_dir();
+
+            for ($i = 0; $i < count($img_elements) - 1; $i++) {
+                $src = $img_elements[$i]->getAttribute('src');
+                $response = Http::get($src);
+
+                $test_file = "$temp_dir/$i.png";
+                file_put_contents($test_file, $response->body());
+                $this->assertEquals($sample_file_size, filesize($test_file));
+
+                $test_file_hash = hash_file('sha1', $test_file);
+                $this->assertEquals($sample_file_hash, $test_file_hash);
+
+                unlink($test_file);
+            }
         });
     }
 }
