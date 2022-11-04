@@ -3,15 +3,20 @@
 namespace Tests\Browser;
 
 use App\Models\Customer;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\CustomDuskTestCase;
 
 class CustomersListTest extends CustomDuskTestCase
 {
-    use DatabaseMigrations;
-
-    public $seed = true;
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->browse(function (Browser $browser) {
+            $browser->driver->manage()->deleteAllCookies();
+        });
+        $this->artisan('migrate:fresh');
+        $this->artisan('db:seed');
+    }
 
     public function test_can_view_list_of_customers()
     {

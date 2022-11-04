@@ -3,15 +3,20 @@
 namespace Tests\Browser;
 
 use App\Models\Customer;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\CustomDuskTestCase;
 
 class CheckCustomerIcTest extends CustomDuskTestCase
 {
-    use DatabaseMigrations;
-
-    public $seed = true;
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->browse(function (Browser $browser) {
+            $browser->driver->manage()->deleteAllCookies();
+        });
+        $this->artisan('migrate:fresh');
+        $this->artisan('db:seed');
+    }
 
     public function test_users_can_check_ic()
     {
@@ -22,7 +27,7 @@ class CheckCustomerIcTest extends CustomDuskTestCase
             $browser
             ->visit(env('FRONTEND_URL').'/customers/create')
             ->waitForText('CREATE')
-            ->type('#name', 'Lorem')
+            ->typeSlowly('#name', 'Lorem')
             ->typeSlowly('#icNumber', $customer->ic_number)
             ->select('#icTypeId', '1')
             ->pause(5000)
