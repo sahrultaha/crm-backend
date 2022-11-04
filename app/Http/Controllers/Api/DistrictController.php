@@ -17,6 +17,16 @@ class DistrictController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request): AnonymousResourceCollection
+    {
+        // return $this->repository->getListOfVillages($request->query());
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  \App\Models\District  $village

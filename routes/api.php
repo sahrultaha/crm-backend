@@ -24,10 +24,14 @@ Route::controller(DistrictController::class)->group(function () {
     Route::get('/district', 'district');
 });
 
+Route::controller(PostalCodeController::class)->group(function () {
+    Route::get('/postalcode', 'index');
+    Route::get('/postalcode', 'postalcode');
+});
+
 Route::controller(MukimController::class)->group(function () {
+    Route::get('/mukim', 'index');
     Route::get('/mukim', 'mukim');
 });
 
-Route::controller(PostalCodeController::class)->group(function () {
-    Route::get('/postalcode', 'postalcode');
-});
+// });
