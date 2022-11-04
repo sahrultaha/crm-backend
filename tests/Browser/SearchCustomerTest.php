@@ -35,6 +35,25 @@ class SearchCustomerTest extends DuskTestCase
                 ->type('#search', $customer->email)
                 ->press('Search')
                 ->waitForText($customer->name);
+            // advance search functionality
+            $browser->visit(env('FRONTEND_URL').'/customers')
+                ->waitForText('Customers Index')
+                ->check('advanced')
+                ->type('#custEmail', $customer->email)
+                ->press('Search')
+                ->waitForText($customer->name)
+                ->type('#custIc', '111111')
+                ->press('Search')
+                ->waitUntilMissingText($customer->name)
+                ->type('#custIc', $customer->ic_number)
+                ->press('Search')
+                ->waitForText($customer->name)
+                ->type('#custName', 'xxxx')
+                ->press('Search')
+                ->waitUntilMissingText($customer->name)
+                ->type('#custName', $customer->name)
+                ->press('Search')
+                ->waitForText($customer->name);
         });
     }
 }
