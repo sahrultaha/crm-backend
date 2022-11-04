@@ -3,17 +3,12 @@
 namespace Tests\Browser;
 
 use Facebook\WebDriver\WebDriverBy;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Http;
 use Laravel\Dusk\Browser;
 use Tests\CustomDuskTestCase;
 
 class ViewCustomersTest extends CustomDuskTestCase
 {
-    use DatabaseMigrations;
-
-    public $seed = true;
-
     public function test_can_view_customers()
     {
         $this->browse(function (Browser $browser) {
