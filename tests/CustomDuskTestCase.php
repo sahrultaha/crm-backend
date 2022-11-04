@@ -6,6 +6,16 @@ use Laravel\Dusk\Browser;
 
 class CustomDuskTestCase extends DuskTestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->browse(function (Browser $browser) {
+            $browser->driver->manage()->deleteAllCookies();
+        });
+        $this->artisan('migrate:fresh');
+        $this->artisan('db:seed');
+    }
+
     public function loginAsAdmin(Browser $browser): void
     {
         $browser

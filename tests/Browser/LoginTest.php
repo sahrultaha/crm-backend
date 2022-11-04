@@ -3,20 +3,10 @@
 namespace Tests\Browser;
 
 use Laravel\Dusk\Browser;
-use Tests\DuskTestCase;
+use Tests\CustomDuskTestCase;
 
-class LoginTest extends DuskTestCase
+class LoginTest extends CustomDuskTestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->browse(function (Browser $browser) {
-            $browser->driver->manage()->deleteAllCookies();
-        });
-        $this->artisan('migrate:fresh');
-        $this->artisan('db:seed');
-    }
-
     /**
      * A basic browser test example.
      *
