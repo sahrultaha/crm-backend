@@ -1,66 +1,62 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# CRM
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Requirements:
+ - [Docker](https://www.docker.com/) 
+ - CRM Backend
+ - CRM Frontend
 
-## About Laravel
+## First Installation
+- clone CRM Backend and CRM frontend on the same directory
+- cd to CRM Frontend directory
+- do `docker run --rm --interactive --tty -w /app --volume $PWD:/app node:16-alpine npm install`
+- copy .env.example to .env `cp .env.example .env`
+- cd to CRM Backend directory
+- do `docker pull composer` 
+- do `docker run --rm --interactive --tty --volume $PWD:/app composer install`
+- Build the docker container `./vendor/bin/sail build --no-cache`
+- copy .env.example to .env `cp .env.example .env`
+- Run docker container for the first time `./vendor/bin/sail up -d`
+- do `./vendor/bin/sail artisan key:generate`
+- do `./vendor/bin/sail artisan migrate --seed`
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Configuration (.env)
+Please make sure `ADMIN_EMAIL` and `ADMIN_PASSWORD` is not empty
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+To use separate environment for dusk please copy `.env` to `.env.dusk.local` and modifies the `DB_DATABASE=testing` value.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## /etc/hosts
+Add below lines to your /etc/hosts
+```
+127.0.0.1     crm.test
+127.0.0.1     api.crm.test
+127.0.0.1     www.crm.test
+127.0.0.1     minio.test
+```
 
-## Learning Laravel
+## URLs
+- Frontend http://www.crm.test:3000/
+- Backend http://api.crm.test/
+- Dusk Testing http://localhost:7900
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Running the development server
+Refer to documentation of [sail](https://laravel.com/docs/9.x/sail)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- Change directory to the CRM Backend directory
+- do `./vendor/bin/sail up`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Before pull request
+- `vendor/bin/sail artisan test`
+- `vendor/bin/sail pint --test`
+- `vendor/bin/sail dusk`
+- `vendor/bin/sail artisan migrate:fresh --seed`
 
-## Laravel Sponsors
+## Docker clean up
+- `vendor/bin/sail down`
+- `docker rm -f $(docker ps -a -q)`
+- `docker volume rm $(docker volume ls -q)`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Setup minio
+- Go to crm.test:8900
+- Login with username `sail` and password `password`
+- Create a bucket with the name `photos`
+- Copy `FILESYSTEM_DISK` and all the `AWS_X` values from your `.env.example` into your `.env` and `.env.dusk.local`

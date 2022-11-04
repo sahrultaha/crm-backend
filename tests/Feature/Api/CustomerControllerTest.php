@@ -6,10 +6,16 @@ use App\Models\AccountCategory;
 use App\Models\Country;
 use App\Models\Customer;
 use App\Models\CustomerTitle;
+use App\Models\File;
+use App\Models\FileCategory;
+use App\Models\FileRelationType;
 use App\Models\IcColor;
 use App\Models\IcType;
 use App\Models\User;
+use Database\Seeders\FileSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -404,7 +410,12 @@ class CustomerControllerTest extends TestCase
 
     public function test_users_can_view_customer_details()
     {
+        Storage::fake('s3');
+        $this->seed(FileSeeder::class);
         $user = User::factory()->create();
+        $ic_front_category = FileCategory::find(1);
+        $ic_back_category = FileCategory::find(2);
+        $fake_file = UploadedFile::fake()->image('image.jpg');
 
         [
             $customer_name,
@@ -440,19 +451,41 @@ class CustomerControllerTest extends TestCase
         $response->assertCreated();
         $this->assertDatabaseCount('customer', 1);
         $customer = Customer::first();
+
+        $this->postJson('/api/files', [
+            'file' => $fake_file,
+            'relation_id' => $customer->id,
+            'relation_type_id' => FileRelationType::CUSTOMER,
+            'file_category_id' => $ic_front_category->id,
+        ])->assertCreated();
+        $this->assertDatabaseCount('file', 1);
+        $this->assertDatabaseCount('file_relation', 1);
+
+        $this->postJson('/api/files', [
+            'file' => $fake_file,
+            'relation_id' => $customer->id,
+            'relation_type_id' => FileRelationType::CUSTOMER,
+            'file_category_id' => $ic_back_category->id,
+        ])->assertCreated();
+        $this->assertDatabaseCount('file', 2);
+        $this->assertDatabaseCount('file_relation', 2);
+
+        $files = File::all()->toArray();
         $response = $this->getJson('/api/customers/'.$customer->id);
         $response
-        ->assertOk()
-        ->assertJsonPath('email', $customer_email)
-        ->assertJsonPath('mobile_number', $customer_mobile_number)
-        ->assertJsonPath('ic_number', $customer_ic_number)
-        ->assertJsonPath('ic_type_id', $customer_ic_type_id)
-        ->assertJsonPath('ic_color_id', $customer_ic_color_id)
-        ->assertJsonPath('ic_expiry_date', $customer_ic_expiry_date)
-        ->assertJsonPath('country_id', $customer_country_id)
-        ->assertJsonPath('customer_title_id', $customer_title_id)
-        ->assertJsonPath('account_category_id', $customer_account_category_id)
-        ->assertJsonPath('birth_date', $customer_birth_date);
+            ->assertOk()
+            ->assertJsonPath('email', $customer_email)
+            ->assertJsonPath('mobile_number', $customer_mobile_number)
+            ->assertJsonPath('ic_number', $customer_ic_number)
+            ->assertJsonPath('ic_type_id', $customer_ic_type_id)
+            ->assertJsonPath('ic_color_id', $customer_ic_color_id)
+            ->assertJsonPath('ic_expiry_date', $customer_ic_expiry_date)
+            ->assertJsonPath('country_id', $customer_country_id)
+            ->assertJsonPath('customer_title_id', $customer_title_id)
+            ->assertJsonPath('account_category_id', $customer_account_category_id)
+            ->assertJsonPath('file_ids.0', $files[0]['id'])
+            ->assertJsonPath('file_ids.1', $files[1]['id'])
+            ->assertJsonPath('birth_date', $customer_birth_date);
     }
 
     public function test_guests_cannot_access_list_of_customers()
@@ -617,5 +650,30 @@ class CustomerControllerTest extends TestCase
         $response = $this->getJson("/api/customers?search={$names[1]}");
         $response->assertOk();
         $this->assertGreaterThanOrEqual(1, count($response['data']));
+    }
+
+    public function test_users_can_check_ic()
+    {
+        $this->withoutExceptionHandling();
+        $user = User::factory()->create();
+        $customers = Customer::factory()->count(10)->create();
+        $customer = $customers->first();
+        Sanctum::actingAs($user);
+        $response = $this->getJson('/api/customers/search?ic_number=89522452&ic_type_id=1');
+        $response->assertOk();
+    }
+
+    public function test_users_can_soft_delete_customers()
+    {
+        $user = User::factory()->create();
+        $customer = Customer::factory()->create();
+        $id = $customer->id;
+        $this->assertFalse($customer->fresh()->trashed());
+
+        Sanctum::actingAs($user);
+        $this->deleteJson("/api/customers/{$customer->id}")
+            ->assertOk()
+            ->assertJsonPath('id', $id);
+        $this->assertTrue($customer->fresh()->trashed());
     }
 }

@@ -4,6 +4,9 @@ namespace App\Repositories;
 
 use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
+use App\Models\FileRelation;
+use App\Models\FileRelationType;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CustomerRepository
@@ -58,5 +61,19 @@ class CustomerRepository
         $customer = Customer::find($id);
 
         return $customer;
+    }
+
+    public function getFileIds($id): Collection
+    {
+        return FileRelation::query()
+            ->select('file_id')
+            ->where('file_relation_type_id', FileRelationType::CUSTOMER)
+            ->where('relation_id', $id)
+            ->get();
+    }
+
+    public function checkCustomerByIc($query)
+    {
+        return Customer::where('ic_number', $query['ic_number'])->where('ic_type_id', $query['ic_type_id'])->get();
     }
 }

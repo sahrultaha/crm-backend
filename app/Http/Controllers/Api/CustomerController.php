@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CustomerStoreRequest;
+use App\Models\Customer;
 use App\Repositories\CustomerRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -34,10 +35,33 @@ class CustomerController extends Controller
         ], 201);
     }
 
-    public function show($id)
+    public function show($id): JsonResponse
     {
         $customer = $this->repository->showCustomer($id);
 
-        return response()->json($customer->toArray());
+        $file_ids = $this->repository->getFileIds($customer->id);
+
+        $data_to_return = $customer->toArray();
+        $data_to_return = array_merge($data_to_return, [
+            'file_ids' => $file_ids->isNotEmpty() ? $file_ids->pluck('file_id')->toArray() : [],
+        ]);
+
+        return response()->json($data_to_return);
+    }
+
+    public function checkIc(Request $request): JsonResponse
+    {
+        return response()->json($this->repository->checkCustomerByIc($request->query())->toArray());
+    }
+
+    public function destroy(Customer $customer): JsonResponse
+    {
+        $id = $customer->id;
+
+        $customer->delete();
+
+        return response()->json([
+            'id' => $id,
+        ]);
     }
 }
