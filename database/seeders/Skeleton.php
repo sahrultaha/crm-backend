@@ -39,7 +39,7 @@ class Skeleton extends Seeder
             ],
             [
                 'id' => 3,
-                'name' => 'Red',
+                'name' => 'Purple',
             ],
         ]);
         DB::table('communication_channel')->insert([
