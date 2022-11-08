@@ -26,12 +26,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::controller(VillageController::class)->group(function () {
         Route::get('/autocomplete', 'autocomplete');
     });
-
     Route::controller(DistrictController::class)->group(function () {
         Route::get('/district', 'district');
     });
-
     Route::controller(MukimController::class)->group(function () {
         Route::get('/mukim', 'mukim');
+    });
+    Route::controller(PostalCodeController::class)->group(function () {
+        Route::get('/postalcode', 'postalcode');
     });
 });
