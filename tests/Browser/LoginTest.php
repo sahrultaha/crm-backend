@@ -21,8 +21,8 @@ class LoginTest extends CustomDuskTestCase
                 ->typeSlowly('#email', env('ADMIN_EMAIL'))
                 ->typeSlowly('#password', env('ADMIN_PASSWORD'))
                 ->press('LOGIN')
-                ->waitForText('Dashboard')
-                ->assertPathIs('/dashboard');
+                ->waitForText('Customers Index')
+                ->assertPathIs('/customers');
         });
     }
 }

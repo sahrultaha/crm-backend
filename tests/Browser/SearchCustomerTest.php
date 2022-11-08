@@ -23,10 +23,8 @@ class SearchCustomerTest extends CustomDuskTestCase
                 ->typeSlowly('#email', env('ADMIN_EMAIL'))
                 ->typeSlowly('#password', env('ADMIN_PASSWORD'))
                 ->press('LOGIN')
-                ->waitForText('Dashboard')
-                ->assertPathIs('/dashboard');
-            $browser->visit(env('FRONTEND_URL').'/customers')
                 ->waitForText('Customers Index')
+                ->assertPathIs('/customers')
                 ->typeSlowly('#search', $customer->email)
                 ->press('Search')
                 ->waitForText($customer->name);
