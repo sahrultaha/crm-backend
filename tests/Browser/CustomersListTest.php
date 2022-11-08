@@ -48,7 +48,15 @@ class CustomersListTest extends CustomDuskTestCase
 
             $browser
                 ->assertSee($customerA['id'].' - '.$customerA['name'])
-                ->assertNotPresent($customerB['id'].' - '.$customerB['name']);
+                ->assertNotPresent($customerB['id'].' - '.$customerB['name'])
+                ->assertPresent('#page-link-1')
+                ->assertPresent('#page-link-2');
+
+            $browser
+                ->click('#page-link-2')
+                ->pause(1000)
+                ->assertSee($customerB['id'].' - '.$customerB['name'])
+                ->assertNotPresent($customerA['id'].' - '.$customerA['name']);
         });
     }
 }
