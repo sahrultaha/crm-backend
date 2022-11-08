@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DistrictController;
+use App\Http\Controllers\Api\FileController;
 use App\Http\Controllers\Api\MukimController;
 use App\Http\Controllers\Api\PostalCodeController;
 use App\Http\Controllers\Api\VillageController;
