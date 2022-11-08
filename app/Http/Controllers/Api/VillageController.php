@@ -25,6 +25,7 @@ class VillageController extends Controller
     public function index(Request $request): AnonymousResourceCollection
     {
         return view('village');
+        // return $this->repository->getListOfVillages($request->query());
     }
 
     /**
@@ -44,6 +45,17 @@ class VillageController extends Controller
     {
         $data = Village::with('mukim', 'mukim.district')
                     ->select('id', 'name', 'mukim_id')
+                    ->where('name', 'iLIKE', '%'.$request->get('search').'%')
+                    ->take(10)
+                    ->get();
+
+        return response()->json($data);
+    }
+
+    public function district(Request $request)
+    {
+        $data = District::with('district')
+                    ->select('id', 'name', 'district_id')
                     ->where('name', 'iLIKE', '%'.$request->get('search').'%')
                     ->take(10)
                     ->get();
