@@ -15,7 +15,7 @@ class LoginTest extends CustomDuskTestCase
     public function testLogin()
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(env('FRONTEND_URL'))
+            $browser->visit(env('FRONTEND_URL').'/login')
                 ->waitForLocation('/login')
                 ->waitForText('Email')
                 ->waitForText('Remember me')
