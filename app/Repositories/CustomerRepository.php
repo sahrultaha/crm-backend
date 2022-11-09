@@ -43,6 +43,7 @@ class CustomerRepository
             $sort = 'desc';
         }
         $builder = Customer::query()->orderBy('id', $sort);
+        $builder->with('accountCategory');
         if (isset($query['search']) && mb_strlen($query['search']) > 3) {
             if (env('DB_CONNECTION') === 'pgsql') {
                 $builder->whereRaw('fulltext @@ to_tsquery(?)', [$query['search']]);

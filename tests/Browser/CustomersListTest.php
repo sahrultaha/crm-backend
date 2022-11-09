@@ -29,34 +29,34 @@ class CustomersListTest extends CustomDuskTestCase
             sleep(1);
 
             $browser
-                ->assertSee($customerA['id'].' - '.$customerA['name'])
-                ->assertSee($customerB['id'].' - '.$customerB['name']);
+                ->assertSee($customerA['name'])
+                ->assertSee($customerB['name']);
 
             $this->changeCustomersListDropdownSort($browser, 'desc');
 
             $browser
-                ->assertSee($customerB['id'].' - '.$customerB['name'])
-                ->assertSee($customerA['id'].' - '.$customerA['name']);
+                ->assertSee($customerB['name'])
+                ->assertSee($customerA['name']);
 
             $this->changeCustomersListDropdownSort($browser, 'asc');
 
             $browser
-                ->assertSee($customerA['id'].' - '.$customerA['name'])
-                ->assertSee($customerB['id'].' - '.$customerB['name']);
+                ->assertSee($customerA['name'])
+                ->assertSee($customerB['name']);
 
             $this->changeCustomersListDropdownLimit($browser, 1);
 
             $browser
-                ->assertSee($customerA['id'].' - '.$customerA['name'])
-                ->assertNotPresent($customerB['id'].' - '.$customerB['name'])
+                ->assertSee($customerA['name'])
+                ->assertNotPresent($customerB['name'])
                 ->assertPresent('#page-link-1')
                 ->assertPresent('#page-link-2');
 
             $browser
                 ->click('#page-link-2')
                 ->pause(1000)
-                ->assertSee($customerB['id'].' - '.$customerB['name'])
-                ->assertNotPresent($customerA['id'].' - '.$customerA['name']);
+                ->assertSee($customerB['name'])
+                ->assertNotPresent($customerA['name']);
         });
     }
 }
