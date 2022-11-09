@@ -11,4 +11,14 @@ class Customer extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'customer';
+
+    protected $hidden = [
+        'fulltext',
+        'deleted_at',
+    ];
+
+    public function accountCategory()
+    {
+        return $this->belongsTo(AccountCategory::class, 'account_category_id');
+    }
 }
