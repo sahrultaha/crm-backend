@@ -16,13 +16,14 @@ class LoginTest extends CustomDuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(env('FRONTEND_URL').'/login')
+                ->waitForLocation('/login')
                 ->waitForText('Email')
                 ->waitForText('Remember me')
                 ->typeSlowly('#email', env('ADMIN_EMAIL'))
                 ->typeSlowly('#password', env('ADMIN_PASSWORD'))
                 ->press('LOGIN')
-                ->waitForText('Dashboard')
-                ->assertPathIs('/dashboard');
+                ->waitForText('Customers Index')
+                ->assertPathIs('/customers');
         });
     }
 }

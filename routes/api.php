@@ -1,7 +1,11 @@
 <?php
 
 use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\DistrictController;
 use App\Http\Controllers\Api\FileController;
+use App\Http\Controllers\Api\MukimController;
+use App\Http\Controllers\Api\PostalCodeController;
+use App\Http\Controllers\Api\VillageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,5 +26,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/files', 'store');
         Route::patch('/files', 'update');
         Route::get('/files/{file}', 'show');
+    });
+    Route::controller(VillageController::class)->group(function () {
+        Route::get('/autocomplete', 'autocomplete');
+    });
+    Route::controller(DistrictController::class)->group(function () {
+        Route::get('/district', 'district');
+    });
+    Route::controller(MukimController::class)->group(function () {
+        Route::get('/mukim', 'mukim');
+    });
+    Route::controller(PostalCodeController::class)->group(function () {
+        Route::get('/postalcode', 'postalcode');
     });
 });

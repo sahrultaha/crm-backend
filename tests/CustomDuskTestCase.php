@@ -25,8 +25,8 @@ class CustomDuskTestCase extends DuskTestCase
             ->typeSlowly('#email', env('ADMIN_EMAIL'))
             ->typeSlowly('#password', env('ADMIN_PASSWORD'))
             ->press('LOGIN')
-            ->waitForText('Dashboard')
-            ->assertPathIs('/dashboard');
+            ->waitForText('Customers Index')
+            ->assertPathIs('/customers');
     }
 
     public function createNewCustomer(Browser $browser, $ic_number = '01987651'): void
