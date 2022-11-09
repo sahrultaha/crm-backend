@@ -85,4 +85,29 @@ class CustomerRepository
     {
         return Customer::where('ic_number', $query['ic_number'])->where('ic_type_id', $query['ic_type_id'])->get();
     }
+
+    public function getCustomerDetails($query) : Customer
+    {
+        return Customer::find($query['id']);
+    }
+
+    public function updateCustomer($id, array $validated): Customer
+    {
+        $customer = Customer::find($id);
+        $customer->name = $validated['name'];
+        $customer->email = $validated['email'] ?? null;
+        $customer->mobile_number = $validated['mobile_number'] ?? null;
+        $customer->ic_number = $validated['ic_number'];
+        $customer->ic_type_id = $validated['ic_type_id'];
+        $customer->ic_expiry_date = $validated['ic_expiry_date'];
+        $customer->customer_title_id = $validated['customer_title_id'] ?? null;
+        $customer->account_category_id = $validated['account_category_id'];
+        $customer->birth_date = $validated['birth_date'];
+        $customer->country_id = $validated['country_id'];
+        $customer->ic_color_id = $validated['ic_color_id'] ?? null;
+
+        $customer->save();
+        
+        return $customer;
+    }
 }

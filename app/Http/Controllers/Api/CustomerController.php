@@ -54,6 +54,21 @@ class CustomerController extends Controller
         return response()->json($this->repository->checkCustomerByIc($request->query())->toArray());
     }
 
+    public function getCustomer(Request $request): JsonResponse
+    {
+        $customer = $this->repository->getCustomerDetails($request->query());
+
+        $file_ids = $this->repository->getFileIds($customer->id);
+
+        $data_to_return = $customer->toArray();
+        $data_to_return = array_merge($data_to_return, [
+            'file_ids' => $file_ids->isNotEmpty() ? $file_ids->pluck('file_id')->toArray() : [],
+        ]);
+
+        return response()->json($data_to_return);
+    }
+
+
     public function destroy(Customer $customer): JsonResponse
     {
         $id = $customer->id;
@@ -63,5 +78,17 @@ class CustomerController extends Controller
         return response()->json([
             'id' => $id,
         ]);
+    }
+
+    public function update(CustomerStoreRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+        $id = $request['id'];
+
+        $customer_update = $this->repository->updateCustomer($id,$validated);
+
+        return response()->json([
+            'id' => $customer_update->id,
+        ], 201);
     }
 }

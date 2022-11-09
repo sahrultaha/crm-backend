@@ -13,11 +13,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/customers', 'index');
         Route::post('/customers', 'store');
         Route::get('/customers/search', 'checkIc');
+        Route::get('/customers/get', 'getCustomer');
+        Route::put('/customers/update', 'update');
         Route::get('/customers/{id}', 'show');
         Route::delete('/customers/{customer}', 'destroy');
     });
     Route::controller(FileController::class)->group(function () {
         Route::post('/files', 'store');
+        Route::patch('/files', 'update');
         Route::get('/files/{file}', 'show');
     });
 });
