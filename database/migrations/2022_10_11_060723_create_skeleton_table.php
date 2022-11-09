@@ -39,7 +39,7 @@ return new class extends Migration
         });
         Schema::create('customer', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps();
+
             $table->string('name');
             $table->string('email')->nullable();
             $table->string('mobile_number')->nullable();
@@ -61,6 +61,8 @@ return new class extends Migration
             $table->index('ic_type_id');
             $table->index('customer_title_id');
             $table->index('account_category_id');
+            $table->timestampTz('created_at', 0)->nullable()->useCurrent();
+            $table->timestampTz('updated_at', 0)->nullable()->useCurrent();
             $table->softDeletes();
         });
         Schema::create('district', function (Blueprint $table) {

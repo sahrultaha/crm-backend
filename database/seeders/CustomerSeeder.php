@@ -27,6 +27,7 @@ class CustomerSeeder extends Seeder
                 'country_id' => 1,
                 'account_category_id' => 1,
                 'birth_date' => now()->subYears(50),
+                'created_at' => now(),
             ];
         }
         Customer::insert($insert);
