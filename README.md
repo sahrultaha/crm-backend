@@ -60,3 +60,23 @@ Refer to documentation of [sail](https://laravel.com/docs/9.x/sail)
 - Login with username `sail` and password `password`
 - Create a bucket with the name `photos`
 - Copy `FILESYSTEM_DISK` and all the `AWS_X` values from your `.env.example` into your `.env` and `.env.dusk.local`
+
+## Selenium Docker Compose Override
+- only for machines using Apple Silicon chip. See [details](https://laravel.com/docs/9.x/sail#selenium-on-apple-silicon)
+- create docker-compose.override.yml
+- paste the following inside the file:
+```yaml
+# For more information: https://laravel.com/docs/sail
+version: '3'
+services:
+  selenium:
+    image: 'seleniarm/standalone-chromium'
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    volumes:
+      - '/dev/shm:/dev/shm'
+    networks:
+      - sail
+    ports:
+      - '7900:7900'
+```
