@@ -21,4 +21,20 @@ class VillageRepository
             Village::query()
         );
     }
+
+    public function autocomplete($query)
+    {
+        $builder = Village::with('mukim', 'mukim.district')
+            ->select('id', 'name', 'mukim_id')
+            ->take(10);
+            
+        if(env('DB_CONNECTION')==='pgsql'){
+            $builder->where('name', 'iLIKE', '%'.$query.'%');
+            // whereRaw('name @@ to_tsquery(?)',[$query['search']] );
+        }else{
+            $builder->where('name', 'like', "%{$query['search']}%");
+        }
+
+        return $builder->get();
+    }
 }

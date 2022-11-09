@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
+use App\Models\Address;
 use App\Models\FileRelation;
 use App\Models\FileRelationType;
 use Illuminate\Database\Eloquent\Collection;
@@ -11,8 +12,24 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CustomerRepository
 {
+
     public function createNewCustomer(array $validated): Customer
     {
+        $address = new Address();
+        $address->village_id = $validated['village_id'];
+        $address->district_id = $validated['district_id'];
+        $address->mukim_id = $validated['mukim_id'];
+        $address->postal_code_id = $validated['postal_code_id'];
+        $address->house_number = $validated['house_number'];
+        $address->simpang = $validated['simpang'];
+        $address->street = $validated['street'];
+        $address->building_name = $validated['building_name'];
+        $address->block = $validated['block'];
+        $address->floor = $validated['floor'];
+        $address->unit = $validated['unit'];
+
+        $address->save();
+
         $new_customer = new Customer();
         $new_customer->name = $validated['name'];
         $new_customer->email = $validated['email'] ?? null;
@@ -24,6 +41,7 @@ class CustomerRepository
         $new_customer->account_category_id = $validated['account_category_id'];
         $new_customer->birth_date = $validated['birth_date'];
         $new_customer->country_id = $validated['country_id'];
+        $new_customer->address_id = $address->id;
         $new_customer->ic_color_id = $validated['ic_color_id'] ?? null;
 
         $new_customer->save();

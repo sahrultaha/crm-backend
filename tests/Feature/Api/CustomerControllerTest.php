@@ -676,4 +676,18 @@ class CustomerControllerTest extends TestCase
             ->assertJsonPath('id', $id);
         $this->assertTrue($customer->fresh()->trashed());
     }
+
+    public function test_village_entry_autoselects_mukim_district_and_postalcode()
+    {
+        $user = User::factory()->create();
+        $customer_village = 'Telisai';
+
+        Sanctum::actingAs($user);
+        $response = $this->getJson("/api/autocomplete?search=".$customer_village);
+        $response 
+            ->assertOk();
+            // ->assertJsonPath('id', '293');
+    }
+
+    
 }
