@@ -28,11 +28,15 @@ class CustomerController extends Controller
     {
         $validated = $request->validated();
 
+        // $address = $this->repository->createNewAddress($validated);
+
+        // $validated['address_id'] = $address->id;
+
         $customer = $this->repository->createNewCustomer($validated);
 
         return response()->json([
             'id' => $customer->id,
-            'address_id'=>$customer->address_id, //test
+            'address_id' => $customer->address_id,
         ], 201);
     }
 

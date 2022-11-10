@@ -4,6 +4,7 @@ namespace Tests\Feature\Api;
 
 use App\Models\AccountCategory;
 use App\Models\Country;
+use App\Models\Address;
 use App\Models\Customer;
 use App\Models\CustomerTitle;
 use App\Models\File;
@@ -30,6 +31,7 @@ class CustomerControllerTest extends TestCase
         $country = Country::factory()->create();
         $customer_title = CustomerTitle::factory()->create();
         $account_category = AccountCategory::factory()->create();
+        $address = Address::factory()->create();
 
         $customer_name = 'Abc';
         $customer_email = 'test@mail.com';
@@ -42,6 +44,12 @@ class CustomerControllerTest extends TestCase
         $customer_title_id = $customer_title->id;
         $customer_account_category_id = $account_category->id;
         $customer_birth_date = '2100-01-20';
+        $customer_address = $address->id;
+        $customer_village = $address->village_id;
+        $customer_house_number = $address->house_number;
+        $customer_simpang = $address->simpang;
+        $customer_street = $address->street;
+
 
         return [
             $customer_name,
@@ -55,6 +63,11 @@ class CustomerControllerTest extends TestCase
             $customer_title_id,
             $customer_account_category_id,
             $customer_birth_date,
+            $customer_address,
+            $customer_village,
+            $customer_house_number,
+            $customer_simpang,
+            $customer_street,
         ];
     }
 
@@ -84,6 +97,11 @@ class CustomerControllerTest extends TestCase
             $customer_title_id,
             $customer_account_category_id,
             $customer_birth_date,
+            $customer_address,
+            $customer_village,
+            $customer_house_number,
+            $customer_simpang,
+            $customer_street,
         ] = $this->generateCustomerPostData();
 
         Sanctum::actingAs($user);
@@ -101,6 +119,10 @@ class CustomerControllerTest extends TestCase
             'customer_title_id' => $customer_title_id,
             'account_category_id' => $customer_account_category_id,
             'birth_date' => $customer_birth_date,
+            'village_id' => $customer_village,
+            'house_number' => $customer_house_number,
+            'simpang' => $customer_simpang,
+            'street' => $customer_street,
         ]);
 
         $response->assertCreated();
@@ -117,6 +139,8 @@ class CustomerControllerTest extends TestCase
         $this->assertEquals($customer->customer_title_id, $customer_title_id);
         $this->assertEquals($customer->account_category_id, $customer_account_category_id);
         $this->assertEquals($customer->birth_date, $customer_birth_date);
+        // $this->assertEquals($customer->address_id, $customer_address);
+        $this->assertDatabaseCount('address', 1);
     }
 
     public function test_users_can_create_new_customer_without_email()

@@ -95,18 +95,19 @@ return new class extends Migration
         });
         Schema::create('address', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('street');
-            $table->string('simpang');
-            $table->string('house_number');
-            $table->smallInteger('district_id');
-            $table->smallInteger('mukim_id');
-            $table->smallInteger('village_id');
-            $table->smallInteger('postal_code_id');
-            $table->timestamps();
+            $table->smallInteger('village_id')->nullable();
+            $table->smallInteger('mukim_id')->nullable();
+            $table->smallInteger('district_id')->nullable();
+            $table->smallInteger('postal_code_id')->nullable();
+            $table->string('street')->nullable();
+            $table->string('simpang')->nullable();
+            $table->string('house_number')->nullable();
             $table->string('block')->nullable();
             $table->string('floor')->nullable();
             $table->string('unit')->nullable();
             $table->string('building_name')->nullable();
+            $table->timestampTz('created_at', 0)->nullable()->useCurrent();
+            $table->timestampTz('updated_at', 0)->nullable()->useCurrent();
             $table->foreign('district_id')->references('id')->on('district');
             $table->foreign('mukim_id')->references('id')->on('mukim');
             $table->foreign('village_id')->references('id')->on('village');
