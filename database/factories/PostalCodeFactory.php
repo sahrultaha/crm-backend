@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Village;
+
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
