@@ -58,7 +58,7 @@ Refer to documentation of [sail](https://laravel.com/docs/9.x/sail)
 ## Setup minio
 - Go to crm.test:8900
 - Login with username `sail` and password `password`
-- Create a bucket with the name `photos`
+- Create a bucket with the name `crm`
 - Copy `FILESYSTEM_DISK` and all the `AWS_X` values from your `.env.example` into your `.env` and `.env.dusk.local`
 
 ## Selenium Docker Compose Override
