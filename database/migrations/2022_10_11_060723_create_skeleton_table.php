@@ -183,6 +183,10 @@ return new class extends Migration
             $table->integer('imsi');
             $table->smallInteger('imsi_status_id');
             $table->smallInteger('imsi_type_id');
+            $table->smallInteger('pin');
+            $table->integer('puk_1');
+            $table->integer('puk_2');
+            $table->string('ki');
             $table->timestamps();
             $table->softDeletes();
             $table->index('imsi');
