@@ -14,6 +14,6 @@ class Imsi extends Model
         'imsi_type_id',
         'pin',
         'puk_1',
-        'puk_2'
+        'puk_2',
     ];
 }
