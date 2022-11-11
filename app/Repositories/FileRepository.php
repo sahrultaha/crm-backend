@@ -14,7 +14,7 @@ class FileRepository
         $name = $file->hashName();
         $extension = $file->extension();
         $path = Storage::putFileAs(
-            'photos',
+            env('AWS_BUCKET'),
             $validated['file'],
             $name,
         );
