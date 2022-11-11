@@ -15,4 +15,5 @@ yarn-error.log
 phpunit.xml
 /.idea
 /.vscode
+/nbproject
 docker-compose.override.yml
