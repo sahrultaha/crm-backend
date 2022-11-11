@@ -7,7 +7,6 @@ use Tests\CustomDuskTestCase;
 
 class CustomerNameSeparatedBySpace extends CustomDuskTestCase
 {
-
     public function test_name_can_be_separated_by_space()
     {
         $this->browse(function (Browser $browser) {
