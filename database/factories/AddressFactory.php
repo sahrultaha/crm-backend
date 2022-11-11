@@ -20,7 +20,6 @@ class AddressFactory extends Factory
      */
     public function definition(): array
     {
-
         return [
             'village_id' => Village::factory(),
             'mukim_id' => Mukim::factory(),

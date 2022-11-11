@@ -19,11 +19,11 @@ class DistrictRepository
             ->select('id', 'name', 'district_id')
             // ->where('name', 'iLIKE', '%'.$query.'%')
             ->take(10);
-            
-        if(env('DB_CONNECTION')==='pgsql'){
+
+        if (env('DB_CONNECTION') === 'pgsql') {
             $builder->where('name', 'iLIKE', '%'.$query.'%');
-            // whereRaw('name @@ to_tsquery(?)',[$query['search']] );
-        }else{
+        // whereRaw('name @@ to_tsquery(?)',[$query['search']] );
+        } else {
             $builder->where('name', 'like', "%{$query['search']}%");
         }
 

@@ -3,8 +3,8 @@
 namespace App\Repositories;
 
 use App\Http\Resources\CustomerResource;
-use App\Models\Customer;
 use App\Models\Address;
+use App\Models\Customer;
 use App\Models\FileRelation;
 use App\Models\FileRelationType;
 use Illuminate\Database\Eloquent\Collection;
@@ -15,37 +15,37 @@ class CustomerRepository
     public function createNewAddress(array $validated): Address
     {
         $address = new Address();
-        if (array_key_exists($validated['village_id'], $validated)){
+        if (array_key_exists($validated['village_id'], $validated)) {
             $address->village_id = $validated['village_id'];
         }
-        if (array_key_exists($validated['district_id'], $validated)){
+        if (array_key_exists($validated['district_id'], $validated)) {
             $address->district_id = $validated['district_id'];
         }
-        if (array_key_exists($validated['mukim_id'], $validated)){
+        if (array_key_exists($validated['mukim_id'], $validated)) {
             $address->mukim_id = $validated['mukim_id'];
         }
-        if (array_key_exists($validated['postal_code_id'], $validated)){
+        if (array_key_exists($validated['postal_code_id'], $validated)) {
             $address->postal_code_id = $validated['postal_code_id'];
         }
-        if (array_key_exists($validated['house_number'], $validated)){
+        if (array_key_exists($validated['house_number'], $validated)) {
             $address->house_number = $validated['house_number'];
         }
-        if (array_key_exists($validated['simpang'], $validated)){
+        if (array_key_exists($validated['simpang'], $validated)) {
             $address->simpang = $validated['simpang'];
         }
-        if (array_key_exists($validated['street'], $validated)){
+        if (array_key_exists($validated['street'], $validated)) {
             $address->street = $validated['street'];
         }
-        if (array_key_exists($validated['building_name'], $validated)){
+        if (array_key_exists($validated['building_name'], $validated)) {
             $address->building_name = $validated['building_name'];
         }
-        if (array_key_exists($validated['block'], $validated)){
+        if (array_key_exists($validated['block'], $validated)) {
             $address->block = $validated['block'];
         }
-        if (array_key_exists($validated['floor'], $validated)){
+        if (array_key_exists($validated['floor'], $validated)) {
             $address->floor = $validated['floor'];
         }
-        if (array_key_exists($validated['unit'], $validated)){
+        if (array_key_exists($validated['unit'], $validated)) {
             $address->unit = $validated['unit'];
         }
 
@@ -53,24 +53,9 @@ class CustomerRepository
 
         return $address;
     }
-    
+
     public function createNewCustomer(array $validated, Address $address): Customer
     {
-        // $address = new Address();
-        // $address->village_id = $validated['village_id'];
-        // $address->district_id = $validated['district_id'];
-        // $address->mukim_id = $validated['mukim_id'];
-        // $address->postal_code_id = $validated['postal_code_id'];
-        // $address->house_number = $validated['house_number'];
-        // $address->simpang = $validated['simpang'];
-        // $address->street = $validated['street'];
-        // $address->building_name = $validated['building_name'];
-        // $address->block = $validated['block'];
-        // $address->floor = $validated['floor'];
-        // $address->unit = $validated['unit'];
-
-        // $address->save();
-    
         $new_customer = new Customer();
         $new_customer->name = $validated['name'];
         $new_customer->email = $validated['email'] ?? null;
@@ -82,7 +67,6 @@ class CustomerRepository
         $new_customer->account_category_id = $validated['account_category_id'];
         $new_customer->birth_date = $validated['birth_date'];
         $new_customer->country_id = $validated['country_id'];
-        // $new_customer->address_id = $validated['address_id'];
         $new_customer->address_id = $address->id ?? null;
         $new_customer->ic_color_id = $validated['ic_color_id'] ?? null;
 

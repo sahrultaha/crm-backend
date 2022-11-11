@@ -28,6 +28,6 @@ class Address extends Model
 
     public function postalCode()
     {
-        return $this ->belongsTo(PostalCode::class, 'postal_code_id');
+        return $this->belongsTo(PostalCode::class, 'postal_code_id');
     }
 }

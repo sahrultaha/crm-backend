@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Village;
 use App\Repositories\VillageRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -49,7 +48,7 @@ class VillageController extends Controller
         return response()->json($data);
     }
 
-    public function district(Request $request) : District
+    public function district(Request $request): District
     {
         $query = $request->get('search');
         $data = $this->repository->district($query);

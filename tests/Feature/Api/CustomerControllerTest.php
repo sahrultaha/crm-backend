@@ -3,9 +3,8 @@
 namespace Tests\Feature\Api;
 
 use App\Models\AccountCategory;
-use App\Models\Country;
 use App\Models\Address;
-use App\Models\Village;
+use App\Models\Country;
 use App\Models\Customer;
 use App\Models\CustomerTitle;
 use App\Models\File;
@@ -14,6 +13,7 @@ use App\Models\FileRelationType;
 use App\Models\IcColor;
 use App\Models\IcType;
 use App\Models\User;
+use App\Models\Village;
 use Database\Seeders\FileSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -59,7 +59,6 @@ class CustomerControllerTest extends TestCase
         $customer_block = $address->block;
         $customer_floor = $address->floor;
         $customer_unit = $address->unit;
-
 
         return [
             $customer_name,
@@ -153,8 +152,8 @@ class CustomerControllerTest extends TestCase
             'simpang' => $customer_simpang,
             'street' => $customer_street,
             'building_name' => $customer_building_name,
-            'block'=> $customer_block,
-            'floor'=> $customer_floor,
+            'block' => $customer_block,
+            'floor' => $customer_floor,
             'unit' => $customer_unit,
         ]);
 
@@ -172,7 +171,6 @@ class CustomerControllerTest extends TestCase
         $this->assertEquals($customer->customer_title_id, $customer_title_id);
         $this->assertEquals($customer->account_category_id, $customer_account_category_id);
         $this->assertEquals($customer->birth_date, $customer_birth_date);
-        // $this->assertEquals($customer->address_id, $customer_address);
     }
 
     public function test_users_can_create_new_customer_without_email()
@@ -191,6 +189,19 @@ class CustomerControllerTest extends TestCase
             $customer_title_id,
             $customer_account_category_id,
             $customer_birth_date,
+            $customer_address,
+            $customer_village,
+            $village,
+            $customer_mukim_id,
+            $customer_district_id,
+            $customer_postal_code_id,
+            $customer_house_number,
+            $customer_simpang,
+            $customer_street,
+            $customer_building_name,
+            $customer_block,
+            $customer_floor,
+            $customer_unit,
         ] = $this->generateCustomerPostData();
 
         Sanctum::actingAs($user);
@@ -207,6 +218,17 @@ class CustomerControllerTest extends TestCase
             'customer_title_id' => $customer_title_id,
             'account_category_id' => $customer_account_category_id,
             'birth_date' => $customer_birth_date,
+            'village_id' => $customer_village,
+            'district_id' => $customer_district_id,
+            'mukim_id' => $customer_mukim_id,
+            'postal_code_id' => $customer_postal_code_id,
+            'house_number' => $customer_house_number,
+            'simpang' => $customer_simpang,
+            'street' => $customer_street,
+            'building_name' => $customer_building_name,
+            'block' => $customer_block,
+            'floor' => $customer_floor,
+            'unit' => $customer_unit,
         ]);
 
         $response->assertCreated();
@@ -241,6 +263,19 @@ class CustomerControllerTest extends TestCase
             $customer_title_id,
             $customer_account_category_id,
             $customer_birth_date,
+            $customer_address,
+            $customer_village,
+            $village,
+            $customer_mukim_id,
+            $customer_district_id,
+            $customer_postal_code_id,
+            $customer_house_number,
+            $customer_simpang,
+            $customer_street,
+            $customer_building_name,
+            $customer_block,
+            $customer_floor,
+            $customer_unit,
         ] = $this->generateCustomerPostData();
 
         Sanctum::actingAs($user);
@@ -257,6 +292,17 @@ class CustomerControllerTest extends TestCase
             'customer_title_id' => $customer_title_id,
             'account_category_id' => $customer_account_category_id,
             'birth_date' => $customer_birth_date,
+            'village_id' => $customer_village,
+            'district_id' => $customer_district_id,
+            'mukim_id' => $customer_mukim_id,
+            'postal_code_id' => $customer_postal_code_id,
+            'house_number' => $customer_house_number,
+            'simpang' => $customer_simpang,
+            'street' => $customer_street,
+            'building_name' => $customer_building_name,
+            'block' => $customer_block,
+            'floor' => $customer_floor,
+            'unit' => $customer_unit,
         ]);
 
         $response->assertCreated();
@@ -291,6 +337,19 @@ class CustomerControllerTest extends TestCase
             $customer_title_id,
             $customer_account_category_id,
             $customer_birth_date,
+            $customer_address,
+            $customer_village,
+            $village,
+            $customer_mukim_id,
+            $customer_district_id,
+            $customer_postal_code_id,
+            $customer_house_number,
+            $customer_simpang,
+            $customer_street,
+            $customer_building_name,
+            $customer_block,
+            $customer_floor,
+            $customer_unit,
         ] = $this->generateCustomerPostData();
 
         Sanctum::actingAs($user);
@@ -307,6 +366,17 @@ class CustomerControllerTest extends TestCase
             'customer_title_id' => $customer_title_id,
             'account_category_id' => $customer_account_category_id,
             'birth_date' => $customer_birth_date,
+            'village_id' => $customer_village,
+            'district_id' => $customer_district_id,
+            'mukim_id' => $customer_mukim_id,
+            'postal_code_id' => $customer_postal_code_id,
+            'house_number' => $customer_house_number,
+            'simpang' => $customer_simpang,
+            'street' => $customer_street,
+            'building_name' => $customer_building_name,
+            'block' => $customer_block,
+            'floor' => $customer_floor,
+            'unit' => $customer_unit,
         ]);
 
         $response->assertCreated();
@@ -341,6 +411,19 @@ class CustomerControllerTest extends TestCase
             $customer_title_id,
             $customer_account_category_id,
             $customer_birth_date,
+            $customer_address,
+            $customer_village,
+            $village,
+            $customer_mukim_id,
+            $customer_district_id,
+            $customer_postal_code_id,
+            $customer_house_number,
+            $customer_simpang,
+            $customer_street,
+            $customer_building_name,
+            $customer_block,
+            $customer_floor,
+            $customer_unit,
         ] = $this->generateCustomerPostData();
 
         Sanctum::actingAs($user);
@@ -357,6 +440,17 @@ class CustomerControllerTest extends TestCase
             'country_id' => $customer_country_id,
             'account_category_id' => $customer_account_category_id,
             'birth_date' => $customer_birth_date,
+            'village_id' => $customer_village,
+            'district_id' => $customer_district_id,
+            'mukim_id' => $customer_mukim_id,
+            'postal_code_id' => $customer_postal_code_id,
+            'house_number' => $customer_house_number,
+            'simpang' => $customer_simpang,
+            'street' => $customer_street,
+            'building_name' => $customer_building_name,
+            'block' => $customer_block,
+            'floor' => $customer_floor,
+            'unit' => $customer_unit,
         ]);
 
         $response->assertCreated();
@@ -391,6 +485,19 @@ class CustomerControllerTest extends TestCase
             $customer_title_id,
             $customer_account_category_id,
             $customer_birth_date,
+            $customer_address,
+            $customer_village,
+            $village,
+            $customer_mukim_id,
+            $customer_district_id,
+            $customer_postal_code_id,
+            $customer_house_number,
+            $customer_simpang,
+            $customer_street,
+            $customer_building_name,
+            $customer_block,
+            $customer_floor,
+            $customer_unit,
         ] = $this->generateCustomerPostData();
 
         Sanctum::actingAs($user);
@@ -404,6 +511,17 @@ class CustomerControllerTest extends TestCase
             'country_id' => $customer_country_id,
             'account_category_id' => $customer_account_category_id,
             'birth_date' => $customer_birth_date,
+            'village_id' => $customer_village,
+            'district_id' => $customer_district_id,
+            'mukim_id' => $customer_mukim_id,
+            'postal_code_id' => $customer_postal_code_id,
+            'house_number' => $customer_house_number,
+            'simpang' => $customer_simpang,
+            'street' => $customer_street,
+            'building_name' => $customer_building_name,
+            'block' => $customer_block,
+            'floor' => $customer_floor,
+            'unit' => $customer_unit,
         ]);
 
         $response->assertCreated();
@@ -438,6 +556,19 @@ class CustomerControllerTest extends TestCase
             $customer_title_id,
             $customer_account_category_id,
             $customer_birth_date,
+            $customer_address,
+            $customer_village,
+            $village,
+            $customer_mukim_id,
+            $customer_district_id,
+            $customer_postal_code_id,
+            $customer_house_number,
+            $customer_simpang,
+            $customer_street,
+            $customer_building_name,
+            $customer_block,
+            $customer_floor,
+            $customer_unit,
         ] = $this->generateCustomerPostData();
 
         Sanctum::actingAs($user);
@@ -455,6 +586,17 @@ class CustomerControllerTest extends TestCase
             'customer_title_id' => $customer_title_id,
             'account_category_id' => $customer_account_category_id,
             'birth_date' => $customer_birth_date,
+            'village_id' => $customer_village,
+            'district_id' => $customer_district_id,
+            'mukim_id' => $customer_mukim_id,
+            'postal_code_id' => $customer_postal_code_id,
+            'house_number' => $customer_house_number,
+            'simpang' => $customer_simpang,
+            'street' => $customer_street,
+            'building_name' => $customer_building_name,
+            'block' => $customer_block,
+            'floor' => $customer_floor,
+            'unit' => $customer_unit,
         ]);
 
         $this->assertDatabaseCount('customer', 1);
@@ -473,6 +615,8 @@ class CustomerControllerTest extends TestCase
         $ic_back_category = FileCategory::find(2);
         $fake_file = UploadedFile::fake()->image('image.jpg');
 
+        $user = User::factory()->create();
+
         [
             $customer_name,
             $customer_email,
@@ -485,6 +629,19 @@ class CustomerControllerTest extends TestCase
             $customer_title_id,
             $customer_account_category_id,
             $customer_birth_date,
+            $customer_address,
+            $customer_village,
+            $village,
+            $customer_mukim_id,
+            $customer_district_id,
+            $customer_postal_code_id,
+            $customer_house_number,
+            $customer_simpang,
+            $customer_street,
+            $customer_building_name,
+            $customer_block,
+            $customer_floor,
+            $customer_unit,
         ] = $this->generateCustomerPostData();
 
         Sanctum::actingAs($user);
@@ -502,6 +659,17 @@ class CustomerControllerTest extends TestCase
             'customer_title_id' => $customer_title_id,
             'account_category_id' => $customer_account_category_id,
             'birth_date' => $customer_birth_date,
+            'village_id' => $customer_village,
+            'district_id' => $customer_district_id,
+            'mukim_id' => $customer_mukim_id,
+            'postal_code_id' => $customer_postal_code_id,
+            'house_number' => $customer_house_number,
+            'simpang' => $customer_simpang,
+            'street' => $customer_street,
+            'building_name' => $customer_building_name,
+            'block' => $customer_block,
+            'floor' => $customer_floor,
+            'unit' => $customer_unit,
         ]);
 
         $response->assertCreated();
@@ -732,18 +900,4 @@ class CustomerControllerTest extends TestCase
             ->assertJsonPath('id', $id);
         $this->assertTrue($customer->fresh()->trashed());
     }
-
-    public function test_village_entry_autoselects_mukim_district_and_postalcode()
-    {
-        $user = User::factory()->create();
-        $customer_village = 'Telisai';
-
-        Sanctum::actingAs($user);
-        $response = $this->getJson("/api/autocomplete?search=".$customer_village);
-        $response 
-            ->assertOk();
-            // ->assertJsonPath('id', '293');
-    }
-
-    
 }

@@ -27,11 +27,11 @@ class VillageRepository
         $builder = Village::with('mukim', 'mukim.district')
             ->select('id', 'name', 'mukim_id')
             ->take(10);
-            
-        if(env('DB_CONNECTION')==='pgsql'){
+
+        if (env('DB_CONNECTION') === 'pgsql') {
             $builder->where('name', 'iLIKE', '%'.$query.'%');
-            // whereRaw('name @@ to_tsquery(?)',[$query['search']] );
-        }else{
+        // whereRaw('name @@ to_tsquery(?)',[$query['search']] );
+        } else {
             $builder->where('name', 'like', "%{$query['search']}%");
         }
 
