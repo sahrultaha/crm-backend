@@ -210,5 +210,29 @@ class Skeleton extends Seeder
                 'name' => 'Invoiced',
             ],
         ]);
+        DB::table('imsi_type')->insert([
+            [
+                'id' => 1,
+                'name' => '3G',
+            ],
+            [
+                'id' => 2,
+                'name' => '4G',
+            ],
+        ]);
+        DB::table('imsi_status')->insert([
+            [
+                'id' => 1,
+                'name' => 'Available',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Active',
+            ],
+            [
+                'id' => 3,
+                'name' => 'Terminated',
+            ],
+        ]);
     }
 }
