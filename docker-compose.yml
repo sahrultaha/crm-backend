@@ -27,7 +27,6 @@ services:
             - redis
             - minio.test
             - mailhog
-            - selenium
     pgsql:
         image: 'postgres:14'
         ports:
@@ -93,6 +92,8 @@ services:
             - sail
         ports:
             - '7900:7900'
+        depends_on:
+            - www.crm.test
     www.crm.test:
         image: 'node:16-alpine'
         command: 'npm run dev'
