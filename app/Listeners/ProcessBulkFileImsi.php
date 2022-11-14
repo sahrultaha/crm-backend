@@ -5,12 +5,15 @@ namespace App\Listeners;
 use App\Events\FileUploaded;
 use App\Models\FileCategory;
 use App\Traits\LogAwareTraits;
-use Illuminate\Contracts\Filesystem\Factory as FileSystemManager;
+use Illuminate\Contracts\Filesystem\Factory;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Log\Logger;
+use Illuminate\Queue\InteractsWithQueue;
 use Psr\Log\LogLevel;
 
-class ProcessBulkFileImsi
+class ProcessBulkFileImsi implements ShouldQueue
 {
+    use InteractsWithQueue;
     use LogAwareTraits;
 
     protected $manager;
@@ -22,7 +25,7 @@ class ProcessBulkFileImsi
      *
      * @return void
      */
-    public function __construct(FilesystemManager $manager, ?Logger $logger = null)
+    public function __construct(Factory $manager, ?Logger $logger = null)
     {
         $this->manager = $manager;
         $this->logger = $logger;
@@ -36,8 +39,8 @@ class ProcessBulkFileImsi
      */
     public function handle(FileUploaded $event)
     {
+        $this->log(LogLevel::DEBUG, __METHOD__);
         $file = $event->getFile();
-        $this->log(LogLevel::DEBUG, __METHOD__.json_encode($file));
 
         if ((int) $file->file_category_id !== FileCategory::BULK_IMSI_FILE) {
             return;
@@ -64,6 +67,19 @@ class ProcessBulkFileImsi
         if (file_exists($tmp)) {
             unlink($tmp);
         }
+    }
+
+    /**
+     * Handle the event.
+     *
+     * @param  \App\Events\FileUploaded  $event
+     * @return bool
+     */
+    public function shouldQueue(FileUploaded $event)
+    {
+        $file = $event->getFile();
+
+        return (int) $file->file_category_id === FileCategory::BULK_IMSI_FILE;
     }
 
     protected function checkHeaders(array $row)
