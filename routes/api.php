@@ -26,6 +26,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
     Route::controller(VillageController::class)->group(function () {
         Route::get('/autocomplete', 'autocomplete');
+        Route::get('/district', 'district');
     });
     Route::controller(DistrictController::class)->group(function () {
         Route::get('/district', 'district');
