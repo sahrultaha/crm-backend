@@ -234,5 +234,15 @@ class Skeleton extends Seeder
                 'name' => 'Terminated',
             ],
         ]);
+        DB::table('address_type')->insert([
+            [
+                'id' => 1,
+                'name' => 'Billing Address',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Service Address',
+            ],
+        ]);
     }
 }
