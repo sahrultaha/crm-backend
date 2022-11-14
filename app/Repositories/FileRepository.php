@@ -42,7 +42,7 @@ class FileRepository
         $name = $file->hashName();
         $extension = $file->extension();
         $path = Storage::putFileAs(
-            'photos',
+            env('AWS_BUCKET'),
             $validated['file'],
             $name,
         );
@@ -53,11 +53,6 @@ class FileRepository
         $file_model->filetype = $extension;
         $file_model->file_category_id = $validated['file_category_id'];
         $file_model->save();
-
-        $file_relation = FileRelation::find($validated['relation_id']);
-        $file_relation->file_id = $file_model->id;
-        $file_relation->file_relation_type_id = $validated['relation_type_id'];
-        $file_relation->save();
 
         return $file_model;
     }

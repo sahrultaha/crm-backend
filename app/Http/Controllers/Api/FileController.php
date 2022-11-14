@@ -40,8 +40,8 @@ class FileController extends Controller
     public function update(FileStoreRequest $request): JsonResponse
     {
         $validated = $request->validated();
-        $id = $request['id'];
-        $file = $this->repository->createNewFile($id,$validated);
+        $id = $request['file_id'];
+        $file = $this->repository->updateFiles($id,$validated);
 
         return response()->json([
             'id' => $file->id,
