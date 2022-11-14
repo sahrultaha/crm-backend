@@ -10,8 +10,10 @@ class FileRepository
 {
     public function createNewFile(array $validated): File
     {
+        \Illuminate\Support\Facades\Log::debug(__METHOD__.json_encode($validated));
+        /* @var $file \Illuminate\Http\UploadedFile */
         $file = $validated['file'];
-        $name = $file->hashName();
+        $name = time().'-'.$file->getClientOriginalName();
         $extension = $file->extension();
         $path = Storage::putFileAs(
             env('AWS_BUCKET'),
