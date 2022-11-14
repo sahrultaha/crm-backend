@@ -156,4 +156,39 @@ class ImsiControllerTest extends TestCase
         $this->assertEquals($old_puk_1, $new_imsi->puk_1);
         $this->assertEquals($old_puk_2, $new_imsi->puk_2);
     }
+
+    public function test_users_can_view_existing_imsi_details()
+    {
+        $this->seed(Skeleton::class);
+
+        $imsi_status = ImsiStatus::first();
+        $imsi_type = ImsiType::first();
+        $user = User::factory()->create();
+        $this->assertDatabaseCount('imsi', 0);
+
+        Sanctum::actingAs($user);
+        $this->postJson('/api/imsi', [
+            'imsi' => 1234567890,
+            'imsi_status_id' => $imsi_status->id,
+            'imsi_type_id' => $imsi_type->id,
+            'pin' => 1234,
+            'puk_1' => 123456,
+            'puk_2' => 123456,
+        ])->assertCreated();
+        $this->assertDatabaseCount('imsi', 1);
+
+        $new_imsi = Imsi::first();
+        $new_imsi_id = $new_imsi->id;
+
+        $response = $this->getJson("/api/imsi/$new_imsi_id");
+
+        $response->assertOk()
+            ->assertJsonPath('data.id', $new_imsi->id)
+            ->assertJsonPath('data.imsi', $new_imsi->imsi)
+            ->assertJsonPath('data.imsi_status_id', $new_imsi->imsi_status_id)
+            ->assertJsonPath('data.imsi_type_id', $new_imsi->imsi_type_id)
+            ->assertJsonPath('data.pin', $new_imsi->pin)
+            ->assertJsonPath('data.puk_1', $new_imsi->puk_1)
+            ->assertJsonPath('data.puk_2', $new_imsi->puk_2);
+    }
 }
