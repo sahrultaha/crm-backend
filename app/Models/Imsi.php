@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Imsi extends Model
 {
+    use HasFactory;
+
     protected $table = 'imsi';
 
     protected $fillable = [

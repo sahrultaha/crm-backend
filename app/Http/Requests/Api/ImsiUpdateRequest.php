@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ImsiStoreRequest extends FormRequest
+class ImsiUpdateRequest extends FormRequest
 {
     public function authorize()
     {
@@ -13,6 +13,6 @@ class ImsiStoreRequest extends FormRequest
 
     public function rules()
     {
-        return ImsiRequest::generate();
+        return ImsiRequest::generate(false);
     }
 }
