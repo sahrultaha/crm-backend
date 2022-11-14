@@ -72,6 +72,43 @@ class CustomerStoreRequest extends FormRequest
                 'required',
                 'date',
             ],
+            'village_id' => [
+                'nullable',
+                'exists:village,id',
+            ],
+            'district_id' => [
+                'nullable',
+                'exists:district,id',
+            ],
+            'mukim_id' => [
+                'nullable',
+                'exists:mukim,id',
+            ],
+            'postal_code_id' => [
+                'nullable',
+                'exists:postal_code,id',
+            ],
+            'house_number' => [
+                'nullable',
+            ],
+            'simpang' => [
+                'nullable',
+            ],
+            'street' => [
+                'nullable',
+            ],
+            'building_name' => [
+                'nullable',
+            ],
+            'block' => [
+                'nullable',
+            ],
+            'floor' => [
+                'nullable',
+            ],
+            'unit' => [
+                'nullable',
+            ],
         ];
     }
 }

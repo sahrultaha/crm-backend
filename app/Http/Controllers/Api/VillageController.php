@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Village;
 use App\Repositories\VillageRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -43,22 +42,16 @@ class VillageController extends Controller
 
     public function autocomplete(Request $request)
     {
-        $data = Village::with('mukim', 'mukim.district')
-                    ->select('id', 'name', 'mukim_id')
-                    ->where('name', 'iLIKE', '%'.$request->get('search').'%')
-                    ->take(10)
-                    ->get();
+        $query = $request->get('search');
+        $data = $this->repository->autocomplete($query);
 
         return response()->json($data);
     }
 
-    public function district(Request $request)
+    public function district(Request $request): District
     {
-        $data = District::with('district')
-                    ->select('id', 'name', 'district_id')
-                    ->where('name', 'iLIKE', '%'.$request->get('search').'%')
-                    ->take(10)
-                    ->get();
+        $query = $request->get('search');
+        $data = $this->repository->district($query);
 
         return response()->json($data);
     }

@@ -21,17 +21,17 @@ class AddressFactory extends Factory
     public function definition(): array
     {
         return [
-            'street' => fake()->name(),
-            'simpang' => fake()->name(),
-            'house_number' => fake()->name(),
-            'district_id' => District::factory(),
-            'mukim_id' => Mukim::factory(),
             'village_id' => Village::factory(),
+            'mukim_id' => Mukim::factory(),
+            'district_id' => District::factory(),
             'postal_code_id' => PostalCode::factory(),
-            'block' => fake()->name(),
-            'floor' => fake()->name(),
-            'unit' => fake()->name(),
-            'building_name' => fake()->name(),
+            'street' => 'Jalan Buku',
+            'simpang' => 'Simpang 21',
+            'house_number' => 'No 1',
+            'block' => 'Block A',
+            'floor' => '1st floor',
+            'unit' => 'Unit 1B',
+            'building_name' => 'Bangunan sini',
         ];
     }
 }

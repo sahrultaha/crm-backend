@@ -49,6 +49,7 @@ return new class extends Migration
             $table->smallInteger('customer_title_id')->nullable();
             $table->date('birth_date');
             $table->smallInteger('country_id');
+            $table->smallInteger('address_id')->nullable();
             $table->smallInteger('ic_color_id')->nullable();
             $table->smallInteger('account_category_id');
             $table->foreign('country_id')->references('id')->on('country');
@@ -56,6 +57,7 @@ return new class extends Migration
             $table->foreign('ic_type_id')->references('id')->on('ic_type');
             $table->foreign('customer_title_id')->references('id')->on('customer_title');
             $table->foreign('account_category_id')->references('id')->on('account_category');
+            // $table->foreign('address_id')->references('id')->on('address');
             $table->index('country_id');
             $table->index('ic_color_id');
             $table->index('ic_type_id');
@@ -63,6 +65,7 @@ return new class extends Migration
             $table->index('account_category_id');
             $table->timestampTz('created_at', 0)->nullable()->useCurrent();
             $table->timestampTz('updated_at', 0)->nullable()->useCurrent();
+            // $table->index('address_id');
             $table->softDeletes();
         });
         Schema::create('district', function (Blueprint $table) {
@@ -92,18 +95,19 @@ return new class extends Migration
         });
         Schema::create('address', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('street');
-            $table->string('simpang');
-            $table->string('house_number');
-            $table->smallInteger('district_id');
-            $table->smallInteger('mukim_id');
-            $table->smallInteger('village_id');
-            $table->smallInteger('postal_code_id');
-            $table->timestamps();
+            $table->smallInteger('village_id')->nullable();
+            $table->smallInteger('mukim_id')->nullable();
+            $table->smallInteger('district_id')->nullable();
+            $table->smallInteger('postal_code_id')->nullable();
+            $table->string('street')->nullable();
+            $table->string('simpang')->nullable();
+            $table->string('house_number')->nullable();
             $table->string('block')->nullable();
             $table->string('floor')->nullable();
             $table->string('unit')->nullable();
             $table->string('building_name')->nullable();
+            $table->timestampTz('created_at', 0)->nullable()->useCurrent();
+            $table->timestampTz('updated_at', 0)->nullable()->useCurrent();
             $table->foreign('district_id')->references('id')->on('district');
             $table->foreign('mukim_id')->references('id')->on('mukim');
             $table->foreign('village_id')->references('id')->on('village');
@@ -182,7 +186,7 @@ return new class extends Migration
             $table->smallInteger('pin');
             $table->integer('puk_1');
             $table->integer('puk_2');
-            $table->string('ki');
+            $table->string('ki')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->index('imsi');

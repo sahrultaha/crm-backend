@@ -21,4 +21,9 @@ class Customer extends Model
     {
         return $this->belongsTo(AccountCategory::class, 'account_category_id');
     }
+
+    public function address()
+    {
+        return $this->belongsTo(Address::class, 'address_id');
+    }
 }
