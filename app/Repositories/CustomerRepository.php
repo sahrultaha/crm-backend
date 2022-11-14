@@ -14,8 +14,6 @@ class CustomerRepository
 {
     public function createNewAddress(array $validated): Address
     {
-        
-       
         $address = new Address();
         if (array_key_exists($validated['village_id'], $validated)) {
             $address->village_id = $validated['village_id'];
@@ -131,10 +129,11 @@ class CustomerRepository
         return Customer::where('ic_number', $query['ic_number'])->where('ic_type_id', $query['ic_type_id'])->get();
     }
 
-    public function getCustomerDetails($query) : Customer
+    public function getCustomerDetails($query): Customer
     {
         return Customer::find($query['id']);
     }
+
     public function getAddressDetails($id): Address
     {
         return Address::findOrFail($id);
@@ -156,7 +155,7 @@ class CustomerRepository
         $customer->ic_color_id = $validated['ic_color_id'] ?? null;
 
         $customer->save();
-        
+
         return $customer;
     }
 }

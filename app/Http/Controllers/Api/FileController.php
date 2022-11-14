@@ -43,11 +43,10 @@ class FileController extends Controller
     {
         $validated = $request->validated();
         $id = $request['file_id'];
-        $file = $this->repository->updateFiles($id,$validated);
+        $file = $this->repository->updateFiles($id, $validated);
 
         return response()->json([
             'id' => $file->id,
         ], 201);
     }
-  
 }
