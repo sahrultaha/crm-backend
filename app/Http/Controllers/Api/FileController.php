@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\FileUploaded;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FileStoreRequest;
 use App\Models\File;
@@ -22,6 +23,7 @@ class FileController extends Controller
         $validated = $request->validated();
 
         $file = $this->repository->createNewFile($validated);
+        FileUploaded::dispatch($file);
 
         return response()->json([
             'id' => $file->id,
