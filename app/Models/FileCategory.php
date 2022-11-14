@@ -14,6 +14,8 @@ class FileCategory extends Model
 
     public const CUSTOMER_IC_BACK = 2;
 
+    public const BULK_IMSI_FILE = 3;
+
     public $timestamps = false;
 
     protected $table = 'file_category';
