@@ -109,6 +109,9 @@ class CustomerStoreRequest extends FormRequest
             'unit' => [
                 'nullable',
             ],
+            'address_type_id' => [
+                'nullable',
+            ],
         ];
     }
 }

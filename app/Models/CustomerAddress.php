@@ -11,6 +11,8 @@ class CustomerAddress extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'customer_address';
+    
+    public $timestamps = false;
 
     public function customer()
     {

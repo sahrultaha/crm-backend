@@ -17,8 +17,8 @@ class VillageFactory extends Factory
         return [
             'name' => fake()->name(),
             'mukim_id' => Mukim::factory(),
-            // 'district_id' => District::factory(),
-            // 'postal_code_id' => PostalCode::factory(),
+            'district_id' => District::factory(),
+            'postal_code_id' => PostalCode::factory(),
         ];
     }
 }

@@ -53,12 +53,12 @@ class CustomerRepository
         return $new_customer;
     }
 
-    public function createCustomerAddress(Customer $customer, Address $address): CustomerAddress
+    public function createCustomerAddress(array $validated, Customer $customer, Address $address): CustomerAddress
     {
         $customer_address = new CustomerAddress();
         $customer_address->customer_id = $customer->id ?? null;
         $customer_address->address_id = $address->id ?? null;
-        $customer_address->address_type_id = 1;
+        $customer_address->address_type_id = $validated['address_type_id'] ?? null;
 
         $customer_address->save();
 
