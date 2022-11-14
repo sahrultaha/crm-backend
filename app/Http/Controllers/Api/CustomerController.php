@@ -62,8 +62,11 @@ class CustomerController extends Controller
         $customer = $this->repository->getCustomerDetails($request->query());
 
         $file_ids = $this->repository->getFileIds($customer->id);
+        
+        $address_details = $this->repository->getAddressDetails($customer->address_id);
 
-        $data_to_return = $customer->toArray();
+        $customer_data = $customer->toArray();
+        $data_to_return= array_merge($customer_data, ['address'=>$address_details->toArray()?? '']);
         $data_to_return = array_merge($data_to_return, [
             'file_ids' => $file_ids->isNotEmpty() ? $file_ids->pluck('file_id')->toArray() : [],
         ]);

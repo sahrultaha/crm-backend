@@ -14,6 +14,8 @@ class CustomerRepository
 {
     public function createNewAddress(array $validated): Address
     {
+        
+       
         $address = new Address();
         if (array_key_exists($validated['village_id'], $validated)) {
             $address->village_id = $validated['village_id'];
@@ -112,9 +114,7 @@ class CustomerRepository
 
     public function showCustomer($id): Customer
     {
-        $customer = Customer::find($id);
-
-        return $customer;
+        return Customer::find($id);
     }
 
     public function getFileIds($id): Collection
@@ -134,6 +134,10 @@ class CustomerRepository
     public function getCustomerDetails($query) : Customer
     {
         return Customer::find($query['id']);
+    }
+    public function getAddressDetails($id): Address
+    {
+        return Address::findOrFail($id);
     }
 
     public function updateCustomer($id, array $validated): Customer
