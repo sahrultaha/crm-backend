@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Http\Resources\CustomerResource;
 use App\Models\Address;
+use App\Models\CustomerAddress;
 use App\Models\Customer;
 use App\Models\FileRelation;
 use App\Models\FileRelationType;
@@ -15,39 +16,17 @@ class CustomerRepository
     public function createNewAddress(array $validated): Address
     {
         $address = new Address();
-        if (array_key_exists($validated['village_id'], $validated)) {
-            $address->village_id = $validated['village_id'];
-        }
-        if (array_key_exists($validated['district_id'], $validated)) {
-            $address->district_id = $validated['district_id'];
-        }
-        if (array_key_exists($validated['mukim_id'], $validated)) {
-            $address->mukim_id = $validated['mukim_id'];
-        }
-        if (array_key_exists($validated['postal_code_id'], $validated)) {
-            $address->postal_code_id = $validated['postal_code_id'];
-        }
-        if (array_key_exists($validated['house_number'], $validated)) {
-            $address->house_number = $validated['house_number'];
-        }
-        if (array_key_exists($validated['simpang'], $validated)) {
-            $address->simpang = $validated['simpang'];
-        }
-        if (array_key_exists($validated['street'], $validated)) {
-            $address->street = $validated['street'];
-        }
-        if (array_key_exists($validated['building_name'], $validated)) {
-            $address->building_name = $validated['building_name'];
-        }
-        if (array_key_exists($validated['block'], $validated)) {
-            $address->block = $validated['block'];
-        }
-        if (array_key_exists($validated['floor'], $validated)) {
-            $address->floor = $validated['floor'];
-        }
-        if (array_key_exists($validated['unit'], $validated)) {
-            $address->unit = $validated['unit'];
-        }
+        $address->village_id = $validated['village_id'] ?? null;
+        $address->district_id = $validated['district_id'] ?? null;
+        $address->mukim_id = $validated['mukim_id'] ?? null;
+        $address->postal_code_id = $validated['postal_code_id'] ?? null;
+        $address->house_number = $validated['house_number'] ?? null;
+        $address->simpang = $validated['simpang'] ?? null;
+        $address->street = $validated['street'] ?? null;
+        $address->building_name = $validated['building_name'] ?? null;
+        $address->block = $validated['block'] ?? null;
+        $address->floor = $validated['floor'] ?? null;
+        $address->unit = $validated['unit'] ?? null;
 
         $address->save();
 
@@ -67,12 +46,23 @@ class CustomerRepository
         $new_customer->account_category_id = $validated['account_category_id'];
         $new_customer->birth_date = $validated['birth_date'];
         $new_customer->country_id = $validated['country_id'];
-        $new_customer->address_id = $address->id ?? null;
         $new_customer->ic_color_id = $validated['ic_color_id'] ?? null;
 
         $new_customer->save();
-
+        
         return $new_customer;
+    }
+
+    public function createCustomerAddress(array $validated, Customer $customer, Address $address): CustomerAddress
+    {
+        $customer_address = new CustomerAddress();
+        $customer_address->customer_id = $customer->id ?? null;
+        $customer_address->address_id = $address->id ?? null;
+        $customer_address->address_type_id = $validated['address_type_id'];
+
+        $customer_address->save();
+
+        return $customer_address;
     }
 
     public function getListOfCustomers($query): AnonymousResourceCollection

@@ -22,7 +22,7 @@ class AddressController extends Controller
      */
     public function showAddress($id)
     {
-        $postal_code = $this->repository->showPostalCode($postal_code_id);
+        $address = $this->repository->showAddress($id);
 
         return response()->json($address->toArray());
     }
