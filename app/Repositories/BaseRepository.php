@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BaseRepository
+class BaseRepository implements RepositoryInterface
 {
     protected $model;
 
@@ -13,24 +13,24 @@ class BaseRepository
         $this->model = $model;
     }
 
-    public function create(array $attributes)
+    public function create(array $attributes): Model
     {
         return $this->model->newInstance($attributes);
     }
 
-    public function find(int $id)
+    public function find(int $id): Model | null
     {
         return $this->model->newQuery()->find($id);
     }
 
-    public function update(int $id, array $attributes)
+    public function update(int $id, array $attributes): int
     {
         return $this->model->newQuery()
             ->whereKey($id)
             ->update($attributes);
     }
 
-    public function delete(int $id)
+    public function delete(int $id): int | null
     {
         return $this->model->newQuery()
             ->whereKey($id)
