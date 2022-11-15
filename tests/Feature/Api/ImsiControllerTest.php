@@ -164,22 +164,17 @@ class ImsiControllerTest extends TestCase
         $imsi_status = ImsiStatus::first();
         $imsi_type = ImsiType::first();
         $user = User::factory()->create();
-        $this->assertDatabaseCount('imsi', 0);
-
-        Sanctum::actingAs($user);
-        $this->postJson('/api/imsi', [
+        $new_imsi = Imsi::factory()->create([
             'imsi' => 1234567890,
             'imsi_status_id' => $imsi_status->id,
             'imsi_type_id' => $imsi_type->id,
             'pin' => 1234,
             'puk_1' => 123456,
             'puk_2' => 123456,
-        ])->assertCreated();
-        $this->assertDatabaseCount('imsi', 1);
-
-        $new_imsi = Imsi::first();
+        ]);
         $new_imsi_id = $new_imsi->id;
 
+        Sanctum::actingAs($user);
         $response = $this->getJson("/api/imsi/$new_imsi_id");
 
         $response->assertOk()
