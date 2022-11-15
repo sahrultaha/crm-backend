@@ -43,5 +43,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/imsi', 'store');
         Route::put('/imsi/{imsi}', 'update');
         Route::get('/imsi/{imsi}', 'show');
+        Route::delete('/imsi/{imsi}', 'destroy');
     });
 });
