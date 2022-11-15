@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\FileUploaded;
 use App\Models\FileCategory;
+use App\Repositories\RepositoryInterface;
 use App\Traits\LogAwareTraits;
 use Illuminate\Contracts\Filesystem\Factory;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,6 +19,8 @@ class ProcessBulkFileImsi implements ShouldQueue
 
     protected $manager;
 
+    protected $repo;
+
     protected $logger;
 
     /**
@@ -25,7 +28,7 @@ class ProcessBulkFileImsi implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Factory $manager, ?Logger $logger = null)
+    public function __construct(Factory $manager, RepositoryInterface $repo, ?Logger $logger = null)
     {
         $this->manager = $manager;
         $this->logger = $logger;

@@ -4,6 +4,7 @@ namespace Tests\Unit\Listeners;
 
 use App\Events\FileUploaded;
 use App\Listeners\ProcessBulkFileImsi as Obj;
+use App\Repositories\RepositoryInterface;
 use Illuminate\Contracts\Filesystem\Factory as FileSystemManager;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use PHPUnit\Framework\TestCase;
@@ -18,6 +19,8 @@ class ProcessBulkFileImsiTest extends TestCase
 
     protected $event;
 
+    protected $repository;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -31,7 +34,9 @@ class ProcessBulkFileImsiTest extends TestCase
         $this->manager->expects($this->any())
             ->method('disk')
             ->willReturn($this->filesystem);
-        $this->obj = new Obj($this->manager);
+        $this->repository = $this->getMockBuilder(RepositoryInterface::class)
+            ->getMock();
+        $this->obj = new Obj($this->manager, $this->repository);
     }
 
     public function test_instance()
