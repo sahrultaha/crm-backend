@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Mukim;
 use App\Models\District;
+use App\Models\Mukim;
 use App\Models\PostalCode;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

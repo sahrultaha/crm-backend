@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class AddressType extends Model
 {
-
     use HasFactory;
+
     public $timestamps = false;
 
     public const BILLING = 1;

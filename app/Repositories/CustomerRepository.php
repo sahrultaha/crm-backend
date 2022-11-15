@@ -4,8 +4,8 @@ namespace App\Repositories;
 
 use App\Http\Resources\CustomerResource;
 use App\Models\Address;
-use App\Models\CustomerAddress;
 use App\Models\Customer;
+use App\Models\CustomerAddress;
 use App\Models\FileRelation;
 use App\Models\FileRelationType;
 use Illuminate\Database\Eloquent\Collection;
@@ -49,7 +49,7 @@ class CustomerRepository
         $new_customer->ic_color_id = $validated['ic_color_id'] ?? null;
 
         $new_customer->save();
-        
+
         return $new_customer;
     }
 
