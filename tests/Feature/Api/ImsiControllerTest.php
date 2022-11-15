@@ -178,12 +178,12 @@ class ImsiControllerTest extends TestCase
         $response = $this->getJson("/api/imsi/$new_imsi_id");
 
         $response->assertOk()
-            ->assertJsonPath('data.id', $new_imsi->id)
-            ->assertJsonPath('data.imsi', $new_imsi->imsi)
-            ->assertJsonPath('data.imsi_status_id', $new_imsi->imsi_status_id)
-            ->assertJsonPath('data.imsi_type_id', $new_imsi->imsi_type_id)
-            ->assertJsonPath('data.pin', $new_imsi->pin)
-            ->assertJsonPath('data.puk_1', $new_imsi->puk_1)
-            ->assertJsonPath('data.puk_2', $new_imsi->puk_2);
+            ->assertJsonPath('id', $new_imsi->id)
+            ->assertJsonPath('imsi', $new_imsi->imsi)
+            ->assertJsonPath('imsi_status_id', $new_imsi->imsi_status_id)
+            ->assertJsonPath('imsi_type_id', $new_imsi->imsi_type_id)
+            ->assertJsonPath('pin', $new_imsi->pin)
+            ->assertJsonPath('puk_1', $new_imsi->puk_1)
+            ->assertJsonPath('puk_2', $new_imsi->puk_2);
     }
 }

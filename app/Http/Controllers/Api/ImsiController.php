@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ImsiStoreRequest;
 use App\Http\Requests\Api\ImsiUpdateRequest;
-use App\Http\Resources\ImsiResource;
 use App\Models\Imsi;
 use App\Repositories\ImsiRepository;
 use Illuminate\Http\JsonResponse;
@@ -41,8 +40,8 @@ class ImsiController extends Controller
         ]);
     }
 
-    public function show(Imsi $imsi): ImsiResource
+    public function show(Imsi $imsi): JsonResponse
     {
-        return new ImsiResource($imsi);
+        return response()->json($imsi->toArray());
     }
 }
