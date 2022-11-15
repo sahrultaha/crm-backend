@@ -24,7 +24,7 @@ return new class extends Migration
             $table->bigInteger('imsi_id')->nullable()->index();
             $table->bigInteger('file_id')->index();
             $table->smallInteger('imsi_type_id')->index();
-            $table->smallInteger('row_status_id')->index();
+            $table->smallInteger('row_status_id')->default(1)->index();
 
             $table->foreign('imsi_type_id')->references('id')->on('imsi_type');
             $table->foreign('imsi_id')->references('id')->on('imsi');
