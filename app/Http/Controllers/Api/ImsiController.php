@@ -39,4 +39,9 @@ class ImsiController extends Controller
             'id' => $imsi->id,
         ]);
     }
+
+    public function show(Imsi $imsi): JsonResponse
+    {
+        return response()->json($imsi->toArray());
+    }
 }

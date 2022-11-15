@@ -156,4 +156,34 @@ class ImsiControllerTest extends TestCase
         $this->assertEquals($old_puk_1, $new_imsi->puk_1);
         $this->assertEquals($old_puk_2, $new_imsi->puk_2);
     }
+
+    public function test_users_can_view_existing_imsi_details()
+    {
+        $this->seed(Skeleton::class);
+
+        $imsi_status = ImsiStatus::first();
+        $imsi_type = ImsiType::first();
+        $user = User::factory()->create();
+        $new_imsi = Imsi::factory()->create([
+            'imsi' => 1234567890,
+            'imsi_status_id' => $imsi_status->id,
+            'imsi_type_id' => $imsi_type->id,
+            'pin' => 1234,
+            'puk_1' => 123456,
+            'puk_2' => 123456,
+        ]);
+        $new_imsi_id = $new_imsi->id;
+
+        Sanctum::actingAs($user);
+        $response = $this->getJson("/api/imsi/$new_imsi_id");
+
+        $response->assertOk()
+            ->assertJsonPath('id', $new_imsi->id)
+            ->assertJsonPath('imsi', $new_imsi->imsi)
+            ->assertJsonPath('imsi_status_id', $new_imsi->imsi_status_id)
+            ->assertJsonPath('imsi_type_id', $new_imsi->imsi_type_id)
+            ->assertJsonPath('pin', $new_imsi->pin)
+            ->assertJsonPath('puk_1', $new_imsi->puk_1)
+            ->assertJsonPath('puk_2', $new_imsi->puk_2);
+    }
 }
