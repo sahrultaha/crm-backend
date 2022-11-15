@@ -39,6 +39,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/postalcode', 'postalcode');
     });
     Route::controller(ImsiController::class)->group(function () {
+        Route::get('/imsi', 'index');
         Route::post('/imsi', 'store');
+        Route::put('/imsi/{imsi}', 'update');
+        Route::get('/imsi/{imsi}', 'show');
     });
 });
