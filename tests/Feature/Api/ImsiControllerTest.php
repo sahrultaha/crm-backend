@@ -71,7 +71,7 @@ class ImsiControllerTest extends TestCase
 
         Sanctum::actingAs(User::factory()->create());
 
-        $this->getJson("/api/imsi")
+        $this->getJson('/api/imsi')
             ->assertOk()
             ->assertJsonCount(3, 'data')
             ->assertJsonStructure([
