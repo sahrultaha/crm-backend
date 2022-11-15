@@ -69,9 +69,10 @@ class ProcessBulkFileImsi implements ShouldQueue
 
                 continue;
             }
-            if (! $row) {
+            if (! $row || empty($row) || empty(array_filter($row))) {
                 continue;
             }
+
             switch($row[6]) {
                 case '3G':
                     $network = 1;

@@ -103,6 +103,8 @@ class ProcessBulkFileImsiTest extends TestCase
         id,imsi,pin,puk_1,puk_2,ki,network
         1,123456789012340,12345,123456,123456,ABCDEF012345,4G
         
+        
+        
         EOD;
         $this->setFileContent($content);
         $this->repository->expects($this->exactly(1))
