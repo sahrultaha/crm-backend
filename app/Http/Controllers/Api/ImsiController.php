@@ -8,6 +8,8 @@ use App\Http\Requests\Api\ImsiUpdateRequest;
 use App\Models\Imsi;
 use App\Repositories\ImsiRepository;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ImsiController extends Controller
 {
@@ -16,6 +18,11 @@ class ImsiController extends Controller
     public function __construct(ImsiRepository $repository)
     {
         $this->repository = $repository;
+    }
+
+    public function index(Request $request): AnonymousResourceCollection
+    {
+        return $this->repository->getListOfImsi($request->query());
     }
 
     public function store(ImsiStoreRequest $request): JsonResponse

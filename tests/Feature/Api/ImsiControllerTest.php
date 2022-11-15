@@ -63,6 +63,35 @@ class ImsiControllerTest extends TestCase
         $response->assertJsonPath('id', $new_imsi->id);
     }
 
+    public function test_users_can_view_imsi_list()
+    {
+        $this->seed(Skeleton::class);
+
+        Imsi::factory()->count(3)->create();
+
+        Sanctum::actingAs(User::factory()->create());
+
+        $this->getJson("/api/imsi")
+            ->assertOk()
+            ->assertJsonCount(3, 'data')
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => [
+                        'id',
+                        'created_at',
+                        'updated_at',
+                        'imsi',
+                        'imsi_status_id',
+                        'imsi_type_id',
+                        'pin',
+                        'puk_1',
+                        'puk_2',
+                    ],
+                ],
+            ])
+            ->assertJsonPath('meta.total', 3);
+    }
+
     public function test_users_can_update_existing_imsi()
     {
         $this->seed(Skeleton::class);
