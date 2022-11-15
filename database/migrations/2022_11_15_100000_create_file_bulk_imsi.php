@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('file_bulk_imsi', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('imsi');
+            $table->bigInteger('imsi');
 
             $table->smallInteger('pin');
             $table->integer('puk_1');
