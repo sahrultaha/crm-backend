@@ -4,16 +4,22 @@ namespace App\Listeners;
 
 use App\Events\FileUploaded;
 use App\Models\FileCategory;
+use App\Repositories\RepositoryInterface;
 use App\Traits\LogAwareTraits;
-use Illuminate\Contracts\Filesystem\Factory as FileSystemManager;
+use Illuminate\Contracts\Filesystem\Factory;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Log\Logger;
+use Illuminate\Queue\InteractsWithQueue;
 use Psr\Log\LogLevel;
 
-class ProcessBulkFileImsi
+class ProcessBulkFileImsi implements ShouldQueue
 {
+    use InteractsWithQueue;
     use LogAwareTraits;
 
     protected $manager;
+
+    protected $repo;
 
     protected $logger;
 
@@ -22,10 +28,11 @@ class ProcessBulkFileImsi
      *
      * @return void
      */
-    public function __construct(FilesystemManager $manager, ?Logger $logger = null)
+    public function __construct(Factory $manager, RepositoryInterface $repo, ?Logger $logger = null)
     {
         $this->manager = $manager;
         $this->logger = $logger;
+        $this->repo = $repo;
     }
 
     /**
@@ -37,11 +44,11 @@ class ProcessBulkFileImsi
     public function handle(FileUploaded $event)
     {
         $file = $event->getFile();
-        $this->log(LogLevel::DEBUG, __METHOD__.json_encode($file));
 
         if ((int) $file->file_category_id !== FileCategory::BULK_IMSI_FILE) {
             return;
         }
+        $this->log(LogLevel::DEBUG, __METHOD__."processing {$file->id} {$file->filename}");
         $tmp = tempnam(sys_get_temp_dir(), 'bulkimsi');
         $content = $this->manager->disk('s3')->get($file->filepath);
         if (! $content) {
@@ -50,20 +57,50 @@ class ProcessBulkFileImsi
         file_put_contents($tmp, $content);
 
         $csv = new \SplFileObject($tmp);
-        $csv->setFlags(\SplFileObject::READ_CSV);
+        $csv->setFlags(\SplFileObject::READ_CSV | \SplFileObject::SKIP_EMPTY);
         $id = 0;
+        $header = [];
+
         foreach ($csv as $row) {
             if ($id === 0) {
                 $this->checkHeaders($row);
                 $id++;
+                $header = ['file_id', 'imsi_type_id', ...$row];
 
                 continue;
             }
-            $this->log(LogLevel::DEBUG, implode(',', $row));
+            if (! $row) {
+                continue;
+            }
+            switch($row[6]) {
+                case '3G':
+                    $network = 1;
+                    break;
+                case '5G':
+                    $network = 3;
+                default:
+                    $network = \App\Models\ImsiType::FOUR_G;
+            }
+            $this->repo->create(array_combine($header, [$file->id, $network, ...$row]));
+            $this->log(LogLevel::DEBUG, json_encode($header));
+            $this->log(LogLevel::DEBUG, json_encode([$file->id, ...$row]));
         }
         if (file_exists($tmp)) {
             unlink($tmp);
         }
+    }
+
+    /**
+     * Handle the event.
+     *
+     * @param  \App\Events\FileUploaded  $event
+     * @return bool
+     */
+    public function shouldQueue(FileUploaded $event)
+    {
+        $file = $event->getFile();
+
+        return (int) $file->file_category_id === FileCategory::BULK_IMSI_FILE;
     }
 
     protected function checkHeaders(array $row)

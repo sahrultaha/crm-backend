@@ -180,7 +180,7 @@ return new class extends Migration
         });
         Schema::create('imsi', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('imsi');
+            $table->bigInteger('imsi');
             $table->smallInteger('imsi_status_id');
             $table->smallInteger('imsi_type_id');
             $table->smallInteger('pin');

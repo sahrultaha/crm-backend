@@ -219,6 +219,10 @@ class Skeleton extends Seeder
                 'id' => 2,
                 'name' => '4G',
             ],
+            [
+                'id' => 3,
+                'name' => '5G',
+            ],
         ]);
         DB::table('imsi_status')->insert([
             [

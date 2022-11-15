@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             AddressSeeder::class,
             FileSeeder::class,
+            RowStatusSeeder::class,
         ]);
 
         if (env('APP_ENV') === 'local') {
