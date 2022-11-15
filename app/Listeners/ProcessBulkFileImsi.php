@@ -32,6 +32,7 @@ class ProcessBulkFileImsi implements ShouldQueue
     {
         $this->manager = $manager;
         $this->logger = $logger;
+        $this->repo = $repo;
     }
 
     /**
@@ -42,12 +43,12 @@ class ProcessBulkFileImsi implements ShouldQueue
      */
     public function handle(FileUploaded $event)
     {
-        $this->log(LogLevel::DEBUG, __METHOD__);
         $file = $event->getFile();
 
         if ((int) $file->file_category_id !== FileCategory::BULK_IMSI_FILE) {
             return;
         }
+        $this->log(LogLevel::DEBUG, __METHOD__."processing {$file->id} {$file->filename}");
         $tmp = tempnam(sys_get_temp_dir(), 'bulkimsi');
         $content = $this->manager->disk('s3')->get($file->filepath);
         if (! $content) {
@@ -56,16 +57,33 @@ class ProcessBulkFileImsi implements ShouldQueue
         file_put_contents($tmp, $content);
 
         $csv = new \SplFileObject($tmp);
-        $csv->setFlags(\SplFileObject::READ_CSV);
+        $csv->setFlags(\SplFileObject::READ_CSV | \SplFileObject::SKIP_EMPTY);
         $id = 0;
+        $header = [];
+
         foreach ($csv as $row) {
             if ($id === 0) {
                 $this->checkHeaders($row);
                 $id++;
+                $header = ['file_id', 'imsi_type_id', ...$row];
 
                 continue;
             }
-            $this->log(LogLevel::DEBUG, implode(',', $row));
+            if (! $row) {
+                continue;
+            }
+            switch($row[6]) {
+                case '3G':
+                    $network = 1;
+                    break;
+                case '5G':
+                    $network = 3;
+                default:
+                    $network = \App\Models\ImsiType::FOUR_G;
+            }
+            $this->repo->create(array_combine($header, [$file->id, $network, ...$row]));
+            $this->log(LogLevel::DEBUG, json_encode($header));
+            $this->log(LogLevel::DEBUG, json_encode([$file->id, ...$row]));
         }
         if (file_exists($tmp)) {
             unlink($tmp);
