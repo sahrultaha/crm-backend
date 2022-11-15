@@ -69,4 +69,21 @@ class CustomDuskTestCase extends DuskTestCase
             ->waitForText('Customers Index');
         sleep(1);
     }
+
+    public function createNewImsi(Browser $browser): void
+    {
+        $browser
+            ->visit(env('FRONTEND_URL').'/imsi/create')
+            ->waitForText('Create Imsi')
+            ->waitForText('CREATE')
+            ->typeSlowly('#imsi', '1234567890')
+            ->select('#imsiStatusId', '1')
+            ->select('#imsiTypeId', '1')
+            ->typeSlowly('#pin', '1234')
+            ->typeSlowly('#puk1', '987654321')
+            ->typeSlowly('#puk2', '987654322')
+            ->press('CREATE')
+            ->waitForText('Create New IMSI')
+            ->assertPathIs('/imsi');
+    }
 }
