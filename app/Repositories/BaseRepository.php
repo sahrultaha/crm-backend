@@ -15,7 +15,10 @@ class BaseRepository implements RepositoryInterface
 
     public function create(array $attributes): Model
     {
-        return $this->model->newInstance($attributes);
+        $model = $this->model->newInstance($attributes);
+        if ($model->save()) {
+            return $model;
+        }
     }
 
     public function find(int $id): Model | null
