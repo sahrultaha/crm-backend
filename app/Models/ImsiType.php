@@ -13,5 +13,7 @@ class ImsiType extends Model
 
     public const FOUR_G = 2;
 
+    public $timestamps = false;
+
     protected $table = 'imsi_type';
 }

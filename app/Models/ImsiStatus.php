@@ -15,5 +15,7 @@ class ImsiStatus extends Model
 
     public const TERMINATED = 3;
 
+    public $timestamps = false;
+
     protected $table = 'imsi_status';
 }
