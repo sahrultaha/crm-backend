@@ -184,7 +184,7 @@ return new class extends Migration
             $table->smallInteger('pin');
             $table->integer('puk_1');
             $table->integer('puk_2');
-            $table->string('ki');
+            $table->string('ki')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->index('imsi');

@@ -23,6 +23,10 @@ class FileSeeder extends Seeder
                 'id' => 2,
                 'name' => 'Customer IC Back',
             ],
+            [
+                'id' => 3,
+                'name' => 'Bulk IMSI file',
+            ],
         ]);
 
         DB::table('file_relation_type')->insert([

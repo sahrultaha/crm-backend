@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DistrictController;
 use App\Http\Controllers\Api\FileController;
+use App\Http\Controllers\Api\ImsiController;
 use App\Http\Controllers\Api\MukimController;
 use App\Http\Controllers\Api\PostalCodeController;
 use App\Http\Controllers\Api\VillageController;
@@ -36,5 +37,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
     Route::controller(PostalCodeController::class)->group(function () {
         Route::get('/postalcode', 'postalcode');
+    });
+    Route::controller(ImsiController::class)->group(function () {
+        Route::post('/imsi', 'store');
+        Route::put('/imsi/{imsi}', 'update');
     });
 });
