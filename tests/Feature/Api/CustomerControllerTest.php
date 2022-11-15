@@ -5,6 +5,7 @@ namespace Tests\Feature\Api;
 use App\Models\AccountCategory;
 use App\Models\Address;
 use App\Models\AddressType;
+use App\Models\CustomerAddress;
 use App\Models\Country;
 use App\Models\Customer;
 use App\Models\CustomerTitle;
@@ -33,7 +34,7 @@ class CustomerControllerTest extends TestCase
         $country = Country::factory()->create();
         $customer_title = CustomerTitle::factory()->create();
         $account_category = AccountCategory::factory()->create();
-        // $village = Village::factory()->create();
+        $village = Village::factory()->create();
         $address_type = AddressType::factory()->create();
 
         $customer_name = 'Abc';
@@ -47,8 +48,8 @@ class CustomerControllerTest extends TestCase
         $customer_title_id = $customer_title->id;
         $customer_account_category_id = $account_category->id;
         $customer_birth_date = '2100-01-20';
-        $customer_village = ''/*$village->id*/;
-        $village = ''/*$village->name*/;
+        $customer_village = $village->id;
+        $village = $village->name;
         $customer_mukim_id = '';
         $customer_district_id = '';
         $customer_postal_code_id = '';

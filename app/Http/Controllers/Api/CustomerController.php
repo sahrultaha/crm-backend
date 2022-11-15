@@ -36,7 +36,6 @@ class CustomerController extends Controller
 
         return response()->json([
             'id' => $customer->id,
-            'customer_address_id' => $customer_address->id,
         ], 201);
     }
 

@@ -6,6 +6,7 @@ use App\Http\Resources\CustomerResource;
 use App\Models\Address;
 use App\Models\CustomerAddress;
 use App\Models\Customer;
+use App\Models\AddressType;
 use App\Models\FileRelation;
 use App\Models\FileRelationType;
 use Illuminate\Database\Eloquent\Collection;
@@ -58,7 +59,7 @@ class CustomerRepository
         $customer_address = new CustomerAddress();
         $customer_address->customer_id = $customer->id ?? null;
         $customer_address->address_id = $address->id ?? null;
-        $customer_address->address_type_id = $validated['address_type_id'] ?? null;
+        $customer_address->address_type_id = AddressType::factory()->create()->id;
 
         $customer_address->save();
 
