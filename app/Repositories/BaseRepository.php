@@ -42,4 +42,18 @@ class BaseRepository implements RepositoryInterface
             ->whereKey($id)
             ->delete();
     }
+
+    public function select(array $attributes): \Illuminate\Database\Eloquent\Collection
+    {
+        $builder = $this->model->newQuery();
+        foreach ($attributes as $key => $value) {
+            if (is_array($value)) {
+                $builder->whereIn($key, $value);
+            } else {
+                $builder->where($key, $value);
+            }
+        }
+
+        return $builder->get();
+    }
 }
