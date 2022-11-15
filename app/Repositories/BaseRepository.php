@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaseRepository implements RepositoryInterface
 {
+    /**
+     * @var \Illuminate\Database\Eloquent\Model
+     */
     protected $model;
 
     public function __construct(Model $model)
