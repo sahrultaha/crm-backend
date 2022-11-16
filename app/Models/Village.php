@@ -24,6 +24,6 @@ class Village extends Model
 
     public function postalcode()
     {
-        return $this->has('App\Models\PostalCode', 'village_id');
+        return $this->belongsTo('App\Models\PostalCode', 'village_id');
     }
 }

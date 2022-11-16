@@ -22,8 +22,8 @@ class Customer extends Model
         return $this->belongsTo(AccountCategory::class, 'account_category_id');
     }
 
-    public function address()
+    public function customerAddress()
     {
-        return $this->belongsTo(Address::class, 'address_id');
+        return $this->belolngsToMany(CustomerAddress::class, 'customer_address');
     }
 }

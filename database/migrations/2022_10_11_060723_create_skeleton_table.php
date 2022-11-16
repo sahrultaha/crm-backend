@@ -39,7 +39,6 @@ return new class extends Migration
         });
         Schema::create('customer', function (Blueprint $table) {
             $table->bigIncrements('id');
-
             $table->string('name');
             $table->string('email')->nullable();
             $table->string('mobile_number')->nullable();
@@ -49,7 +48,6 @@ return new class extends Migration
             $table->smallInteger('customer_title_id')->nullable();
             $table->date('birth_date');
             $table->smallInteger('country_id');
-            $table->smallInteger('address_id')->nullable();
             $table->smallInteger('ic_color_id')->nullable();
             $table->smallInteger('account_category_id');
             $table->foreign('country_id')->references('id')->on('country');
@@ -57,7 +55,6 @@ return new class extends Migration
             $table->foreign('ic_type_id')->references('id')->on('ic_type');
             $table->foreign('customer_title_id')->references('id')->on('customer_title');
             $table->foreign('account_category_id')->references('id')->on('account_category');
-            // $table->foreign('address_id')->references('id')->on('address');
             $table->index('country_id');
             $table->index('ic_color_id');
             $table->index('ic_type_id');
@@ -65,7 +62,6 @@ return new class extends Migration
             $table->index('account_category_id');
             $table->timestampTz('created_at', 0)->nullable()->useCurrent();
             $table->timestampTz('updated_at', 0)->nullable()->useCurrent();
-            // $table->index('address_id');
             $table->softDeletes();
         });
         Schema::create('district', function (Blueprint $table) {
@@ -123,12 +119,14 @@ return new class extends Migration
         });
         Schema::create('customer_address', function (Blueprint $table) {
             $table->smallIncrements('id');
-            $table->bigInteger('customer_id');
-            $table->bigInteger('address_id');
-            $table->smallInteger('address_type_id');
+            $table->bigInteger('customer_id')->nullable();
+            $table->bigInteger('address_id')->nullable();
+            $table->smallInteger('address_type_id')->nullable();
+            $table->timestampTz('created_at', 0)->nullable()->useCurrent();
+            $table->timestampTz('updated_at', 0)->nullable()->useCurrent();
             $table->foreign('customer_id')->references('id')->on('customer');
             $table->foreign('address_id')->references('id')->on('address');
-            $table->foreign('address_type_id')->references('id')->on('address');
+            $table->foreign('address_type_id')->references('id')->on('address_type');
             $table->index('customer_id');
             $table->index('address_id');
             $table->index('address_type_id');

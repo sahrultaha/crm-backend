@@ -30,4 +30,9 @@ class Address extends Model
     {
         return $this->belongsTo(PostalCode::class, 'postal_code_id');
     }
+
+    public function customerAddress()
+    {
+        return $this->belongsToMany(CustomerAddress::class, 'customer_address');
+    }
 }
