@@ -56,4 +56,9 @@ class BaseRepository implements RepositoryInterface
 
         return $builder->get();
     }
+
+    public function save(Model $item): bool
+    {
+        return $item->save();
+    }
 }

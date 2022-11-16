@@ -16,4 +16,6 @@ interface RepositoryInterface
     public function delete(int $id): int | null;
 
     public function select(array $attributes): Collection;
+
+    public function save(Model $item): bool;
 }
