@@ -61,4 +61,19 @@ class BaseRepository implements RepositoryInterface
     {
         return $item->save();
     }
+
+    public function paginate($limit = 10, $sort = 'desc', $page = 1): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    {
+        if (! is_numeric($limit) || intval($limit) === 0) {
+            $limit = 10;
+        }
+
+        if ($sort !== 'asc' && $sort !== 'desc') {
+            $sort = 'desc';
+        }
+
+        $builder = $this->model->newQuery()->orderBy($this->model->getKey(), 'desc');
+
+        return $builder->paginate($limit, '*', 'page', $page);
+    }
 }
