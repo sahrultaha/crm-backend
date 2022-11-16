@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 
 class FileBulkImsiRepository extends BaseRepository
 {
@@ -42,8 +43,9 @@ class FileBulkImsiRepository extends BaseRepository
             if ($rows->isEmpty()) {
                 break;
             }
+
             $id = $rows->last()->id;
-            \Illuminate\Support\Facades\Log::debug(__METHOD__."yield {$id}");
+            Log::debug(__METHOD__."found {$rows->count()} row(s)");
 
             yield $rows;
         }

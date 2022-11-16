@@ -85,6 +85,7 @@ class FileControllerTest extends TestCase
         $content = <<<'EOD'
         id,imsi,pin,puk_1,puk_2,ki,network
         1,123456789012340,12345,123456,123456,ABCDEF012345,4G
+        2,123456789012341,12345,123456,123456,ABCDEF012345,4G
         
         EOD;
         $file = $file_factory->createWithContent('test.csv', $content);
@@ -96,9 +97,9 @@ class FileControllerTest extends TestCase
             'relation_type_id' => FileRelationType::CUSTOMER,
             'file_category_id' => FileCategory::BULK_IMSI_FILE,
         ])->assertStatus(201);
-        $this->assertEquals(1, FileBulkImsi::query()->count());
-        $this->assertEquals(1, Imsi::query()->count());
-        $this->assertEquals(1, FileBulkImsi::query()->where('row_status_id', RowStatus::SUCCESS)->count());
+        $this->assertEquals(2, FileBulkImsi::query()->count());
+        $this->assertEquals(2, Imsi::query()->count());
+        $this->assertEquals(2, FileBulkImsi::query()->where('row_status_id', RowStatus::SUCCESS)->count());
         // 2nd file, imsi count should be only one
         $this->postJson('/api/files', [
             'file' => $file,
@@ -106,14 +107,14 @@ class FileControllerTest extends TestCase
             'relation_type_id' => FileRelationType::CUSTOMER,
             'file_category_id' => FileCategory::BULK_IMSI_FILE,
         ])->assertStatus(201);
-        $this->assertEquals(2, FileBulkImsi::query()->count());
-        $this->assertEquals(1, Imsi::query()->count());
-        $this->assertEquals(1, FileBulkImsi::query()->where('row_status_id', RowStatus::FAIL)->count());
+        $this->assertEquals(4, FileBulkImsi::query()->count());
+        $this->assertEquals(2, Imsi::query()->count());
+        $this->assertEquals(2, FileBulkImsi::query()->where('row_status_id', RowStatus::FAIL)->count());
 
         // 3rd file, different imsi, imsi count should be two
         $content_3 = <<<'EOD'
         id,imsi,pin,puk_1,puk_2,ki,network
-        1,123456789012341,12345,123456,123456,ABCDEF012345,4G
+        1,123456789012343,12345,123456,123456,ABCDEF012345,5G
         
         EOD;
         $file_3 = $file_factory->createWithContent('test.csv', $content_3);
@@ -123,8 +124,8 @@ class FileControllerTest extends TestCase
             'relation_type_id' => FileRelationType::CUSTOMER,
             'file_category_id' => FileCategory::BULK_IMSI_FILE,
         ])->assertStatus(201);
-        $this->assertEquals(3, FileBulkImsi::query()->count());
-        $this->assertEquals(2, Imsi::query()->count());
-        $this->assertEquals(2, FileBulkImsi::query()->where('row_status_id', RowStatus::SUCCESS)->count());
+        $this->assertEquals(5, FileBulkImsi::query()->count());
+        $this->assertEquals(3, Imsi::query()->count());
+        $this->assertEquals(3, FileBulkImsi::query()->where('row_status_id', RowStatus::SUCCESS)->count());
     }
 }

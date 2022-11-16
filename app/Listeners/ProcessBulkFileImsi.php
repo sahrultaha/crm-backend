@@ -88,8 +88,8 @@ class ProcessBulkFileImsi implements ShouldQueue
                     $network = \App\Models\ImsiType::FOUR_G;
             }
             $this->repo->create(array_combine($header, [$file->id, $network, ...$row]));
-            $this->dispatcher->dispatch(\App\Events\BulkFileImsiStored::class, $file);
         }
+        $this->dispatcher->dispatch(\App\Events\BulkFileImsiStored::class, $file);
         if (file_exists($tmp)) {
             unlink($tmp);
         }
