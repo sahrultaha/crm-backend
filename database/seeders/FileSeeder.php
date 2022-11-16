@@ -34,6 +34,10 @@ class FileSeeder extends Seeder
                 'id' => 1,
                 'name' => 'Customer',
             ],
+            [
+                'id' => 2,
+                'name' => 'File Bulk IMSI',
+            ],
         ]);
     }
 }
