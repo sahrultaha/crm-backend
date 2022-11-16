@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\DistrictController;
 use App\Http\Controllers\Api\FileController;
 use App\Http\Controllers\Api\ImsiController;
 use App\Http\Controllers\Api\MukimController;
+use App\Http\Controllers\Api\PackController;
 use App\Http\Controllers\Api\PostalCodeController;
 use App\Http\Controllers\Api\VillageController;
 use Illuminate\Http\Request;
@@ -44,5 +45,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::put('/imsi/{imsi}', 'update');
         Route::get('/imsi/{imsi}', 'show');
         Route::delete('/imsi/{imsi}', 'destroy');
+    });
+    Route::controller(PackController::class)->group(function() {
+        Route::get('/packs', 'index');
     });
 });
