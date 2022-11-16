@@ -4,7 +4,6 @@ namespace Tests\Feature\Api;
 
 use App\Models\Number;
 use App\Models\Pack;
-use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;

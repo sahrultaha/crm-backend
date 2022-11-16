@@ -46,7 +46,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/imsi/{imsi}', 'show');
         Route::delete('/imsi/{imsi}', 'destroy');
     });
-    Route::controller(PackController::class)->group(function() {
+    Route::controller(PackController::class)->group(function () {
         Route::get('/packs', 'index');
     });
 });

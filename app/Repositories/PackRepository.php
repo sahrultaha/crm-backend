@@ -24,8 +24,8 @@ class PackRepository extends BaseRepository
         $builder->with('number');
 
         if (isset($query['number'])) {
-            $number_to_find =$query['number'];
-            $builder->whereHas('number', function(Builder $builder) use ($number_to_find) {
+            $number_to_find = $query['number'];
+            $builder->whereHas('number', function (Builder $builder) use ($number_to_find) {
                 $builder->where('number', '=', $number_to_find);
             });
         }
