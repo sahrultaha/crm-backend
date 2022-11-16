@@ -215,4 +215,30 @@ class ImsiControllerTest extends TestCase
             ->assertJsonPath('puk_1', $new_imsi->puk_1)
             ->assertJsonPath('puk_2', $new_imsi->puk_2);
     }
+
+    public function test_users_can_delete_existing_imsi()
+    {
+        $this->seed(Skeleton::class);
+
+        $imsi_status = ImsiStatus::first();
+        $imsi_type = ImsiType::first();
+        $user = User::factory()->create();
+        $new_imsi = Imsi::factory()->create([
+            'imsi' => 1234567890,
+            'imsi_status_id' => $imsi_status->id,
+            'imsi_type_id' => $imsi_type->id,
+            'pin' => 1234,
+            'puk_1' => 123456,
+            'puk_2' => 123456,
+        ]);
+        $new_imsi_id = $new_imsi->id;
+        $this->assertDatabaseCount('imsi', 1);
+
+        Sanctum::actingAs($user);
+        $response = $this->deleteJson("/api/imsi/$new_imsi_id");
+
+        $response->assertOk();
+        $this->assertSoftDeleted($new_imsi);
+        $this->assertDatabaseCount('imsi', 1);
+    }
 }
