@@ -7,11 +7,14 @@ use App\Models\AddressType;
 use App\Models\Country;
 use App\Models\Customer;
 use App\Models\CustomerTitle;
+use App\Models\District;
 use App\Models\File;
 use App\Models\FileCategory;
 use App\Models\FileRelationType;
 use App\Models\IcColor;
 use App\Models\IcType;
+use App\Models\Mukim;
+use App\Models\PostalCode; //test Address factory
 use App\Models\User;
 use App\Models\Village;
 use Database\Seeders\FileSeeder;
@@ -34,6 +37,9 @@ class CustomerControllerTest extends TestCase
         $account_category = AccountCategory::factory()->create();
         $village = Village::factory()->create();
         $address_type = AddressType::factory()->create();
+        // $mukim = Mukim::factory()->create(); //test address factory
+        // $district = District::factory()->create();
+        // $postalcode = PostalCode::factory()->create();
 
         $customer_name = 'Abc';
         $customer_email = 'test@mail.com';
@@ -45,7 +51,7 @@ class CustomerControllerTest extends TestCase
         $customer_country_id = $country->id;
         $customer_title_id = $customer_title->id;
         $customer_account_category_id = $account_category->id;
-        $customer_birth_date = '2100-01-20';
+        $customer_birth_date = '2000-01-20';
         $customer_village = $village->id;
         $village = $village->name;
         $customer_mukim_id = null;
@@ -180,6 +186,7 @@ class CustomerControllerTest extends TestCase
 
         [
             $customer_name,
+            $customer_email,
             $customer_mobile_number,
             $customer_ic_number,
             $customer_ic_type_id,
@@ -255,6 +262,7 @@ class CustomerControllerTest extends TestCase
         [
             $customer_name,
             $customer_email,
+            $customer_mobile_number,
             $customer_ic_number,
             $customer_ic_type_id,
             $customer_ic_color_id,
@@ -332,6 +340,7 @@ class CustomerControllerTest extends TestCase
             $customer_mobile_number,
             $customer_ic_number,
             $customer_ic_type_id,
+            $customer_ic_color_id,
             $customer_ic_expiry_date,
             $customer_country_id,
             $customer_title_id,
@@ -409,6 +418,7 @@ class CustomerControllerTest extends TestCase
             $customer_ic_color_id,
             $customer_ic_expiry_date,
             $customer_country_id,
+            $customer_title_id,
             $customer_account_category_id,
             $customer_birth_date,
             $customer_village,
@@ -476,10 +486,14 @@ class CustomerControllerTest extends TestCase
 
         [
             $customer_name,
+            $customer_email,
+            $customer_mobile_number,
             $customer_ic_number,
             $customer_ic_type_id,
+            $customer_ic_color_id,
             $customer_ic_expiry_date,
             $customer_country_id,
+            $customer_title_id,
             $customer_account_category_id,
             $customer_birth_date,
             $customer_village,
