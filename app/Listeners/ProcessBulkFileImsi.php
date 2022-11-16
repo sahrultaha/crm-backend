@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\Dispatcher;
 use App\Events\FileUploaded;
 use App\Models\FileCategory;
 use App\Repositories\RepositoryInterface;
@@ -23,16 +24,19 @@ class ProcessBulkFileImsi implements ShouldQueue
 
     protected $logger;
 
+    protected $dispatcher;
+
     /**
      * Create the event listener.
      *
      * @return void
      */
-    public function __construct(Factory $manager, RepositoryInterface $repo, ?Logger $logger = null)
+    public function __construct(Factory $manager, RepositoryInterface $repo, Dispatcher $dispatcher, ?Logger $logger = null)
     {
         $this->manager = $manager;
         $this->logger = $logger;
         $this->repo = $repo;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -79,12 +83,12 @@ class ProcessBulkFileImsi implements ShouldQueue
                     break;
                 case '5G':
                     $network = 3;
+                    break;
                 default:
                     $network = \App\Models\ImsiType::FOUR_G;
             }
             $this->repo->create(array_combine($header, [$file->id, $network, ...$row]));
-            $this->log(LogLevel::DEBUG, json_encode($header));
-            $this->log(LogLevel::DEBUG, json_encode([$file->id, ...$row]));
+            $this->dispatcher->dispatch(\App\Events\BulkFileImsiStored::class, $file);
         }
         if (file_exists($tmp)) {
             unlink($tmp);
