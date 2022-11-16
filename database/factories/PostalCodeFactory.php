@@ -14,7 +14,7 @@ class PostalCodeFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'village_id' => Village::factory(),
+            // 'village_id' => Village::factory(),
         ];
     }
 }
