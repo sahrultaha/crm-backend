@@ -51,4 +51,15 @@ class ImsiController extends Controller
     {
         return response()->json($imsi->toArray());
     }
+
+    public function destroy(Imsi $imsi): JsonResponse
+    {
+        $id = $imsi->id;
+
+        $imsi->delete();
+
+        return response()->json([
+            'id' => $id,
+        ]);
+    }
 }
