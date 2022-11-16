@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 interface RepositoryInterface
@@ -13,4 +14,8 @@ interface RepositoryInterface
     public function find(int $id): Model|null;
 
     public function delete(int $id): int | null;
+
+    public function select(array $attributes): Collection;
+
+    public function save(Model $item): bool;
 }

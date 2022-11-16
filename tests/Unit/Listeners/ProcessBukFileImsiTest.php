@@ -19,6 +19,8 @@ class ProcessBulkFileImsiTest extends TestCase
 
     protected $event;
 
+    protected $dispatcher;
+
     protected $repository;
 
     public function setUp(): void
@@ -36,7 +38,9 @@ class ProcessBulkFileImsiTest extends TestCase
             ->willReturn($this->filesystem);
         $this->repository = $this->getMockBuilder(RepositoryInterface::class)
             ->getMock();
-        $this->obj = new Obj($this->manager, $this->repository);
+        $this->dispatcher = $this->getMockBuilder(\App\Events\Dispatcher::class)
+            ->getMock();
+        $this->obj = new Obj($this->manager, $this->repository, $this->dispatcher);
     }
 
     public function test_instance()
@@ -103,6 +107,8 @@ class ProcessBulkFileImsiTest extends TestCase
         id,imsi,pin,puk_1,puk_2,ki,network
         1,123456789012340,12345,123456,123456,ABCDEF012345,4G
         
+        
+        
         EOD;
         $this->setFileContent($content);
         $this->repository->expects($this->exactly(1))
@@ -118,7 +124,8 @@ class ProcessBulkFileImsiTest extends TestCase
                 'ki' => 'ABCDEF012345',
                 'network' => '4G',
             ]));
-
+        $this->dispatcher->expects($this->once())
+            ->method('dispatch');
         $this->obj->handle($this->event);
     }
 
