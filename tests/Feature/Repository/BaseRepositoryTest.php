@@ -3,6 +3,7 @@
 namespace Tests\Feature\Repository;
 
 use App\Models\User;
+use App\Repositories\BaseRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -17,13 +18,9 @@ class BaseRepositoryTest extends TestCase
      */
     public function test_paginate()
     {
-        $this->seed([
-            \Database\Seeders\RowStatusSeeder::class,
-            \Database\Seeders\FileSeeder::class,
-        ]);
         User::factory()->count(25)->create();
 
-        $repo = new \App\Repositories\BaseRepository(new User());
+        $repo = new BaseRepository(new User());
         $paginator = $repo->paginate(10, 'desc');
 
         $this->assertInstanceOf(\Illuminate\Contracts\Pagination\LengthAwarePaginator::class, $paginator);
