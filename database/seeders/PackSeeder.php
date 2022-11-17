@@ -21,6 +21,8 @@ class PackSeeder extends Seeder
                 'imsi_id' => 1,
                 'product_id' => 1,
                 'pack_type_id' => 1,
+                'installation_date' => now()->subYear(),
+                'expiry_date' => now()->addYears(10),
             ],
             [
                 'id' => 2,
@@ -28,6 +30,8 @@ class PackSeeder extends Seeder
                 'imsi_id' => 2,
                 'product_id' => 2,
                 'pack_type_id' => 2,
+                'installation_date' => now()->subYear(),
+                'expiry_date' => now()->addYears(10),
             ],
             [
                 'id' => 3,
@@ -35,6 +39,8 @@ class PackSeeder extends Seeder
                 'imsi_id' => 3,
                 'product_id' => 3,
                 'pack_type_id' => 3,
+                'installation_date' => now()->subYear(),
+                'expiry_date' => now()->addYears(10),
             ],
         ]);
     }
