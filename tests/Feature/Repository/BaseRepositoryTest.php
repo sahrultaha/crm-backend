@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ExampleTest extends TestCase
+class BaseRepositoryTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -24,8 +24,14 @@ class ExampleTest extends TestCase
         User::factory()->count(25)->create();
 
         $repo = new \App\Repositories\BaseRepository(new User());
-        $paginator = $repo->paginate();
+        $paginator = $repo->paginate(10, 'desc');
+
         $this->assertInstanceOf(\Illuminate\Contracts\Pagination\LengthAwarePaginator::class, $paginator);
         $this->assertCount(10, $paginator->items());
+        $this->assertEquals(25, $paginator->items()[0]['id']);
+
+        $middle = $repo->paginate(10, 'desc', 2);
+        $this->assertCount(10, $middle->items());
+        $this->assertEquals(15, $middle->items()[0]['id']);
     }
 }

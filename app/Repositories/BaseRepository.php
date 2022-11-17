@@ -72,7 +72,12 @@ class BaseRepository implements RepositoryInterface
             $sort = 'desc';
         }
 
-        $builder = $this->model->newQuery()->orderBy($this->model->getKey(), 'desc');
+        return $this->paginateBuilder($this->model->newModelQuery(), $limit, $sort, $page);
+    }
+
+    protected function paginateBuilder(\Illuminate\Database\Eloquent\Builder $builder, $limit, $sort, $page)
+    {
+        $builder->orderBy($this->model->getKeyName(), $sort);
 
         return $builder->paginate($limit, '*', 'page', $page);
     }
