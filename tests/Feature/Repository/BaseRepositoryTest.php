@@ -45,7 +45,7 @@ class BaseRepositoryTest extends TestCase
         File::factory()->count(5)->create(['file_category_id' => FileCategory::BULK_IMSI_FILE]);
 
         $repo = new BaseRepository(new File());
-        $paginator = $repo->paginateWhere([['file_category_id' => FileCategory::BULK_IMSI_FILE]]);
+        $paginator = $repo->paginate(10, 'desc', 1, [['file_category_id' => FileCategory::BULK_IMSI_FILE]]);
         $this->assertEquals(5, $paginator->total());
         $this->assertEquals(20, $paginator->items()[0]['id']);
     }
