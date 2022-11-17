@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Route;
     Route::controller(VillageController::class)->group(function () {
         Route::get('/autocomplete', 'autocomplete');
         Route::get('/district', 'district');
+        Route::get('/village', 'index');
     });
     Route::controller(DistrictController::class)->group(function () {
         Route::get('/district', 'district');

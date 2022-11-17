@@ -20,20 +20,15 @@ class SubscriptionNumberController extends Controller
 
     public function index(Request $request)
     {
-    //get all subscriptions
+        //get all subscriptions
         return $this->repository->getListOfSubscriptions($request->query());
     }
 
     public function customerSubscriptions($id)
     { 
-        $subscription = $this->repository->showSubscription($id);
-        // dd($subscription);
-        return $subscription;
-
-        //query subscription with customer id
-        // $subscription = $this->repository->getSubscriptionId($request->query());
-        // // dd($subscription);
-        // $subscription_id = $subscription->id;
-        // return $this->repository->getListOfSubscriptions($subscription_id);
+        $subscriptions = $this->repository->getSubscriptionId($id);
+        return $subscriptions;
+        
+        // return response()->json($data);
     }
 }

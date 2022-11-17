@@ -17,8 +17,9 @@ class VillageRepository
 
     public function getListOfVillages($query): AnonymousResourceCollection
     {
+        $builder = Village::query()->orderBy('id', 'asc');
         return VillageResource::collection(
-            Village::query()
+            $builder->get()
         );
     }
 

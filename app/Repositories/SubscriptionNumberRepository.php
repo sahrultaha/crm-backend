@@ -28,10 +28,10 @@ class SubscriptionNumberRepository
         );
     }
     
-    public function showSubscription($id): AnonymousResourceCollection
+    public function getSubscriptionId($id): AnonymousResourceCollection
     {  
 
-        $builder = Subscription::query();
+        $builder = Subscription::query()->select('id');
         if (env('DB_CONNECTION') === 'pgsql') {
             $builder->where('customer_id','iLike', $id);
         } else {
@@ -41,9 +41,9 @@ class SubscriptionNumberRepository
         return SubscriptionResource::collection($builder->get());
     }
 
-    public function getSubscription($subscription_id): AnonymousResourceCollection
+    public function getSubscription($subscription_id): Subscription
     {
-        $builder = SubscriptionNumber::query();
+        $builder = SubscriptionNumber::query()->with('subscription')->select('id', 'subscription.customer');
         if (isset($query['search']) && mb_strlen($query['search']) > 3) {
             if (env('DB_CONNECTION') === 'pgsql') {
                 $builder->whereRaw('subscription_id @@ to_tsquery(?)', $subscription_id);
