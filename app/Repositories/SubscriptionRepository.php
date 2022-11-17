@@ -2,12 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Http\Resources\SubscriptionResource; 
 use App\Models\Subscription;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class SubscriptionRepository
-{ //find by customer id here
+{
+    //find by customer id here
     public function getListOfSubscriptions($query): AnonymousResourceCollection
     {
         $builder = Subscription::query();

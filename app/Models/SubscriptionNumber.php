@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class SubscriptionNumber extends Model
 {
-    use HasFactory; 
-    
+    use HasFactory;
+
     protected $table = 'subscription_number';
 
     public function number()

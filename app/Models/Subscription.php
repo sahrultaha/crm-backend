@@ -24,5 +24,4 @@ class Subscription extends Model
     {
         return $this->belongsTo(Customer::class, 'subscription_id');
     }
-
 }

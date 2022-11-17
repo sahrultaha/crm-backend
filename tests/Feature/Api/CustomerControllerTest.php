@@ -7,14 +7,12 @@ use App\Models\AddressType;
 use App\Models\Country;
 use App\Models\Customer;
 use App\Models\CustomerTitle;
-use App\Models\District;
 use App\Models\File;
 use App\Models\FileCategory;
 use App\Models\FileRelationType;
 use App\Models\IcColor;
 use App\Models\IcType;
-use App\Models\Mukim;
-use App\Models\PostalCode; //test Address factory
+//test Address factory
 use App\Models\User;
 use App\Models\Village;
 use Database\Seeders\FileSeeder;

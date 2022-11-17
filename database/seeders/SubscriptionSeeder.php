@@ -15,11 +15,11 @@ class SubscriptionSeeder extends Seeder
     public function run()
     {
         $insert = [];
-        $n=1;
+        $n = 1;
         for ($i = 0; $i < 5; $i++) {
             for ($j = 1; $j < 30; $j++) {
                 $insert[] = [
-                    'id' =>$n,
+                    'id' => $n,
                     'customer_id' => $j,
                     'registration_date' => now()->subYears(1),
                     'subscription_status_id' => 2,

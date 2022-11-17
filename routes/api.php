@@ -7,12 +7,12 @@ use App\Http\Controllers\Api\ImsiController;
 use App\Http\Controllers\Api\MukimController;
 use App\Http\Controllers\Api\PackController;
 use App\Http\Controllers\Api\PostalCodeController;
-use App\Http\Controllers\Api\VillageController;
 use App\Http\Controllers\Api\SubscriptionNumberController;
+use App\Http\Controllers\Api\VillageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
@@ -55,4 +55,4 @@ use Illuminate\Support\Facades\Route;
         Route::get('/subscription', 'index'); //pass customer id into {subscriptions} from front end
         Route::get('/subscription/{customer_id}', 'customerSubscriptions');
     });
-// });
+});
