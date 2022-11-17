@@ -49,4 +49,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::controller(PackController::class)->group(function () {
         Route::get('/packs', 'index');
     });
+    Route::controller(SubscriptionNumberController::class)->group(function () {
+        Route::get('/subscriptions/{subscriptions}', 'index'); //pass customer id into {subscriptions} from front end
+    });
 });

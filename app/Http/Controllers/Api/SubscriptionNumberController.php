@@ -4,14 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Subscription;
+use App\Models\SubscriptionNumber;
 use App\Repositories\SubscriptionRepository; 
 use Illuminate\Http\Request;
 
-class SubscriptionController extends Controller
+class SubscriptionNumberController extends Controller
 {
-    private SubscriptionRepository $repository;
+    private SubscriptionNumberRepository $repository;
 
-    public function __construct(SubscriptionRepository $repository)
+    public function __construct(SubscriptionNumberRepository $repository)
     {
         $this->repository = $repository;
     }
