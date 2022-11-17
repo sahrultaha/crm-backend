@@ -26,9 +26,19 @@ class SubscriptionNumberController extends Controller
 
     public function customerSubscriptions($id)
     { 
+        $subscription_ids = [];
         $subscriptions = $this->repository->getSubscriptionId($id);
-        return $subscriptions;
+        $ids = $subscriptions->all();
+        foreach ($ids as $id){
+            array_push($subscription_ids, $id->id);
+        }
+        $customer_subscriptions=[];
+        foreach ($subscription_ids as $subscription_id){
+            return getCustomerSubscription($subscription_id);
+            // $customer_sub = getCustomerSubscription($subscription_id);
+            // array_push($customer_subscriptions, $customer_sub);
+        }
+
         
-        // return response()->json($data);
     }
 }

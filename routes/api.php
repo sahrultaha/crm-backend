@@ -52,7 +52,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/packs', 'index');
     });
     Route::controller(SubscriptionNumberController::class)->group(function () {
-        Route::get('/subscription', 'index'); //pass customer id into {subscriptions} from front end
+        Route::get('/subscription', 'index'); 
         Route::get('/subscription/{customer_id}', 'customerSubscriptions');
     });
 // });
