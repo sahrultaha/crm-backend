@@ -18,8 +18,7 @@ class SubscriptionNumberController extends Controller
     }
 
     public function index(Request $request): AnonymousResourceCollection
-    {
+    { //find by subscription id here
         return $this->repository->getofListSubscriptions($request->query());
     }
-
 }
