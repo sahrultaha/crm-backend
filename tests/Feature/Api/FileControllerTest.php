@@ -75,7 +75,7 @@ class FileControllerTest extends TestCase
     {
         Storage::fake('s3');
         $this->seed([
-            \Database\Seeders\Skeleton::class,
+            \Database\Seeders\ImsiTypeStatusSeeder::class,
             FileSeeder::class,
             \Database\Seeders\RowStatusSeeder::class,
         ]);
