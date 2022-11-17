@@ -16,6 +16,10 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             Skeleton::class,
+            NumberTypeStatusCategorySeeder::class,
+            ImsiTypeStatusSeeder::class,
+            ProductProfileNetworkSeeder::class,
+            PackTypeSeeder::class,
             User::class,
             CountrySeeder::class,
             AddressSeeder::class,
