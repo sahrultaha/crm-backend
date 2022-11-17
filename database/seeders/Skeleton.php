@@ -104,40 +104,6 @@ class Skeleton extends Seeder
                 'name' => 'Dr',
             ],
         ]);
-        DB::table('number_type')->insert([
-            [
-                'id' => 1,
-                'name' => 'Prepaid',
-            ],
-            [
-                'id' => 2,
-                'name' => 'Postpaid Port in',
-            ],
-        ]);
-        DB::table('number_status')->insert([
-            [
-                'id' => 1,
-                'name' => 'Available',
-            ],
-            [
-                'id' => 2,
-                'name' => 'Active',
-            ],
-            [
-                'id' => 3,
-                'name' => 'Terminated',
-            ],
-        ]);
-        DB::table('number_category')->insert([
-            [
-                'id' => 1,
-                'name' => 'Normal',
-            ],
-            [
-                'id' => 2,
-                'name' => 'Gold',
-            ],
-        ]);
         DB::table('subscription_type')->insert([
             [
                 'id' => 1,
@@ -156,28 +122,6 @@ class Skeleton extends Seeder
             [
                 'id' => 3,
                 'name' => 'Expired',
-            ],
-            [
-                'id' => 4,
-                'name' => 'Suspended',
-            ],
-            [
-                'id' => 5,
-                'name' => 'Terminated',
-            ],
-        ]);
-        DB::table('product_network')->insert([
-            [
-                'id' => 1,
-                'name' => '3G',
-            ],
-            [
-                'id' => 2,
-                'name' => '4G',
-            ],
-            [
-                'id' => 3,
-                'name' => '5G',
             ],
             [
                 'id' => 4,
@@ -208,34 +152,6 @@ class Skeleton extends Seeder
             [
                 'id' => 5,
                 'name' => 'Invoiced',
-            ],
-        ]);
-        DB::table('imsi_type')->insert([
-            [
-                'id' => 1,
-                'name' => '3G',
-            ],
-            [
-                'id' => 2,
-                'name' => '4G',
-            ],
-            [
-                'id' => 3,
-                'name' => '5G',
-            ],
-        ]);
-        DB::table('imsi_status')->insert([
-            [
-                'id' => 1,
-                'name' => 'Available',
-            ],
-            [
-                'id' => 2,
-                'name' => 'Active',
-            ],
-            [
-                'id' => 3,
-                'name' => 'Terminated',
             ],
         ]);
         DB::table('address_type')->insert([

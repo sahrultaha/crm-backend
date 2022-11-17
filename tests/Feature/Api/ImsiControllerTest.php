@@ -6,6 +6,7 @@ use App\Models\Imsi;
 use App\Models\ImsiStatus;
 use App\Models\ImsiType;
 use App\Models\User;
+use Database\Seeders\ImsiTypeStatusSeeder;
 use Database\Seeders\Skeleton;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
@@ -17,7 +18,7 @@ class ImsiControllerTest extends TestCase
 
     public function test_guests_cannot_create_new_imsi()
     {
-        $this->seed(Skeleton::class);
+        $this->seed(ImsiTypeStatusSeeder::class);
 
         $imsi_status = ImsiStatus::first();
         $imsi_type = ImsiType::first();
@@ -38,7 +39,7 @@ class ImsiControllerTest extends TestCase
 
     public function test_users_can_create_new_imsi()
     {
-        $this->seed(Skeleton::class);
+        $this->seed(ImsiTypeStatusSeeder::class);
 
         $imsi_status = ImsiStatus::first();
         $imsi_type = ImsiType::first();
@@ -65,7 +66,7 @@ class ImsiControllerTest extends TestCase
 
     public function test_users_can_view_imsi_list()
     {
-        $this->seed(Skeleton::class);
+        $this->seed(ImsiTypeStatusSeeder::class);
 
         Imsi::factory()->count(3)->create();
 
@@ -94,7 +95,7 @@ class ImsiControllerTest extends TestCase
 
     public function test_users_can_update_existing_imsi()
     {
-        $this->seed(Skeleton::class);
+        $this->seed(ImsiTypeStatusSeeder::class);
 
         $old_imsi = Imsi::factory()->create([
             'imsi' => 1234567890,
@@ -140,7 +141,7 @@ class ImsiControllerTest extends TestCase
 
     public function test_passing_null_values_doesnt_update_existing_imsi_properties()
     {
-        $this->seed(Skeleton::class);
+        $this->seed(ImsiTypeStatusSeeder::class);
 
         $old_imsi_number = 1234567890;
         $old_imsi_status_id = ImsiStatus::find(1)->id;
@@ -188,7 +189,7 @@ class ImsiControllerTest extends TestCase
 
     public function test_users_can_view_existing_imsi_details()
     {
-        $this->seed(Skeleton::class);
+        $this->seed(ImsiTypeStatusSeeder::class);
 
         $imsi_status = ImsiStatus::first();
         $imsi_type = ImsiType::first();
@@ -218,7 +219,7 @@ class ImsiControllerTest extends TestCase
 
     public function test_users_can_delete_existing_imsi()
     {
-        $this->seed(Skeleton::class);
+        $this->seed(ImsiTypeStatusSeeder::class);
 
         $imsi_status = ImsiStatus::first();
         $imsi_type = ImsiType::first();
