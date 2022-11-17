@@ -16,19 +16,16 @@ class ProductSeeder extends Seeder
     {
         DB::table('product')->insert([
             [
-                'id' => 1,
                 'name' => 'Product A',
                 'product_profile_id' => 1,
                 'product_network_id' => 1,
             ],
             [
-                'id' => 2,
                 'name' => 'Product B',
                 'product_profile_id' => 2,
                 'product_network_id' => 2,
             ],
             [
-                'id' => 3,
                 'name' => 'Product C',
                 'product_profile_id' => 3,
                 'product_network_id' => 3,

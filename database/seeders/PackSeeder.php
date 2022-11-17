@@ -16,7 +16,6 @@ class PackSeeder extends Seeder
     {
         DB::table('pack')->insert([
             [
-                'id' => 1,
                 'number_id' => 1,
                 'imsi_id' => 1,
                 'product_id' => 1,
@@ -25,7 +24,6 @@ class PackSeeder extends Seeder
                 'expiry_date' => now()->addYears(10),
             ],
             [
-                'id' => 2,
                 'number_id' => 2,
                 'imsi_id' => 2,
                 'product_id' => 2,
@@ -34,7 +32,6 @@ class PackSeeder extends Seeder
                 'expiry_date' => now()->addYears(10),
             ],
             [
-                'id' => 3,
                 'number_id' => 3,
                 'imsi_id' => 3,
                 'product_id' => 3,

@@ -18,8 +18,7 @@ class UpdateImsiTest extends CustomDuskTestCase
         $this->browse(function (Browser $browser) {
             $this->loginAsAdmin($browser);
             $this->createNewImsi($browser);
-            $this->assertDatabaseCount('imsi', 1);
-            $imsi_id = Imsi::first()->id;
+            $imsi_id = 4;
 
             $old_imsi_number = '1234567890';
             $new_imsi_number = '1234567891';
