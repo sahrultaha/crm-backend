@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DistrictController;
 use App\Http\Controllers\Api\FileController;
+use App\Http\Controllers\Api\ImsiBulkController;
 use App\Http\Controllers\Api\ImsiController;
 use App\Http\Controllers\Api\MukimController;
 use App\Http\Controllers\Api\PackController;
@@ -39,6 +40,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::controller(PostalCodeController::class)->group(function () {
         Route::get('/postalcode', 'postalcode');
     });
+    Route::controller(ImsiBulkController::class)->group(function () {
+        Route::get('/imsi/bulk', 'index');
+    });
     Route::controller(ImsiController::class)->group(function () {
         Route::get('/imsi', 'index');
         Route::post('/imsi', 'store');
@@ -46,6 +50,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/imsi/{imsi}', 'show');
         Route::delete('/imsi/{imsi}', 'destroy');
     });
+
     Route::controller(PackController::class)->group(function () {
         Route::get('/packs', 'index');
     });
