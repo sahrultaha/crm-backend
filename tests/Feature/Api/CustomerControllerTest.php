@@ -37,9 +37,6 @@ class CustomerControllerTest extends TestCase
         $account_category = AccountCategory::factory()->create();
         $village = Village::factory()->create();
         $address_type = AddressType::factory()->create();
-        $mukim = Mukim::factory()->create(); //test address factory
-        $district = District::factory()->create();
-        $postalcode = PostalCode::factory()->create();
 
         $customer_name = 'Abc';
         $customer_email = 'test@mail.com';
@@ -54,9 +51,9 @@ class CustomerControllerTest extends TestCase
         $customer_birth_date = '2000-01-20';
         $customer_village = $village->id;
         $village = $village->name;
-        $customer_mukim_id = $mukim->id;
-        $customer_district_id = $district->id;
-        $customer_postal_code_id = $postalcode->id;
+        $customer_mukim_id = null;
+        $customer_district_id = null;
+        $customer_postal_code_id = null;
         $customer_house_number = 'No 1';
         $customer_simpang = 'Simpang 5';
         $customer_street = 'Jalan Utara';

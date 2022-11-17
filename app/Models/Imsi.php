@@ -20,4 +20,9 @@ class Imsi extends Model
         'puk_1',
         'puk_2',
     ];
+
+    public function subscriptionNumber()
+    {
+        return $this->belongsTo(SubscriptionNumber::class, 'imsi_id');
+    }
 }
