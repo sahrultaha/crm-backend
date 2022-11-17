@@ -16,25 +16,28 @@ class PackSeeder extends Seeder
     {
         DB::table('pack')->insert([
             [
-                'id' => 1,
                 'number_id' => 1,
                 'imsi_id' => 1,
                 'product_id' => 1,
                 'pack_type_id' => 1,
+                'installation_date' => now()->subYear(),
+                'expiry_date' => now()->addYears(10),
             ],
             [
-                'id' => 2,
                 'number_id' => 2,
                 'imsi_id' => 2,
                 'product_id' => 2,
                 'pack_type_id' => 2,
+                'installation_date' => now()->subYear(),
+                'expiry_date' => now()->addYears(10),
             ],
             [
-                'id' => 3,
                 'number_id' => 3,
                 'imsi_id' => 3,
                 'product_id' => 3,
                 'pack_type_id' => 3,
+                'installation_date' => now()->subYear(),
+                'expiry_date' => now()->addYears(10),
             ],
         ]);
     }

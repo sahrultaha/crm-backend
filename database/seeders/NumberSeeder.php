@@ -16,21 +16,18 @@ class NumberSeeder extends Seeder
     {
         DB::table('number')->insert([
             [
-                'id' => 1,
                 'number' => 1234567,
                 'number_type_id' => 1,
                 'number_status_id' => 1,
                 'number_category_id' => 1,
             ],
             [
-                'id' => 2,
                 'number' => 9876543,
                 'number_type_id' => 1,
                 'number_status_id' => 1,
                 'number_category_id' => 1,
             ],
             [
-                'id' => 3,
                 'number' => 2345678,
                 'number_type_id' => 1,
                 'number_status_id' => 1,

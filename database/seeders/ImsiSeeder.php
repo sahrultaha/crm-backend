@@ -16,7 +16,6 @@ class ImsiSeeder extends Seeder
     {
         DB::table('imsi')->insert([
             [
-                'id' => 1,
                 'imsi' => 12345678,
                 'imsi_status_id' => 1,
                 'imsi_type_id' => 1,
@@ -25,7 +24,6 @@ class ImsiSeeder extends Seeder
                 'puk_2' => 12344321,
             ],
             [
-                'id' => 2,
                 'imsi' => 87654321,
                 'imsi_status_id' => 1,
                 'imsi_type_id' => 1,
@@ -34,7 +32,6 @@ class ImsiSeeder extends Seeder
                 'puk_2' => 43211234,
             ],
             [
-                'id' => 3,
                 'imsi' => 23456789,
                 'imsi_status_id' => 1,
                 'imsi_type_id' => 1,
