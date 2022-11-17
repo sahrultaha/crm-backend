@@ -7,7 +7,6 @@ use App\Models\ImsiStatus;
 use App\Models\ImsiType;
 use App\Models\User;
 use Database\Seeders\ImsiTypeStatusSeeder;
-use Database\Seeders\Skeleton;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
