@@ -16,4 +16,9 @@ class Number extends Model
     {
         return $this->hasOne(Pack::class);
     }
+
+    public function subscriptionNumber()
+    {
+        return $this->belongsTo(SubscriptionNumber::class, 'number_id');
+    }
 }

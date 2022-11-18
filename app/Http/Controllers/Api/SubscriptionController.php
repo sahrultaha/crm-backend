@@ -7,7 +7,10 @@ use App\Http\Requests\Api\SubscriptionStoreRequest;
 use App\Models\Subscription;
 use App\Models\SubscriptionNumber;
 use App\Repositories\BaseRepository;
+use App\Repositories\SubscriptionRepository;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class SubscriptionController extends Controller
 {
@@ -17,8 +20,13 @@ class SubscriptionController extends Controller
 
     public function __construct()
     {
-        $this->subRepository = new BaseRepository(new Subscription());
+        $this->subRepository = new SubscriptionRepository(new Subscription());
         $this->subNumberRepository = new BaseRepository(new SubscriptionNumber());
+    }
+
+    public function index(Request $request): AnonymousResourceCollection
+    {
+        return $this->subRepository->getListOfSubscriptions($request->query());
     }
 
     public function store(SubscriptionStoreRequest $request): JsonResponse

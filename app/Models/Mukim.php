@@ -13,6 +13,10 @@ class Mukim extends Model
 
     protected $table = 'mukim';
 
+    protected $fillable = ['district_id'];
+
+    protected $primaryKey = 'id';
+
     public function district()
     {
         return $this->belongsTo('App\Models\District', 'district_id');
