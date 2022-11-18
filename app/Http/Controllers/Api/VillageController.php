@@ -23,8 +23,7 @@ class VillageController extends Controller
      */
     public function index(Request $request): AnonymousResourceCollection
     {
-        return view('village');
-        // return $this->repository->getListOfVillages($request->query());
+        return $this->repository->getListOfVillages($request->query());
     }
 
     /**

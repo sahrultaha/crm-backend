@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ImsiController;
 use App\Http\Controllers\Api\MukimController;
 use App\Http\Controllers\Api\PackController;
 use App\Http\Controllers\Api\PostalCodeController;
+use App\Http\Controllers\Api\SubscriptionNumberController;
 use App\Http\Controllers\Api\VillageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::controller(VillageController::class)->group(function () {
         Route::get('/autocomplete', 'autocomplete');
         Route::get('/district', 'district');
+        Route::get('/village', 'index');
     });
     Route::controller(DistrictController::class)->group(function () {
         Route::get('/district', 'district');
@@ -48,5 +50,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
     Route::controller(PackController::class)->group(function () {
         Route::get('/packs', 'index');
+    });
+    Route::controller(SubscriptionNumberController::class)->group(function () {
+        Route::get('/subscription', 'index'); //pass customer id into {subscriptions} from front end
+        Route::get('/subscription/{customer_id}', 'customerSubscriptions');
     });
 });

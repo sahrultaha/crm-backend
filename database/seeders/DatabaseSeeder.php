@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
         if (env('APP_ENV') === 'local') {
             $this->call([
                 CustomerSeeder::class,
+                SubscriptionSeeder::class,
                 NumberSeeder::class,
                 ImsiSeeder::class,
                 ProductSeeder::class,

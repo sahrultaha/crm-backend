@@ -13,6 +13,10 @@ class PostalCode extends Model
 
     protected $table = 'postal_code';
 
+    protected $fillable = ['village_id'];
+
+    protected $primaryKey = 'id';
+
     public function village()
     {
         return $this->belongsTo('App\Models\Village', 'village_id');
