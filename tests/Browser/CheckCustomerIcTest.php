@@ -11,11 +11,11 @@ class CheckCustomerIcTest extends CustomDuskTestCase
     public function test_users_can_check_ic()
     {
         $this->assertDatabaseCount('customer', 30);
-
+        
         $customer = Customer::find(1);
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (Browser $browser) use ($customer) {
             $this->loginAsAdmin($browser);
-            $this->createNewCustomer($browser, '77661234');
+            $this->createNewCustomer($browser,  '77661234' );
             $browser
             ->visit(env('FRONTEND_URL').'/customers/create')
             ->waitForText('CREATE')

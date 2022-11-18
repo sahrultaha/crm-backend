@@ -38,4 +38,15 @@ class FileController extends Controller
             'url' => $url,
         ]);
     }
+
+    public function update(FileStoreRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+        $id = $request['file_id'];
+        $file = $this->repository->updateFiles($id, $validated);
+
+        return response()->json([
+            'id' => $file->id,
+        ], 201);
+    }
 }

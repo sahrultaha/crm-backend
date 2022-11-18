@@ -13,8 +13,9 @@ class PostalCodeFactory extends Factory
     public function definition()
     {
         return [
-            'name' => fake()->name(),
-            // 'village_id' => Village::factory(),
+
+            'name' => fake()->randomNumber(4),
+            'village_id' => Village::factory(),
         ];
     }
 }
