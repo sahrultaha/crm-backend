@@ -17,13 +17,20 @@ class SubscriptionNumber extends Model
         'imsi_id',
     ];
 
+    protected $primaryKey = 'id'; 
+
+    public function subscription()
+    {
+        return $this->belongsTo(Subscription::class, 'subscription_id');
+    }
+
     public function number()
     {
-        return $this->hasMany(Number::class);
+        return $this->belongsTo(Number::class, 'number_id');
     }
 
     public function imsi()
     {
-        return $this->hasMany(Imsi::class);
+        return $this->belongsTo(Imsi::class, 'imsi_id');
     }
 }

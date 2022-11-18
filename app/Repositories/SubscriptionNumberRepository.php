@@ -41,15 +41,19 @@ class SubscriptionNumberRepository
         return SubscriptionResource::collection($builder->get());
     }
 
-    public function getCustomerSubscription($subscription_id): AnonymousResourceCollection
+    public function getCustomerSubscription($subscription_ids)
     {   
-        $builder = SubscriptionNumber::query();
-        if (env('DB_CONNECTION') === 'pgsql') {
-            $builder->where('subscription_id','iLike', $subscription_id);
-        } else {
-            $builder->where('subscription_id', 'like', "%{$subscription_id}%");
+        $res = [];
+        foreach ($subscription_ids as $subscription_id)
+        {    
+            $builder = SubscriptionNumber::query()->with('number', 'imsi', 'subscription')->select('id','subscription_id', 'number_id', 'imsi_id');
+            if (env('DB_CONNECTION') === 'pgsql') {
+                $builder->where('subscription_id','iLike', $subscription_id);
+            } else {
+                $builder->where('subscription_id', 'like', "%{$subscription_id}%");
+            }
+            array_push($res, SubscriptionNumberResource::collection($builder->get()));
         }
-        return SubscriptionNumberResource::collection($builder-get());
+        return $res;
     }
-
 }
