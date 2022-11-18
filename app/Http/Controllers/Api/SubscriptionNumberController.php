@@ -32,9 +32,10 @@ class SubscriptionNumberController extends Controller
         foreach ($ids as $id){
             array_push($subscription_ids, $id->id);
         }
+        
         $customer_subscriptions=[];
         foreach ($subscription_ids as $subscription_id){
-            return getCustomerSubscription($subscription_id);
+            dd(getCustomerSubscription(1)) ;
             // $customer_sub = getCustomerSubscription($subscription_id);
             // array_push($customer_subscriptions, $customer_sub);
         }

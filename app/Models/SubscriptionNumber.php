@@ -11,6 +11,12 @@ class SubscriptionNumber extends Model
     
     protected $table = 'subscription_number';
 
+    protected $fillable = [
+        'subscription_id',
+        'number_id',
+        'imsi_id',
+    ];
+
     public function number()
     {
         return $this->hasMany(Number::class);

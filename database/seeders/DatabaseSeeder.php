@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
                 ImsiSeeder::class,
                 ProductSeeder::class,
                 PackSeeder::class,
+                SubscriptionNumberSeeder::class,
             ]);
         }
     }
