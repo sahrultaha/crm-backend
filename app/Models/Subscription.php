@@ -11,9 +11,15 @@ class Subscription extends Model
 
     protected $table = 'subscription';
 
-    protected $fillable = ['customer_id'];
-
-    protected $primaryKey = 'id';
+    protected $fillable = [
+        'customer_id',
+        'registration_date',
+        'subscription_status_id',
+        'subscription_type_id',
+        'number_id',
+        'imsi_id',
+        'activation_date',
+    ];
 
     public function subscriptionNumber()
     {

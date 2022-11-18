@@ -2,12 +2,12 @@
 
 namespace App\Repositories;
 
+use App\Http\Resources\SubscriptionResource;
 use App\Models\Subscription;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class SubscriptionRepository
+class SubscriptionRepository extends BaseRepository
 {
-    //find by customer id here
     public function getListOfSubscriptions($query): AnonymousResourceCollection
     {
         $builder = Subscription::query();
@@ -18,5 +18,9 @@ class SubscriptionRepository
                 $builder->where('customer_id', 'like', "%{$query['search']}%");
             }
         }
+
+        return SubscriptionResource::collection(
+            $builder->get()
+        );
     }
 }
