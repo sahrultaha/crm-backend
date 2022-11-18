@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 class SubscriptionController extends Controller
 {
     private BaseRepository $subRepository;
+
     private BaseRepository $subNumberRepository;
 
     public function __construct()
@@ -34,7 +35,7 @@ class SubscriptionController extends Controller
             'imsi_id',
             'activation_date',
         ]);
-        $attributes['subscription_id'] =  $subscription->id;
+        $attributes['subscription_id'] = $subscription->id;
         $this->subNumberRepository->create($attributes);
 
         return response()->json([
