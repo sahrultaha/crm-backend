@@ -45,7 +45,10 @@ class CustomerController extends Controller
 
         $file_ids = $this->repository->getFileIds($customer->id);
 
-        $data_to_return = $customer->toArray();
+        $address_details = $this->repository->getCustomerAddress($customer->id, 1);
+
+        $customer_data = $customer->toArray();
+        $data_to_return = array_merge($customer_data, ['address' => $address_details->toArray() ?? '']);
         $data_to_return = array_merge($data_to_return, [
             'file_ids' => $file_ids->isNotEmpty() ? $file_ids->pluck('file_id')->toArray() : [],
         ]);
@@ -67,5 +70,35 @@ class CustomerController extends Controller
         return response()->json([
             'id' => $id,
         ]);
+    }
+
+    public function getCustomer(Request $request): JsonResponse
+    {
+        $customer = $this->repository->getCustomerDetails($request->query());
+
+        $file_ids = $this->repository->getFileIds($customer->id);
+
+        $address_details = $this->repository->getCustomerAddress($customer->id, '1');
+
+        $customer_data = $customer->toArray();
+        $data_to_return = array_merge($customer_data, ['address' => $address_details->toArray() ?? '']);
+        $data_to_return = array_merge($data_to_return, [
+            'file_ids' => $file_ids->isNotEmpty() ? $file_ids->pluck('file_id')->toArray() : [],
+        ]);
+
+        return response()->json($data_to_return);
+    }
+
+    public function update(CustomerStoreRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+        $id = $request['id'];
+        $address_id = $request['address_id'];
+        $customer_update = $this->repository->updateCustomer($id, $validated);
+        $address_update = $this->repository->updateAddress($address_id, $validated);
+
+        return response()->json([
+            'id' => $customer_update->id,
+        ], 201);
     }
 }

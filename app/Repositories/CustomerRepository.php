@@ -102,7 +102,8 @@ class CustomerRepository
 
     public function showCustomer($id): Customer
     {
-        $customer = Customer::find($id);
+        $customer = Customer::with('accountCategory')
+        ->find($id);
 
         return $customer;
     }
@@ -114,6 +115,84 @@ class CustomerRepository
             ->where('file_relation_type_id', FileRelationType::CUSTOMER)
             ->where('relation_id', $id)
             ->get();
+    }
+
+    public function getCustomerDetails($query): Customer
+    {
+        return Customer::find($query['id']);
+    }
+
+    public function updateAddress($address_id, array $validated): Address
+    {
+        $address = Address::find($address_id);
+
+        if (array_key_exists('village_id', $validated)) {
+            $address->village_id = $validated['village_id'];
+        }
+        if (array_key_exists('district_id', $validated)) {
+            $address->district_id = $validated['district_id'];
+        }
+        if (array_key_exists('mukim_id', $validated)) {
+            $address->mukim_id = $validated['mukim_id'];
+        }
+        if (array_key_exists('postal_code_id', $validated)) {
+            $address->postal_code_id = $validated['postal_code_id'];
+        }
+        if (array_key_exists('house_number', $validated)) {
+            $address->house_number = $validated['house_number'];
+        }
+        if (array_key_exists('simpang', $validated)) {
+            $address->simpang = $validated['simpang'];
+        }
+        if (array_key_exists('street', $validated)) {
+            $address->street = $validated['street'];
+        }
+        if (array_key_exists('building_name', $validated)) {
+            $address->building_name = $validated['building_name'];
+        }
+        if (array_key_exists('block', $validated)) {
+            $address->block = $validated['block'];
+        }
+        if (array_key_exists('floor', $validated)) {
+            $address->floor = $validated['floor'];
+        }
+        if (array_key_exists('unit', $validated)) {
+            $address->unit = $validated['unit'];
+        }
+
+        $address->save();
+
+        return $address;
+    }
+
+    public function updateCustomer($id, array $validated): Customer
+    {
+        $customer = Customer::find($id);
+        $customer->name = $validated['name'];
+        $customer->email = $validated['email'] ?? null;
+        $customer->mobile_number = $validated['mobile_number'] ?? null;
+        $customer->ic_number = $validated['ic_number'];
+        $customer->ic_type_id = $validated['ic_type_id'];
+        $customer->ic_expiry_date = $validated['ic_expiry_date'];
+        $customer->customer_title_id = $validated['customer_title_id'] ?? null;
+        $customer->account_category_id = $validated['account_category_id'];
+        $customer->birth_date = $validated['birth_date'];
+        $customer->country_id = $validated['country_id'];
+        $customer->ic_color_id = $validated['ic_color_id'] ?? null;
+
+        $customer->save();
+
+        return $customer;
+    }
+
+    public function getCustomerAddress($id, $address_type_id)
+    {
+        $customer_address = CustomerAddress::with(['address', 'address.district', 'address.village', 'address.mukim', 'address.postalcode'])
+        ->where('customer_id', $id)
+        ->where('address_type_id', $address_type_id)
+        ->get();
+
+        return $customer_address;
     }
 
     public function checkCustomerByIc($query)
