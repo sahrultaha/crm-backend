@@ -24,6 +24,7 @@ class CustomerFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
+            'mobile_number' => '673',
             'mobile_number' => fake()->phoneNumber(),
             'ic_number' => fake()->randomNumber(8),
             'ic_type_id' => IcType::factory(),

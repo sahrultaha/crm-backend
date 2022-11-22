@@ -41,6 +41,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('email')->nullable();
+            $table->smallInteger('country_code')->nullable();
             $table->string('mobile_number')->nullable();
             $table->string('ic_number');
             $table->smallInteger('ic_type_id');
