@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class PackTypeSeeder extends Seeder
 {
+    use TraitAlterSequence;
+
     /**
      * Run the database seeds.
      *
@@ -28,5 +30,6 @@ class PackTypeSeeder extends Seeder
                 'name' => 'Easi 5G',
             ],
         ]);
+        $this->alterSequence('pack_type');
     }
 }

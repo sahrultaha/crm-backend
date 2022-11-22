@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class ImsiTypeStatusSeeder extends Seeder
 {
+    use TraitAlterSequence;
+
     /**
      * Run the database seeds.
      *
@@ -42,5 +44,7 @@ class ImsiTypeStatusSeeder extends Seeder
                 'name' => 'Terminated',
             ],
         ]);
+        $this->alterSequence('imsi_type');
+        $this->alterSequence('imsi_status');
     }
 }

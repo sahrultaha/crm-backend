@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class ProductProfileNetworkSeeder extends Seeder
 {
+    use TraitAlterSequence;
+
     /**
      * Run the database seeds.
      *
@@ -41,14 +43,8 @@ class ProductProfileNetworkSeeder extends Seeder
                 'id' => 3,
                 'name' => '5G',
             ],
-            [
-                'id' => 4,
-                'name' => 'Suspended',
-            ],
-            [
-                'id' => 5,
-                'name' => 'Terminated',
-            ],
         ]);
+        $this->alterSequence('product_profile');
+        $this->alterSequence('product_network');
     }
 }

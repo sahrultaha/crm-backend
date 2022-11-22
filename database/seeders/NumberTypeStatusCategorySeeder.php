@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class NumberTypeStatusCategorySeeder extends Seeder
 {
+    use TraitAlterSequence;
+
     /**
      * Run the database seeds.
      *
@@ -48,5 +50,8 @@ class NumberTypeStatusCategorySeeder extends Seeder
                 'name' => 'Gold',
             ],
         ]);
+        $this->alterSequence('number_type');
+        $this->alterSequence('number_status');
+        $this->alterSequence('number_category');
     }
 }
