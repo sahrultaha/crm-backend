@@ -215,7 +215,7 @@ return new class extends Migration
                 ->on('product_profile');
             $table->foreign('product_network_id')
                 ->references('id')
-                ->on('product_profile');
+                ->on('product_network');
             $table->index('product_profile_id');
             $table->index('product_network_id');
         });
