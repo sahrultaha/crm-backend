@@ -17,15 +17,15 @@ class PackTypeSeeder extends Seeder
         DB::table('pack_type')->insert([
             [
                 'id' => 1,
-                'name' => 'Pack Type A',
+                'name' => 'Easi 4G',
             ],
             [
                 'id' => 2,
-                'name' => 'Pack Type B',
+                'name' => 'Easi Tourist 4G',
             ],
             [
                 'id' => 3,
-                'name' => 'Pack Type C',
+                'name' => 'Easi 5G',
             ],
         ]);
     }
