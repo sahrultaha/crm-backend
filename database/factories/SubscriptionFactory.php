@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\SubscriptionType;
-use App\Models\SubscriptionStatus;
 use App\Models\Customer;
+use App\Models\SubscriptionStatus;
+use App\Models\SubscriptionType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

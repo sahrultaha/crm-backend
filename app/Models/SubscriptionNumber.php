@@ -7,17 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class SubscriptionNumber extends Model
 {
-    use HasFactory; 
-    
+    use HasFactory;
+
     protected $table = 'subscription_number';
 
     protected $fillable = [
         'subscription_id',
         'number_id',
         'imsi_id',
+        'activation_date',
     ];
 
-    protected $primaryKey = 'id'; 
+    protected $primaryKey = 'id';
 
     public function subscription()
     {

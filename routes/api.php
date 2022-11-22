@@ -7,9 +7,9 @@ use App\Http\Controllers\Api\ImsiController;
 use App\Http\Controllers\Api\MukimController;
 use App\Http\Controllers\Api\PackController;
 use App\Http\Controllers\Api\PostalCodeController;
-use App\Http\Controllers\Api\VillageController;
-use App\Http\Controllers\Api\SubscriptionNumberController;
 use App\Http\Controllers\Api\SubscriptionController;
+use App\Http\Controllers\Api\SubscriptionNumberController;
+use App\Http\Controllers\Api\VillageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,11 +21,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/customers', 'index');
         Route::post('/customers', 'store');
         Route::get('/customers/search', 'checkIc');
+        Route::get('/customers/get', 'getCustomer');
+        Route::put('/customers/update', 'update');
         Route::get('/customers/{id}', 'show');
         Route::delete('/customers/{customer}', 'destroy');
     });
     Route::controller(FileController::class)->group(function () {
         Route::post('/files', 'store');
+        Route::patch('/files', 'update');
         Route::get('/files/{file}', 'show');
     });
     Route::controller(VillageController::class)->group(function () {
@@ -52,8 +55,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::controller(PackController::class)->group(function () {
         Route::get('/packs', 'index');
     });
-    Route::controller(SubscriptionNumberController::class)->group(function () {
-        Route::get('/subscription', 'index'); 
+    Route::controller(SubscriptionController::class)->group(function () {
+        Route::get('/subscription', 'index');
+        Route::post('/subscriptions','store');
         Route::get('/subscription/{customer_id}', 'customerSubscriptions');
     });
 });

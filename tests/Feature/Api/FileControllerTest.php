@@ -128,4 +128,47 @@ class FileControllerTest extends TestCase
         $this->assertEquals(3, Imsi::query()->count());
         $this->assertEquals(3, FileBulkImsi::query()->where('row_status_id', RowStatus::SUCCESS)->count());
     }
+
+    public function test_users_can_update_uploaded_file()
+    {
+        //upload file
+        Storage::fake('s3');
+        $this->seed(FileSeeder::class);
+        $user = User::factory()->create();
+        $file_category = FileCategory::first();
+        $fake_file = UploadedFile::fake()->image('image.jpg');
+
+        Sanctum::actingAs($user);
+        $this->assertDatabaseCount('file', 0);
+        $this->assertDatabaseCount('file_relation', 0);
+
+        $response = $this->postJson('/api/files', [
+            'file' => $fake_file,
+            'relation_id' => 1,
+            'relation_type_id' => 1,
+            'file_category_id' => $file_category->id,
+        ]);
+        $old_file = File::first();
+
+        //update file
+        Storage::fake('s3');
+        $new_file = UploadedFile::fake()->image('image2.jpg');
+
+        $update_upload_response = $this->postJson('/api/files', [
+            'file' => $new_file,
+            'relation_id' => 1,
+            'relation_type_id' => 1,
+            'file_category_id' => 1,
+            'file_id' => $old_file->id,
+            '_method' => 'PATCH',
+        ]);
+
+        $update_upload_response->assertCreated();
+        $this->assertDatabaseCount('file', 1);
+        $this->assertDatabaseCount('file_relation', 1);
+
+        $new_file = File::first();
+        Storage::disk('s3')->assertExists($new_file->filepath);
+        $this->assertNotEquals($old_file->filename, $new_file->filename);
+    }
 }

@@ -37,6 +37,27 @@ class FileRepository
         return $file_model;
     }
 
+    public function updateFiles($id, array $validated): File
+    {
+        $file = $validated['file'];
+        $name = $file->hashName();
+        $extension = $file->extension();
+        $path = Storage::putFileAs(
+            env('AWS_BUCKET'),
+            $validated['file'],
+            $name,
+        );
+
+        $file_model = File::find($id);
+        $file_model->filename = $name;
+        $file_model->filepath = $path;
+        $file_model->filetype = $extension;
+        $file_model->file_category_id = $validated['file_category_id'];
+        $file_model->save();
+
+        return $file_model;
+    }
+
     public function generateTemporaryUrl(File $file): string
     {
         return Storage::temporaryUrl($file->filepath, now()->addMinutes(30));
