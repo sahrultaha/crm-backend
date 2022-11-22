@@ -16,14 +16,17 @@ class CheckCustomerIcTest extends CustomDuskTestCase
         $this->browse(function (Browser $browser) {
             $this->loginAsAdmin($browser);
             $this->createNewCustomer($browser, '77661234');
+            $today = now();
             $browser
-            ->visit(env('FRONTEND_URL').'/customers/create')
-            ->waitForText('CREATE')
-            ->typeSlowly('#name', 'Lorem')
-            ->typeSlowly('#icNumber', '77661234')
-            ->select('#icTypeId', '1')
-            ->pause(5000)
-            ->waitForText('Customer already exist!');
+                ->visit(env('FRONTEND_URL').'/customers/create')
+                ->waitForText('Please enter ic details.')
+                ->typeSlowly('#icNumber', '77661234')
+                ->select('#icTypeId', '1')
+                ->select('#icColorId', '1')
+                ->keys('#icExpiryDate', $today->day)
+                ->keys('#icExpiryDate', $today->month)
+                ->keys('#icExpiryDate', $today->year)
+                ->waitForText('Customer already exist!');
         });
     }
 }
