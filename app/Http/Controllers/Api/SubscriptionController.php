@@ -16,9 +16,9 @@ class SubscriptionController extends Controller
         $this->repository = $repository;
     }
 
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(Request $request)
     {
-        return $this->repository->getofListSubscriptions($request->query());
+        return $this->repository->getListOfSubscriptions($request->query());
     }
 
 }

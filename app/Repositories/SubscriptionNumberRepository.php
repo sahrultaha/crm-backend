@@ -9,7 +9,7 @@ use App\Models\SubscriptionNumber;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class SubscriptionNumberRepository
-{ //find by subscription id here
+{
     public function getListOfSubscriptions($query): AnonymousResourceCollection
     {
         $limit = $query['limit'] ?? 10;
@@ -22,8 +22,8 @@ class SubscriptionNumberRepository
             $sort = 'desc';
         }
         
-        $builder = Subscription::query()->orderBy('id', $sort);
-        return SubscriptionResource::collection(
+        $builder = SubscriptionNumber::query()->with('subscription','subscription.customer', 'number', 'imsi')->orderBy('id', $sort);
+        return SubscriptionNumberResource::collection(
             $builder->paginate($limit)
         );
     }

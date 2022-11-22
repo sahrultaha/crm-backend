@@ -21,7 +21,7 @@ class SubscriptionNumberController extends Controller
     public function index(Request $request)
     {
         return $this->repository->getListOfSubscriptions($request->query());
-    }//supposed to be in Subscription controller
+    }
 
     public function customerSubscriptions($id)
     { 
