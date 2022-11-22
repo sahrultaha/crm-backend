@@ -20,5 +20,4 @@ class SubscriptionStatus extends Model
     public const TERMINATED = 5;
 
     protected $table = 'subscription_status';
-
 }

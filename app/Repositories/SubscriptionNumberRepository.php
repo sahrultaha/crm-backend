@@ -3,8 +3,6 @@
 namespace App\Repositories;
 
 use App\Http\Resources\SubscriptionNumberResource;
-use App\Http\Resources\SubscriptionResource;
-use App\Models\Subscription;
 use App\Models\SubscriptionNumber;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 

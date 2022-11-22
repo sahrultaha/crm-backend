@@ -55,5 +55,4 @@ class SubscriptionController extends Controller
     {
         return $this->subRepository->getCustomerSubscriptions($customer_id);
     }
-
 }
