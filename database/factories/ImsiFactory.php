@@ -20,8 +20,8 @@ class ImsiFactory extends Factory
     {
         return [
             'imsi' => fake()->randomNumber(8),
-            'imsi_status_id' => ImsiStatus::factory(),
-            'imsi_type_id' => ImsiType::factory(),
+            'imsi_status_id' => ImsiStatus::AVAILABLE,
+            'imsi_type_id' => ImsiType::FOUR_G,
             'pin' => fake()->randomNumber(4),
             'puk_1' => fake()->randomNumber(8),
             'puk_2' => fake()->randomNumber(8),
