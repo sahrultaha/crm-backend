@@ -55,8 +55,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/packs', 'index');
     });
     Route::controller(SubscriptionController::class)->group(function () {
-        Route::get('/subscription', 'index');
+        Route::get('/subscriptions', 'index');
         Route::post('/subscriptions', 'store');
-        Route::get('/subscription/{customer_id}', 'customerSubscriptions');
+        Route::get('/subscriptions/{customer_id}', 'customerSubscriptions');
     });
 });

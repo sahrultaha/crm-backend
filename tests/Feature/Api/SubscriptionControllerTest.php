@@ -55,4 +55,43 @@ class SubscriptionControllerTest extends TestCase
         $this->assertDatabaseCount('subscription', 1);
         $this->assertDatabaseCount('subscription_number', 1);
     }
+
+    public function test_guests_cannot_view_subscription_list()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $response = $this->getJson('/api/subscription');
+
+        $response->assertUnauthorized();
+    }
+
+    public function test_users_can_view_subscription_list()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        Sanctum::actingAs(User::factory()->create());
+
+        $this->getJson('/api/subscription/')
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => [
+                        'id',
+                        'customer_id',
+                        'registration_date',
+                        'subscription_status_id',
+                        'subscription_type_id',
+                        'created_at',
+                        'updated_at',
+                        'deleted_at',
+                        'subscription'=>[
+                            'subscription_type',
+                            'subscription_status'
+                        ],
+                        'customer',
+                        'number',
+                    ],
+                ],
+            ]);
+    }
 }
