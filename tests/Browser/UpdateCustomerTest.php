@@ -37,6 +37,7 @@ class UpdateCustomerTest extends CustomDuskTestCase
 
             $browser
             ->pause(1000)
+            ->waitForText('SAVE CHANGES')
             ->clear('#name')
                 ->typeSlowly('#name', $new_customer_name)
                 ->typeSlowly('#icNumber', $new_customer_ic_number)
