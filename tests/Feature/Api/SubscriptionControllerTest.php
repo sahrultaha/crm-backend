@@ -60,7 +60,7 @@ class SubscriptionControllerTest extends TestCase
     {
         $this->seed(DatabaseSeeder::class);
 
-        $response = $this->getJson('/api/subscription');
+        $response = $this->getJson('/api/subscriptions');
 
         $response->assertUnauthorized();
     }
@@ -71,7 +71,7 @@ class SubscriptionControllerTest extends TestCase
 
         Sanctum::actingAs(User::factory()->create());
 
-        $this->getJson('/api/subscription/')
+        $this->getJson('/api/subscriptions/')
             ->assertOk()
             ->assertJsonStructure([
                 'data' => [
@@ -84,9 +84,9 @@ class SubscriptionControllerTest extends TestCase
                         'created_at',
                         'updated_at',
                         'deleted_at',
-                        'subscription'=>[
+                        'subscription' => [
                             'subscription_type',
-                            'subscription_status'
+                            'subscription_status',
                         ],
                         'customer',
                         'number',

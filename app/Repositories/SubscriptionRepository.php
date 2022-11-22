@@ -41,6 +41,7 @@ class SubscriptionRepository extends BaseRepository
         $subs_id = SubscriptionResource::collection(
             $builder->get()
         );
+
         return $subs_id;
     }
 }

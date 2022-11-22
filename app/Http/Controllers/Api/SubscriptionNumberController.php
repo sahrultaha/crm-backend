@@ -19,5 +19,4 @@ class SubscriptionNumberController extends Controller
     {
         return $this->repository->getListOfSubscriptions($request->query());
     }
-
 }
