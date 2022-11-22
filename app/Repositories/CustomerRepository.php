@@ -38,6 +38,7 @@ class CustomerRepository
         $new_customer = new Customer();
         $new_customer->name = $validated['name'];
         $new_customer->email = $validated['email'] ?? null;
+        $new_customer->country_code = $validated['country_code'] ?? null;
         $new_customer->mobile_number = $validated['mobile_number'] ?? null;
         $new_customer->ic_number = $validated['ic_number'];
         $new_customer->ic_type_id = $validated['ic_type_id'];
@@ -102,7 +103,7 @@ class CustomerRepository
 
     public function showCustomer($id): Customer
     {
-        $customer = Customer::with('accountCategory')
+        $customer = Customer::with(['accountCategory', 'ic_type', 'ic_color', 'country'])
         ->find($id);
 
         return $customer;
@@ -171,6 +172,7 @@ class CustomerRepository
         $customer->name = $validated['name'];
         $customer->email = $validated['email'] ?? null;
         $customer->mobile_number = $validated['mobile_number'] ?? null;
+        $customer->country_code = $validated['country_code'] ?? null;
         $customer->ic_number = $validated['ic_number'];
         $customer->ic_type_id = $validated['ic_type_id'];
         $customer->ic_expiry_date = $validated['ic_expiry_date'];

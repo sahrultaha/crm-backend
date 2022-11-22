@@ -32,9 +32,13 @@ class CustomerStoreRequest extends FormRequest
                 'nullable',
                 'email',
             ],
+            'country_code' => [
+                'nullable',
+                'integer',
+            ],
             'mobile_number' => [
                 'nullable',
-                'string',
+                'integer',
             ],
             'ic_number' => [
                 'required',
