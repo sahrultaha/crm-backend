@@ -40,6 +40,18 @@ class PackControllerTest extends TestCase
                         'pack_type_id',
                         'installation_date',
                         'expiry_date',
+                        'number' => [
+                            'id',
+                            'number',
+                        ],
+                        'imsi' => [
+                            'id',
+                            'imsi',
+                        ],
+                        'product' => [
+                            'id',
+                            'name',
+                        ],
                     ],
                 ],
             ])
