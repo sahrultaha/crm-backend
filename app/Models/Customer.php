@@ -41,9 +41,4 @@ class Customer extends Model
     {
         return $this->belongsToMany(CustomerAddress::class, 'customer_address');
     }
-
-    public function subscription()
-    {
-        return $this->hasMany(Subscription::class);
-    }
 }
