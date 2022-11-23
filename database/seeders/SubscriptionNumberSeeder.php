@@ -17,12 +17,12 @@ class SubscriptionNumberSeeder extends Seeder
         $insert = [];
         // $n = 1;
         // for ($i = 1; $i < 4; $i++) {
-            $insert[] = [
-                'subscription_id' => 1,
-                'number_id' => 1,
-                'imsi_id' => 1,
-                'activation_date' => now(),
-            ];
+        $insert[] = [
+            'subscription_id' => 1,
+            'number_id' => 1,
+            'imsi_id' => 1,
+            'activation_date' => now(),
+        ];
         // }
         SubscriptionNumber::insert($insert);
     }
