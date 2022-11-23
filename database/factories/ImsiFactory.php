@@ -19,7 +19,7 @@ class ImsiFactory extends Factory
     public function definition(): array
     {
         return [
-            'imsi' => fake()->randomNumber(8),
+            'imsi' => '528'.fake()->randomNumber(5, true).fake()->randomNumber(8, true),
             'imsi_status_id' => ImsiStatus::AVAILABLE,
             'imsi_type_id' => ImsiType::FOUR_G,
             'pin' => fake()->randomNumber(4),
