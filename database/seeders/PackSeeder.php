@@ -15,6 +15,6 @@ class PackSeeder extends Seeder
     public function run(): void
     {
         Pack::factory()->count(10)
-                ->create();
+                ->create(['product_id' => 1, 'pack_type_id' => 1]);
     }
 }
