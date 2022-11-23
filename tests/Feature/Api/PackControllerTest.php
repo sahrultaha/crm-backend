@@ -11,19 +11,20 @@ use Tests\TestCase;
 
 class PackControllerTest extends TestCase
 {
+    protected $seed = true;
     use RefreshDatabase;
 
     public function test_users_can_search_for_number_in_packs()
     {
+        Pack::factory()->count(10)->create();
         $number_to_find = 1234567;
         $number = Number::factory()->create([
             'number' => $number_to_find,
         ]);
-
-        Pack::factory()->count(10)->create();
         $pack_to_find = Pack::factory()->create([
             'number_id' => $number->id,
         ]);
+        $this->assertTrue(11 <= Pack::count());
 
         Sanctum::actingAs(User::factory()->create());
 
