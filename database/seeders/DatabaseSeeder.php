@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             AddressSeeder::class,
             FileSeeder::class,
             RowStatusSeeder::class,
+            ProductSeeder::class,
         ]);
 
         if (env('APP_ENV') === 'local') {
@@ -33,7 +34,6 @@ class DatabaseSeeder extends Seeder
                 //SubscriptionSeeder::class,
                 NumberSeeder::class,
                 ImsiSeeder::class,
-                ProductSeeder::class,
                 PackSeeder::class,
             ]);
         }

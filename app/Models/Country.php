@@ -9,10 +9,6 @@ class Country extends Model
 {
     use HasFactory;
 
-    public const BRUNEI = 1;
-
-    public const MALAYSIA = 2;
-
     public $timestamps = false;
 
     protected $table = 'country';

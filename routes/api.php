@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DistrictController;
 use App\Http\Controllers\Api\FileController;
@@ -67,5 +68,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
     Route::controller(ProductController::class)->group(function () {
         Route::get('/products', 'index');
+    });
+    Route::controller(CountryController::class)->group(function () {
+        Route::get('/country', 'listCountry');
     });
 });

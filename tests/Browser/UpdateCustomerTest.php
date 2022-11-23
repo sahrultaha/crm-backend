@@ -68,8 +68,8 @@ class UpdateCustomerTest extends CustomDuskTestCase
 
             $browser
             ->press('EDIT')
-            ->waitForText('SAVE CHANGES')
             ->pause(1000)
+            ->waitForText('SAVE CHANGES')
             ->assertValue('#name', $new_customer_name)
             ->assertValue('#icNumber', $new_customer_ic_number)
             ->assertValue('#icTypeId', '1')
@@ -87,13 +87,14 @@ class UpdateCustomerTest extends CustomDuskTestCase
     public function test_update_not_proceed_when_cancel(): void
     {
         $this->browse(function (Browser $browser) {
-            $today = now();
             $this->loginAsAdmin($browser);
             $this->createNewCustomer($browser, '77661234');
             $browser
             ->waitForText('EDIT')
             ->press('EDIT')
+            ->pause(1000)
             ->waitForText('Update Customer Details')
+            ->waitForText('SAVE CHANGES')
             ->press('SAVE CHANGES')
             ->assertDialogOpened('Are you sure to update customer?')
             ->pause(1000)
@@ -105,7 +106,6 @@ class UpdateCustomerTest extends CustomDuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $customer1_ic = '77661234';
-            $customer2_ic = '09123241';
             $this->loginAsAdmin($browser);
             $this->createNewCustomer($browser, '77661234');
             $this->createNewCustomer($browser, '09123241');

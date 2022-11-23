@@ -16,4 +16,14 @@ class Pack extends Model
     {
         return $this->belongsTo(Number::class);
     }
+
+    public function imsi(): BelongsTo
+    {
+        return $this->belongsTo(Imsi::class);
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

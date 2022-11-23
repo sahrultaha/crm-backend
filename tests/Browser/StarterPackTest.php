@@ -5,20 +5,21 @@ namespace Tests\Browser;
 use Laravel\Dusk\Browser;
 use Tests\CustomDuskTestCase;
 
-class CreateNewImsiTest extends CustomDuskTestCase
+class StarterPackTest extends CustomDuskTestCase
 {
     /**
      * A basic browser test example.
      *
      * @return void
      */
-    public function test_can_create_new_imsi(): void
+    public function test_index()
     {
         $this->browse(function (Browser $browser) {
-            $count = \App\Models\Imsi::count();
             $this->loginAsAdmin($browser);
-            $this->createNewImsi($browser);
-            $this->assertDatabaseCount('imsi', $count + 1);
+            $pack = \App\Models\Pack::orderBy('id', 'desc')->first();
+
+            $browser->visit(env('FRONTEND_URL').'/starter-packs')
+                ->waitForText($pack->number->number);
         });
     }
 }
