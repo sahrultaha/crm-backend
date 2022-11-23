@@ -6,10 +6,6 @@ use App\Models\Number;
 use App\Models\Pack;
 use App\Models\Product;
 use App\Models\User;
-use Database\Seeders\ImsiTypeStatusSeeder;
-use Database\Seeders\NumberTypeStatusCategorySeeder;
-use Database\Seeders\PackTypeSeeder;
-use Database\Seeders\ProductProfileNetworkSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
@@ -89,13 +85,6 @@ class PackControllerTest extends TestCase
 
     public function test_users_can_create_new_packs()
     {
-        $this->seed([
-            NumberTypeStatusCategorySeeder::class,
-            ImsiTypeStatusSeeder::class,
-            ProductProfileNetworkSeeder::class,
-            PackTypeSeeder::class,
-        ]);
-
         $product = Product::factory()->create([
             'product_profile_id' => 1,
             'product_network_id' => 1,
