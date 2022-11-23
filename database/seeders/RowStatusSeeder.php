@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class RowStatusSeeder extends Seeder
 {
+    use TraitAlterSequence;
+
     /**
      * Run the database seeds.
      *
@@ -28,5 +30,6 @@ class RowStatusSeeder extends Seeder
                 'name' => 'Fail',
             ],
         ]);
+        $this->alterSequence('row_status');
     }
 }

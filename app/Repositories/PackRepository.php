@@ -22,6 +22,8 @@ class PackRepository extends BaseRepository
 
         $builder = $this->model->newQuery()->orderBy('id', $sort);
         $builder->with('number');
+        $builder->with('imsi');
+        $builder->with('product');
 
         if (isset($query['number'])) {
             $number_to_find = $query['number'];

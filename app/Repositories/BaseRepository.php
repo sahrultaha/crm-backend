@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class BaseRepository implements RepositoryInterface
 {
@@ -60,5 +61,26 @@ class BaseRepository implements RepositoryInterface
     public function save(Model $item): bool
     {
         return $item->save();
+    }
+
+    public function paginate($limit = 10, $sort = 'desc', $page = 1, array $attributes = []): LengthAwarePaginator
+    {
+        if (! is_numeric($limit) || intval($limit) === 0) {
+            $limit = 10;
+        }
+
+        if ($sort !== 'asc' && $sort !== 'desc') {
+            $sort = 'desc';
+        }
+        $builder = $this->model->newModelQuery();
+        foreach ($attributes as $attribute) {
+            foreach ($attribute as $key => $value) {
+                $builder->where($key, $value);
+            }
+        }
+
+        $builder->orderBy($this->model->getKeyName(), $sort);
+
+        return $builder->paginate($limit, '*', 'page', $page);
     }
 }

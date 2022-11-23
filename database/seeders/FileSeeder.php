@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class FileSeeder extends Seeder
 {
+    use TraitAlterSequence;
+
     /**
      * Run the database seeds.
      *
@@ -35,5 +37,7 @@ class FileSeeder extends Seeder
                 'name' => 'Customer',
             ],
         ]);
+        $this->alterSequence('file_category');
+        $this->alterSequence('file_relation_type');
     }
 }
