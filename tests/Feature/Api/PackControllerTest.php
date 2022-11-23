@@ -12,6 +12,7 @@ use Tests\TestCase;
 class PackControllerTest extends TestCase
 {
     protected $seed = true;
+
     use RefreshDatabase;
 
     public function test_users_can_search_for_number_in_packs()
