@@ -15,13 +15,15 @@ class PackFactory extends Factory
 {
     public function definition()
     {
+        $next_year = \Carbon\Carbon::now()->addYear(1)->format('Y-m-d');
+
         return [
             'number_id' => Number::factory(),
             'imsi_id' => Imsi::factory(),
             'product_id' => Product::factory(),
             'pack_type_id' => PackType::factory(),
-            'installation_date' => fake()->date(),
-            'expiry_date' => fake()->date(),
+            'installation_date' => date('Y-m-d'),
+            'expiry_date' => $next_year,
         ];
     }
 }
