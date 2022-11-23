@@ -19,7 +19,8 @@ class CustomerSeeder extends Seeder
             $insert[] = [
                 'name' => fake()->name(),
                 'email' => fake()->unique()->safeEmail(),
-                'mobile_number' => fake()->phoneNumber(),
+                'country_code' => '673',
+                'mobile_number' => fake()->numberBetween(7000000, 8000000),
                 'ic_number' => fake()->randomNumber(8),
                 'ic_type_id' => 1,
                 'ic_color_id' => 1,
