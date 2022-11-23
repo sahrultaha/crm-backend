@@ -94,6 +94,7 @@ class UpdateCustomerTest extends CustomDuskTestCase
             ->press('EDIT')
             ->pause(1000)
             ->waitForText('Update Customer Details')
+            ->waitForText('SAVE CHANGES')
             ->press('SAVE CHANGES')
             ->assertDialogOpened('Are you sure to update customer?')
             ->pause(1000)

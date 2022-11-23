@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DistrictController;
 use App\Http\Controllers\Api\FileController;
@@ -58,5 +59,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/subscriptions', 'index');
         Route::post('/subscriptions', 'store');
         Route::get('/subscriptions/{customer_id}', 'customerSubscriptions');
+    });
+
+    Route::controller(CountryController::class)->group(function () {
+        Route::get('/country', 'listCountry');
     });
 });
