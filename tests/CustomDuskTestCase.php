@@ -18,6 +18,7 @@ class CustomDuskTestCase extends DuskTestCase
 
     public function loginAsAdmin(Browser $browser): void
     {
+        $browser->driver->manage()->deleteAllCookies();
         $browser
             ->visit(env('FRONTEND_URL').'/login')
             ->waitForText('Email')
@@ -52,6 +53,7 @@ class CustomDuskTestCase extends DuskTestCase
             ->attach('#icFront', base_path('tests/Browser/photos/600x300.png'))
             ->attach('#icBack', base_path('tests/Browser/photos/600x300.png'))
             ->press('CREATE')
+            ->pause(2000)
             ->waitForText('Customer with')
             ->assertPathIs('/customers/*');
     }
