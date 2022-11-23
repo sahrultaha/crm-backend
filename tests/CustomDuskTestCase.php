@@ -35,13 +35,15 @@ class CustomDuskTestCase extends DuskTestCase
 
         $browser
             ->visit(env('FRONTEND_URL').'/customers/create')
-            ->waitForText('CREATE')
-            ->typeSlowly('#name', 'Lorem')
+            ->waitForText('Please enter ic details.')
             ->typeSlowly('#icNumber', $ic_number)
             ->select('#icTypeId', '1')
+            ->select('#icColorId', '1')
             ->keys('#icExpiryDate', $today->day)
             ->keys('#icExpiryDate', $today->month)
             ->keys('#icExpiryDate', $today->year)
+            ->waitForText('CREATE')
+            ->typeSlowly('#name', 'Lorem')
             ->select('#countryId', '1')
             ->select('#accountCategoryId', '1')
             ->keys('#birthDate', $today->day)
