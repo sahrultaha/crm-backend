@@ -68,8 +68,8 @@ class UpdateCustomerTest extends CustomDuskTestCase
 
             $browser
             ->press('EDIT')
-            ->waitForText('SAVE CHANGES')
             ->pause(1000)
+            ->waitForText('SAVE CHANGES')
             ->assertValue('#name', $new_customer_name)
             ->assertValue('#icNumber', $new_customer_ic_number)
             ->assertValue('#icTypeId', '1')
@@ -94,6 +94,7 @@ class UpdateCustomerTest extends CustomDuskTestCase
             ->waitForText('EDIT')
             ->press('EDIT')
             ->waitForText('Update Customer Details')
+            ->waitForText('SAVE CHANGES')
             ->press('SAVE CHANGES')
             ->assertDialogOpened('Are you sure to update customer?')
             ->pause(1000)
