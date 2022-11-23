@@ -16,7 +16,7 @@ class SubscriptionNumberSeeder extends Seeder
     {
         $insert = [];
         $n = 1;
-        for ($i = 1; $i < 146; $i++) {
+        for ($i = 1; $i < 4; $i++) {
             $insert[] = [
                 'subscription_id' => $i,
                 'number_id' => $i,

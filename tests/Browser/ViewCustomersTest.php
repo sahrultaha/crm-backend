@@ -18,7 +18,7 @@ class ViewCustomersTest extends CustomDuskTestCase
             $browser->pause(1000);
 
             $elements = $browser->driver->findElements(WebDriverBy::tagName('img'));
-            $this->assertCount(32, $elements);
+            $this->assertCount(2, $elements);
 
             $img_elements = $browser->elements('img');
 
