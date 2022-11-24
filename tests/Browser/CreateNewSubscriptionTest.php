@@ -19,7 +19,7 @@ class CreateNewSubscriptionTest extends CustomDuskTestCase
         $this->assertDatabaseCount('subscription', 0);
         $this->browse(function (Browser $browser) {
             $this->loginAsAdmin($browser);
-            $today = now();
+            $today = now()->addYears(5);
             $browser
                 ->visit(env('FRONTEND_URL').'/subscriptions/create')
                 ->waitForText('Ic Number')
