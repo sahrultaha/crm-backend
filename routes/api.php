@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ImsiController;
 use App\Http\Controllers\Api\MukimController;
 use App\Http\Controllers\Api\PackController;
 use App\Http\Controllers\Api\PostalCodeController;
+use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\Api\VillageController;
 use Illuminate\Http\Request;
@@ -54,13 +55,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
     Route::controller(PackController::class)->group(function () {
         Route::get('/packs', 'index');
+        Route::post('/packs', 'store');
+        Route::get('/packs/{pack}', 'show');
     });
     Route::controller(SubscriptionController::class)->group(function () {
         Route::get('/subscriptions', 'index');
         Route::post('/subscriptions', 'store');
         Route::get('/subscriptions/{customer_id}', 'customerSubscriptions');
     });
-
+    Route::controller(ProductController::class)->group(function () {
+        Route::get('/products', 'index');
+    });
     Route::controller(CountryController::class)->group(function () {
         Route::get('/country', 'listCountry');
     });
