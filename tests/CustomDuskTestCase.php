@@ -32,7 +32,7 @@ class CustomDuskTestCase extends DuskTestCase
 
     public function createNewCustomer(Browser $browser, $ic_number = '01987651'): void
     {
-        $today = now();
+        $today = now()->subYears(13);
         $new_expiry_date = now()->addYears(5);
 
         $browser

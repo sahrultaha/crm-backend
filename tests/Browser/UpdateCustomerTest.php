@@ -17,6 +17,7 @@ class UpdateCustomerTest extends CustomDuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $today = now()->addYears(7);
+            $birthday = now()->subYears(12);
             $this->loginAsAdmin($browser);
             $this->createNewCustomer($browser, '77661234');
             $customer = Customer::find(1);
@@ -47,9 +48,9 @@ class UpdateCustomerTest extends CustomDuskTestCase
                 ->keys('#icExpiryDate', $today->year)
                 ->select('#countryId', '2')
                 ->select('#accountCategoryId', '2')
-                ->keys('#birthDate', $today->day)
-                ->keys('#birthDate', $today->month)
-                ->keys('#birthDate', $today->year)
+                ->keys('#birthDate', $birthday->day)
+                ->keys('#birthDate', $birthday->month)
+                ->keys('#birthDate', $birthday->year)
                 ->keys('#house_number', $new_customer_house_number)
                 ->keys('#street', $new_customer_street)
                 ->keys('#building_name', $new_customer_building_name)
@@ -119,6 +120,29 @@ class UpdateCustomerTest extends CustomDuskTestCase
             ->typeSlowly('#icNumber', $customer1_ic)
             ->select('#icTypeId', '1')
             ->waitForText('Customer already exist!');
+        });
+    }
+
+    public function test_user_cannot_update_when_enter_birthdate_12_years_below(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $new_expiry_date = now();
+            $customer1_ic = '77661234';
+            $this->loginAsAdmin($browser);
+            $this->createNewCustomer($browser, '77661234');
+            $this->createNewCustomer($browser, '09123241');
+            $browser
+            ->pause(1000)
+            ->waitForText('EDIT')
+            ->press('EDIT')
+            ->waitForText('Update Customer Details')
+            ->pause(1000)
+            ->keys('#birthDate', $new_expiry_date->day)
+            ->keys('#birthDate', $new_expiry_date->month)
+            ->keys('#birthDate', $new_expiry_date->year)
+            ->waitForDialog(1)
+            // >assertSee("Age must be 12 years old and above");
+            ->assertDialogOpened('Age must be 12 years old and above');
         });
     }
 }

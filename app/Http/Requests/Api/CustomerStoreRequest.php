@@ -76,6 +76,7 @@ class CustomerStoreRequest extends FormRequest
             'birth_date' => [
                 'required',
                 'date',
+                'before_or_equal: '.date('Y-m-d', strtotime('-12 year')),
             ],
             'village_id' => [
                 'nullable',
