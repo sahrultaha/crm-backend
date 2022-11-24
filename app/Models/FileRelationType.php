@@ -11,6 +11,10 @@ class FileRelationType extends Model
 
     public const CUSTOMER = 1;
 
+    public const BULK_IMSI = 2;
+
+    public const BULK_STARTER_PACK = 3;
+
     protected $table = 'file_relation_type';
 
     public function files()

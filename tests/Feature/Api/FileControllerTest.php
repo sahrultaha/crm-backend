@@ -95,7 +95,7 @@ class FileControllerTest extends TestCase
             'file' => $file,
             'relation_id' => 1,
             'relation_type_id' => FileRelationType::CUSTOMER,
-            'file_category_id' => FileCategory::BULK_IMSI_FILE,
+            'file_category_id' => FileCategory::BULK_IMSI,
         ])->assertStatus(201);
         $this->assertEquals(2, FileBulkImsi::query()->count());
         $this->assertEquals(2, Imsi::query()->count());
@@ -105,7 +105,7 @@ class FileControllerTest extends TestCase
             'file' => $file,
             'relation_id' => 1,
             'relation_type_id' => FileRelationType::CUSTOMER,
-            'file_category_id' => FileCategory::BULK_IMSI_FILE,
+            'file_category_id' => FileCategory::BULK_IMSI,
         ])->assertStatus(201);
         $this->assertEquals(4, FileBulkImsi::query()->count());
         $this->assertEquals(2, Imsi::query()->count());
@@ -122,7 +122,7 @@ class FileControllerTest extends TestCase
             'file' => $file_3,
             'relation_id' => 1,
             'relation_type_id' => FileRelationType::CUSTOMER,
-            'file_category_id' => FileCategory::BULK_IMSI_FILE,
+            'file_category_id' => FileCategory::BULK_IMSI,
         ])->assertStatus(201);
         $this->assertEquals(5, FileBulkImsi::query()->count());
         $this->assertEquals(3, Imsi::query()->count());

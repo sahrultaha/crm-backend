@@ -49,7 +49,7 @@ class ProcessBulkFileImsi implements ShouldQueue
     {
         $file = $event->getFile();
 
-        if ((int) $file->file_category_id !== FileCategory::BULK_IMSI_FILE) {
+        if ((int) $file->file_category_id !== FileCategory::BULK_IMSI) {
             return;
         }
         $this->log(LogLevel::DEBUG, __METHOD__."processing {$file->id} {$file->filename}");
@@ -105,7 +105,7 @@ class ProcessBulkFileImsi implements ShouldQueue
     {
         $file = $event->getFile();
 
-        return (int) $file->file_category_id === FileCategory::BULK_IMSI_FILE;
+        return (int) $file->file_category_id === FileCategory::BULK_IMSI;
     }
 
     protected function checkHeaders(array $row)
