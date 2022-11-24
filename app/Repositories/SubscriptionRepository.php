@@ -2,25 +2,46 @@
 
 namespace App\Repositories;
 
+use App\Http\Resources\SubscriptionNumberResource;
 use App\Http\Resources\SubscriptionResource;
 use App\Models\Subscription;
+use App\Models\SubscriptionNumber;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class SubscriptionRepository extends BaseRepository
 {
     public function getListOfSubscriptions($query): AnonymousResourceCollection
     {
-        $builder = Subscription::query();
-        if (isset($query['search']) && mb_strlen($query['search']) > 3) {
-            if (env('DB_CONNECTION') === 'pgsql') {
-                $builder->whereRaw('customer_id @@ to_tsquery(?)', [$query['search']]);
-            } else {
-                $builder->where('customer_id', 'like', "%{$query['search']}%");
-            }
+        $limit = $query['limit'] ?? 10;
+        if (! is_numeric($limit) || intval($limit) === 0) {
+            $limit = 10;
         }
 
-        return SubscriptionResource::collection(
+        $sort = $query['sort'] ?? 'desc';
+        if ($sort !== 'asc' && $sort !== 'desc') {
+            $sort = 'desc';
+        }
+
+        $builder = SubscriptionNumber::query()->with('subscription', 'subscription.customer',
+            'subscription.subscriptionType', 'subscription.subscriptionStatus', 'number', 'imsi')->orderBy('id', $sort);
+
+        return SubscriptionNumberResource::collection(
+            $builder->paginate($limit)
+        );
+    }
+
+    public function getCustomerSubscriptions($query): AnonymousResourceCollection
+    {
+        $builder = Subscription::query();
+        if (env('DB_CONNECTION') === 'pgsql') {
+            $builder->where('customer_id', 'iLike', $query);
+        } else {
+            $builder->where('customer_id', 'like', "%{$query}%");
+        }
+        $subs_id = SubscriptionResource::collection(
             $builder->get()
         );
+
+        return $subs_id;
     }
 }

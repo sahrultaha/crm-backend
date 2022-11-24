@@ -28,6 +28,16 @@ class Subscription extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'subscription_id');
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function subscriptionType()
+    {
+        return $this->belongsTo(SubscriptionType::class);
+    }
+
+    public function subscriptionStatus()
+    {
+        return $this->belongsTo(SubscriptionStatus::class);
     }
 }

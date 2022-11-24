@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Imsi;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -14,6 +15,19 @@ class ImsiSeeder extends Seeder
      */
     public function run(): void
     {
+        // $insert = [];
+        // for ($i = 0; $i < 150; $i++) {
+        //     $insert[] = [
+        //         'imsi' => fake()->unique()->randomNumber(8, true),
+        //         'imsi_status_id' => 1,
+        //         'imsi_type_id' => 1,
+        //         'pin' => fake()->unique()->randomNumber(4, true),
+        //         'puk_1' => fake()->unique()->randomNumber(8, true),
+        //         'puk_2' => fake()->unique()->randomNumber(8, true),
+        //     ];
+        // }
+        // Imsi::insert($insert);
+
         DB::table('imsi')->insert([
             [
                 'imsi' => 12345678,

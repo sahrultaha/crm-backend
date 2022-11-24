@@ -17,7 +17,6 @@ class SubscriptionNumberController extends Controller
 
     public function index(Request $request)
     {
-        //get all subscriptions
         return $this->repository->getListOfSubscriptions($request->query());
     }
 }
