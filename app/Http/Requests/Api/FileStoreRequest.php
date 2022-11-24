@@ -34,7 +34,7 @@ class FileStoreRequest extends FormRequest
             ],
             'relation_type_id' => [
                 'integer',
-                'exists:file_relation_type,id'
+                'exists:file_relation_type,id',
             ],
             'file_category_id' => [
                 'required',

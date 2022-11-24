@@ -93,8 +93,6 @@ class FileControllerTest extends TestCase
         $this->assertEquals(0, Imsi::query()->count());
         $this->postJson('/api/files', [
             'file' => $file,
-            'relation_id' => 1,
-            'relation_type_id' => FileRelationType::CUSTOMER,
             'file_category_id' => FileCategory::BULK_IMSI,
         ])->assertStatus(201);
         $this->assertEquals(2, FileBulkImsi::query()->count());
@@ -103,8 +101,6 @@ class FileControllerTest extends TestCase
         // 2nd file, imsi count should be only one
         $this->postJson('/api/files', [
             'file' => $file,
-            'relation_id' => 1,
-            'relation_type_id' => FileRelationType::CUSTOMER,
             'file_category_id' => FileCategory::BULK_IMSI,
         ])->assertStatus(201);
         $this->assertEquals(4, FileBulkImsi::query()->count());
@@ -120,8 +116,6 @@ class FileControllerTest extends TestCase
         $file_3 = $file_factory->createWithContent('test.csv', $content_3);
         $this->postJson('/api/files', [
             'file' => $file_3,
-            'relation_id' => 1,
-            'relation_type_id' => FileRelationType::CUSTOMER,
             'file_category_id' => FileCategory::BULK_IMSI,
         ])->assertStatus(201);
         $this->assertEquals(5, FileBulkImsi::query()->count());
