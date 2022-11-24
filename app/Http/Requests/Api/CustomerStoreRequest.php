@@ -57,6 +57,7 @@ class CustomerStoreRequest extends FormRequest
             'ic_expiry_date' => [
                 'required',
                 'date',
+                'after:today',
             ],
             'country_id' => [
                 'required',

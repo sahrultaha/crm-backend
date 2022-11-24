@@ -33,6 +33,7 @@ class CustomDuskTestCase extends DuskTestCase
     public function createNewCustomer(Browser $browser, $ic_number = '01987651'): void
     {
         $today = now();
+        $new_expiry_date = now()->addYears(5);
 
         $browser
             ->visit(env('FRONTEND_URL').'/customers/create')
@@ -40,9 +41,9 @@ class CustomDuskTestCase extends DuskTestCase
             ->typeSlowly('#icNumber', $ic_number)
             ->select('#icTypeId', '1')
             ->select('#icColorId', '1')
-            ->keys('#icExpiryDate', $today->day)
-            ->keys('#icExpiryDate', $today->month)
-            ->keys('#icExpiryDate', $today->year)
+            ->keys('#icExpiryDate', $new_expiry_date->day)
+            ->keys('#icExpiryDate', $new_expiry_date->month)
+            ->keys('#icExpiryDate', $new_expiry_date->year)
             ->waitForText('CREATE')
             ->typeSlowly('#name', 'Lorem')
             ->select('#countryId', '1')
