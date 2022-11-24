@@ -30,9 +30,9 @@ class SubscriptionRepository extends BaseRepository
         );
     }
 
-    public function getCustomerSubscriptions($query): AnonymousResourceCollection
+    public function getCustomerSubscriptions($query)
     {
-        $builder = Subscription::query();
+        $builder = Subscription::query()->select('id');
         if (env('DB_CONNECTION') === 'pgsql') {
             $builder->where('customer_id', 'iLike', $query);
         } else {
@@ -42,6 +42,21 @@ class SubscriptionRepository extends BaseRepository
             $builder->get()
         );
 
-        return $subs_id;
+        $arr=[];
+        foreach($subs_id as $subs){
+            $builder2 = SubscriptionNumber::query()->with('number')->select('number_id');
+            if (env('DB_CONNECTION') === 'pgsql') {
+                $builder2->where('subscription_id', 'iLike', $subs->id);
+            } else {
+                $builder2->where('subscription_id', 'like', "%{$subs->id}%");
+            }
+            $sub_number = SubscriptionNumberResource::collection(
+                $builder2->get()
+            ); 
+            array_push($arr,$sub_number);
+        }
+        
+        // dd($subs_id);
+        return $arr;
     }
 }
