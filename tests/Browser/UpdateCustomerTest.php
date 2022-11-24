@@ -16,7 +16,7 @@ class UpdateCustomerTest extends CustomDuskTestCase
     public function test_can_update_existing_customer(): void
     {
         $this->browse(function (Browser $browser) {
-            $today = now();
+            $today = now()->addYears(7);
             $this->loginAsAdmin($browser);
             $this->createNewCustomer($browser, '77661234');
             $customer = Customer::find(1);
