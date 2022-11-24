@@ -16,7 +16,7 @@ class CheckCustomerIcTest extends CustomDuskTestCase
         $this->browse(function (Browser $browser) {
             $this->loginAsAdmin($browser);
             $this->createNewCustomer($browser, '77661234');
-            $today = now();
+            $today = now()->addYears(5);
             $browser
                 ->visit(env('FRONTEND_URL').'/customers/create')
                 ->waitForText('Please enter ic details.')
