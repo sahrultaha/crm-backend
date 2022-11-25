@@ -57,14 +57,7 @@ class SubscriptionController extends Controller
     public function customerSubscriptions($customer_id)
     {
         $numberss = $this->repo->selectNumbers($customer_id);
-        // $arr=[];
-        // foreach ($numberss as $numbers)
-        // {
-        //     foreach ($numbers as $number)
-        //     {
-        //         array_push($arr, $number->number->number);
-        //     }
-        // }
+
         return $numberss;
     }
 }
