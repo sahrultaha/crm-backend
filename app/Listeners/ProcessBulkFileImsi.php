@@ -47,8 +47,8 @@ class ProcessBulkFileImsi implements ShouldQueue
     public function handle(FileUploaded $event)
     {
         $file = $event->getFile();
-
-        if ((int) $file->file_category_id !== FileCategory::BULK_IMSI) {
+        //if ((int) $file->file_category_id !== FileCategory::BULK_IMSI) {
+        if (! $this->factory->isCapable((int) $file->file_category_id)) {
             return;
         }
         $this->log(LogLevel::DEBUG, __METHOD__."processing {$file->id} {$file->filename}");

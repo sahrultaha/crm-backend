@@ -76,13 +76,18 @@ class ProcessBulkFileImsiTest extends TestCase
         ];
 
         $this->setFile($file);
-
+        $this->factory->expects($this->once())
+            ->method('isCapable')
+            ->willReturn(true);
         $this->obj->handle($this->event);
     }
 
     public function test_upload_invalid_header()
     {
         $this->expectException(\RuntimeException::class);
+        $this->factory->expects($this->once())
+            ->method('isCapable')
+            ->willReturn(true);
         $file = (object) [
             'id' => 1,
             'filepath' => 'filepath',
@@ -105,6 +110,9 @@ class ProcessBulkFileImsiTest extends TestCase
 
     public function test_upload_success_4G()
     {
+        $this->factory->expects($this->once())
+            ->method('isCapable')
+            ->willReturn(true);
         $file = (object) [
             'id' => 1,
             'filepath' => 'filepath',
