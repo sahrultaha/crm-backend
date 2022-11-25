@@ -5,7 +5,6 @@ namespace App\Listeners;
 use App\Events\Dispatcher;
 use App\Events\FileUploaded;
 use App\Models\FileCategory;
-use App\Repositories\RepositoryInterface;
 use App\Traits\LogAwareTraits;
 use Illuminate\Contracts\Filesystem\Factory;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -20,7 +19,7 @@ class ProcessBulkFileImsi implements ShouldQueue
 
     protected $manager;
 
-    protected $repo;
+    protected $handler;
 
     protected $logger;
 
@@ -31,11 +30,11 @@ class ProcessBulkFileImsi implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Factory $manager, RepositoryInterface $repo, Dispatcher $dispatcher, ?Logger $logger = null)
+    public function __construct(Factory $manager, Handlers\BulkHandler $handler, Dispatcher $dispatcher, ?Logger $logger = null)
     {
         $this->manager = $manager;
         $this->logger = $logger;
-        $this->repo = $repo;
+        $this->handler = $handler;
         $this->dispatcher = $dispatcher;
     }
 
@@ -69,7 +68,7 @@ class ProcessBulkFileImsi implements ShouldQueue
             if ($id === 0) {
                 $this->checkHeaders($row);
                 $id++;
-                $header = ['file_id', 'imsi_type_id', ...$row];
+                $header = $row;
 
                 continue;
             }
@@ -77,19 +76,9 @@ class ProcessBulkFileImsi implements ShouldQueue
                 continue;
             }
 
-            switch($row[6]) {
-                case '3G':
-                    $network = 1;
-                    break;
-                case '5G':
-                    $network = 3;
-                    break;
-                default:
-                    $network = \App\Models\ImsiType::FOUR_G;
-            }
-            $this->repo->create(array_combine($header, [$file->id, $network, ...$row]));
+            $this->handler->createRow($file->id, array_combine($header, $row));
         }
-        $this->dispatcher->dispatch(\App\Events\BulkFileImsiStored::class, $file);
+        $this->dispatcher->dispatch($this->handler->getDispatchClass(), $file);
         if (file_exists($tmp)) {
             unlink($tmp);
         }
@@ -108,10 +97,10 @@ class ProcessBulkFileImsi implements ShouldQueue
         return (int) $file->file_category_id === FileCategory::BULK_IMSI;
     }
 
-    protected function checkHeaders(array $row)
+    protected function checkHeaders(array $header)
     {
-        if ($row !== ['id', 'imsi', 'pin', 'puk_1', 'puk_2', 'ki', 'network']) {
-            throw new \RuntimeException('header is not the same as the template');
+        if (! $this->handler->checkHeader($header)) {
+            throw new \RuntimeException(json_encode($header));
         }
     }
 }

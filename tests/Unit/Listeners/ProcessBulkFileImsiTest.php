@@ -4,7 +4,6 @@ namespace Tests\Unit\Listeners;
 
 use App\Events\FileUploaded;
 use App\Listeners\ProcessBulkFileImsi as Obj;
-use App\Repositories\RepositoryInterface;
 use Illuminate\Contracts\Filesystem\Factory as FileSystemManager;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use PHPUnit\Framework\TestCase;
@@ -36,7 +35,7 @@ class ProcessBulkFileImsiTest extends TestCase
         $this->manager->expects($this->any())
             ->method('disk')
             ->willReturn($this->filesystem);
-        $this->repository = $this->getMockBuilder(RepositoryInterface::class)
+        $this->repository = $this->getMockBuilder(\App\Listeners\Handlers\BulkHandler::class)
             ->getMock();
         $this->dispatcher = $this->getMockBuilder(\App\Events\Dispatcher::class)
             ->getMock();
@@ -86,8 +85,12 @@ class ProcessBulkFileImsiTest extends TestCase
 
         $this->setFile($file);
         $content = <<<'EOD'
-        id,imsi,pin,puk_1,puk_2,ki,network,xxx
+        id,imsi,pin,puk_1,puk_2,ki,network,xxx,yyyyyy
+        
         EOD;
+        $this->repository->expects($this->exactly(1))
+            ->method('checkHeader')
+            ->willReturn(false);
         $this->setFileContent($content);
 
         $this->obj->handle($this->event);
@@ -112,18 +115,10 @@ class ProcessBulkFileImsiTest extends TestCase
         EOD;
         $this->setFileContent($content);
         $this->repository->expects($this->exactly(1))
-            ->method('create')
-            ->with($this->equalTo([
-                'file_id' => 1,
-                'imsi_type_id' => 2,
-                'id' => '1',
-                'imsi' => '123456789012340',
-                'pin' => '12345',
-                'puk_1' => '123456',
-                'puk_2' => '123456',
-                'ki' => 'ABCDEF012345',
-                'network' => '4G',
-            ]));
+            ->method('checkHeader')
+            ->willReturn(true);
+        $this->repository->expects($this->exactly(1))
+            ->method('createRow');
         $this->dispatcher->expects($this->once())
             ->method('dispatch');
         $this->obj->handle($this->event);
