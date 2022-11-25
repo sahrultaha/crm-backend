@@ -19,7 +19,7 @@ class ProcessBulkFileImsi implements ShouldQueue
 
     protected $manager;
 
-    protected $handler;
+    protected $factory;
 
     protected $logger;
 
@@ -30,11 +30,11 @@ class ProcessBulkFileImsi implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Factory $manager, Handlers\BulkHandler $handler, Dispatcher $dispatcher, ?Logger $logger = null)
+    public function __construct(Factory $manager, Handlers\BulkHandlerFactory $factory, Dispatcher $dispatcher, ?Logger $logger = null)
     {
         $this->manager = $manager;
         $this->logger = $logger;
-        $this->handler = $handler;
+        $this->factory = $factory;
         $this->dispatcher = $dispatcher;
     }
 
@@ -63,10 +63,12 @@ class ProcessBulkFileImsi implements ShouldQueue
         $csv->setFlags(\SplFileObject::READ_CSV | \SplFileObject::SKIP_EMPTY);
         $id = 0;
         $header = [];
-
+        $handler = $this->factory->factory($file->file_category_id);
         foreach ($csv as $row) {
             if ($id === 0) {
-                $this->checkHeaders($row);
+                if (! $handler->checkHeader($row)) {
+                    throw new \RuntimeException(json_encode($header));
+                }
                 $id++;
                 $header = $row;
 
@@ -76,9 +78,9 @@ class ProcessBulkFileImsi implements ShouldQueue
                 continue;
             }
 
-            $this->handler->createRow($file->id, array_combine($header, $row));
+            $handler->createRow($file->id, array_combine($header, $row));
         }
-        $this->dispatcher->dispatch($this->handler->getDispatchClass(), $file);
+        $this->dispatcher->dispatch($handler->getDispatchClass(), $file);
         if (file_exists($tmp)) {
             unlink($tmp);
         }
@@ -97,10 +99,10 @@ class ProcessBulkFileImsi implements ShouldQueue
         return (int) $file->file_category_id === FileCategory::BULK_IMSI;
     }
 
-    protected function checkHeaders(array $header)
-    {
-        if (! $this->handler->checkHeader($header)) {
-            throw new \RuntimeException(json_encode($header));
-        }
-    }
+//    protected function checkHeaders(array $header)
+//    {
+//        if (! $this->handler->checkHeader($header)) {
+//            throw new \RuntimeException(json_encode($header));
+//        }
+//    }
 }

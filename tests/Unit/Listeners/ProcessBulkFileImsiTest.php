@@ -22,6 +22,8 @@ class ProcessBulkFileImsiTest extends TestCase
 
     protected $repository;
 
+    protected $factory;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -37,9 +39,14 @@ class ProcessBulkFileImsiTest extends TestCase
             ->willReturn($this->filesystem);
         $this->repository = $this->getMockBuilder(\App\Listeners\Handlers\BulkHandler::class)
             ->getMock();
+        $this->factory = $this->getMockBuilder(\App\Listeners\Handlers\BulkHandlerFactory::class)
+            ->getMock();
         $this->dispatcher = $this->getMockBuilder(\App\Events\Dispatcher::class)
             ->getMock();
-        $this->obj = new Obj($this->manager, $this->repository, $this->dispatcher);
+        $this->factory->expects($this->any())
+            ->method('factory')
+            ->willReturn($this->repository);
+        $this->obj = new Obj($this->manager, $this->factory, $this->dispatcher);
     }
 
     public function test_instance()

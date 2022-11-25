@@ -18,7 +18,7 @@ class ProcessBulkFileImsiProvider extends ServiceProvider
         $this->app->singleton(ProcessBulkFileImsi::class, function ($app) {
             return new ProcessBulkFileImsi(
                 $app->get(Factory::class),
-                $app->get(\App\Listeners\Handlers\BulkFileImsiHandler::class),
+                new \App\Listeners\Handlers\BulkHandlerFactory(),
                 new \App\Events\Dispatcher(),
                 $app->get(\Illuminate\Log\Logger::class)
             );
