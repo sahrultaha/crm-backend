@@ -26,7 +26,7 @@ class NumberSeeder extends Seeder
             ];
         }
         Number::insert($insert);
-        
+
         // DB::table('number')->insert([
         //     [
         //         'number' => 1234567,

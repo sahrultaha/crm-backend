@@ -9,6 +9,8 @@ class SubscriptionStatus extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     public const PENDING = 1;
 
     public const ACTIVE = 2;
