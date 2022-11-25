@@ -17,10 +17,10 @@ class ProcessBulkFileImsiProvider extends ServiceProvider
     {
         $this->app->singleton(ProcessBulkFileImsi::class, function ($app) {
             return new ProcessBulkFileImsi(
-                $this->app->get(Factory::class),
-                new \App\Listeners\Handlers\BulkFileImsiHandler(new \App\Repositories\BaseRepository(new \App\Models\FileBulkImsi())),
+                $app->get(Factory::class),
+                $app->get(\App\Listeners\Handlers\BulkFileImsiHandler::class),
                 new \App\Events\Dispatcher(),
-                $this->app->get(\Illuminate\Log\Logger::class)
+                $app->get(\Illuminate\Log\Logger::class)
             );
         });
     }
