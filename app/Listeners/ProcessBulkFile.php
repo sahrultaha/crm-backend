@@ -12,7 +12,7 @@ use Illuminate\Log\Logger;
 use Illuminate\Queue\InteractsWithQueue;
 use Psr\Log\LogLevel;
 
-class ProcessBulkFileImsi implements ShouldQueue
+class ProcessBulkFile implements ShouldQueue
 {
     use InteractsWithQueue;
     use LogAwareTraits;

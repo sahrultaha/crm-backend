@@ -3,7 +3,7 @@
 namespace Tests\Unit\Listeners;
 
 use App\Events\FileUploaded;
-use App\Listeners\ProcessBulkFileImsi as Obj;
+use App\Listeners\ProcessBulkFile as Obj;
 use Illuminate\Contracts\Filesystem\Factory as FileSystemManager;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use PHPUnit\Framework\TestCase;
