@@ -4,13 +4,13 @@ namespace App\Listeners;
 
 use App\Events\Dispatcher;
 use App\Events\FileUploaded;
-use App\Models\FileCategory;
 use App\Traits\LogAwareTraits;
 use Illuminate\Contracts\Filesystem\Factory;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Log\Logger;
 use Illuminate\Queue\InteractsWithQueue;
 use Psr\Log\LogLevel;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class ProcessBulkFile implements ShouldQueue
 {
@@ -46,12 +46,12 @@ class ProcessBulkFile implements ShouldQueue
      */
     public function handle(FileUploaded $event)
     {
+        $this->log(LogLevel::DEBUG, __METHOD__);
         $file = $event->getFile();
-        //if ((int) $file->file_category_id !== FileCategory::BULK_IMSI) {
         if (! $this->factory->isCapable((int) $file->file_category_id)) {
             return;
         }
-        $this->log(LogLevel::DEBUG, __METHOD__."processing {$file->id} {$file->filename}");
+
         $tmp = tempnam(sys_get_temp_dir(), 'bulkimsi');
         $content = $this->manager->disk('s3')->get($file->filepath);
         if (! $content) {
@@ -67,7 +67,7 @@ class ProcessBulkFile implements ShouldQueue
         foreach ($csv as $row) {
             if ($id === 0) {
                 if (! $handler->checkHeader($row)) {
-                    throw new \RuntimeException(json_encode($header));
+                    throw new UnprocessableEntityHttpException('Invalid CSV header '.implode(',', $row));
                 }
                 $id++;
                 $header = $row;
@@ -96,13 +96,6 @@ class ProcessBulkFile implements ShouldQueue
     {
         $file = $event->getFile();
 
-        return (int) $file->file_category_id === FileCategory::BULK_IMSI;
+        return $this->factory->isCapable($file->file_category_id);
     }
-
-//    protected function checkHeaders(array $header)
-//    {
-//        if (! $this->handler->checkHeader($header)) {
-//            throw new \RuntimeException(json_encode($header));
-//        }
-//    }
 }
