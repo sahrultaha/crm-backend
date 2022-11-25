@@ -11,7 +11,7 @@ class SubscriptionRepository extends BaseRepository
 {
     public function __construct()
     {
-        // parent::__construct(new Subscription());
+        parent::__construct(new Subscription());
     }
 
     public function getListOfSubscriptions($query): AnonymousResourceCollection

@@ -7,8 +7,6 @@ use App\Models\Subscription;
 use App\Models\SubscriptionNumber;
 use App\Models\User;
 use App\Repositories\SubscriptionRepository;
-use Database\Seeders\CustomerSeeder;
-use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
@@ -54,19 +52,6 @@ class SubscriptionRepositoryTest extends TestCase
                 ],
             ]);
     }
-
-    // public function test_get_customer_subscriptions()
-    // {
-    //     $this->seed([
-    //         DatabaseSeeder::class,
-    //         CustomerSeeder::class,
-    //     ]);
-
-    //     $this->getJson('/api/subscriptions/')
-    //         ->assertOk()
-    //         ->assertJsonStructure();
-    // }
-
     public function setUp(): void
     {
         parent::setUp();

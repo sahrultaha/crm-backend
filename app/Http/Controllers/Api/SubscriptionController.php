@@ -56,8 +56,8 @@ class SubscriptionController extends Controller
 
     public function customerSubscriptions($customer_id)
     {
-        $numberss = $this->repo->selectNumbers($customer_id);
+        $numbers = $this->repo->selectNumbers($customer_id);
 
-        return $numberss;
+        return $numbers;
     }
 }
