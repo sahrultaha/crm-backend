@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('product');
             $table->bigInteger('product_id')->nullable()->index();
             $table->smallInteger('row_status_id')->default(1)->index();
+            $table->string('error')->nullable();
 
             $table->foreign('imsi_type_id')->references('id')->on('imsi_type');
             $table->foreign('imsi_id')->references('id')->on('imsi');

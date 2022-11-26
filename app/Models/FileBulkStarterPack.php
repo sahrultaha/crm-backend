@@ -22,5 +22,6 @@ class FileBulkStarterPack extends Model
         'number_id',
         'product',
         'product_id',
+        'error',
     ];
 }
