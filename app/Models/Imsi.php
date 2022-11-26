@@ -19,6 +19,7 @@ class Imsi extends Model
         'pin',
         'puk_1',
         'puk_2',
+        'ki',
     ];
 
     public function subscriptionNumber()
