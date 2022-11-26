@@ -136,16 +136,6 @@ class FileControllerTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
         $file_factory = new \Illuminate\Http\Testing\FileFactory();
-        /**
-         'id',
-        'imsi',
-        'pin',
-        'puk_1',
-        'puk_2',
-        'network',
-        'number',
-        'product',
-         */
         $content = <<<'EOD'
         id,imsi,pin,puk_1,puk_2,ki,network,number,product
         1,123456789012340,12345,123456,123456,ABCDEF012345,4G,7299250,Easi 4G
@@ -160,6 +150,7 @@ class FileControllerTest extends TestCase
             'file_category_id' => FileCategory::BULK_STARTER_PACK,
         ])->assertStatus(201);
         $this->assertEquals(2, FileBulkStarterPack::count());
+        $this->assertEquals(2, Imsi::count());
     }
 
     public function test_users_can_update_uploaded_file()

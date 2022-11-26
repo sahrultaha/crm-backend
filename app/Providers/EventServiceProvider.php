@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Events\BulkFileImsiStored;
+use App\Events\BulkStarterPackStored;
 use App\Events\FileUploaded;
 use App\Listeners\BulkFileImsiInsertion;
+use App\Listeners\BulkStarterPackInsertion;
 use App\Listeners\ProcessBulkFile;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -27,6 +29,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         BulkFileImsiStored::class => [
             BulkFileImsiInsertion::class,
+        ],
+        BulkStarterPackStored::class => [
+            BulkStarterPackInsertion::class,
         ],
     ];
 
