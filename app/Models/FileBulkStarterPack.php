@@ -14,6 +14,7 @@ class FileBulkStarterPack extends Model
         'pin',
         'puk_1',
         'puk_2',
+        'ki',
         'row_status_id',
         'file_id',
         'imsi_id',
