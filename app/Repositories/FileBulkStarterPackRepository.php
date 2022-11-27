@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Models\FileBulkStarterPack;
 use App\Models\Imsi;
+use App\Models\Number;
+use Illuminate\Database\Eloquent\Collection;
 
 class FileBulkStarterPackRepository extends BaseRepository
 {
@@ -33,7 +35,7 @@ class FileBulkStarterPackRepository extends BaseRepository
             ->where('imsi', $row->imsi)
             ->first();
         if ($exists) {
-            return null;
+            return $exists;
         }
 
         return Imsi::create([
@@ -47,10 +49,50 @@ class FileBulkStarterPackRepository extends BaseRepository
         ]);
     }
 
-    public function selectImsisByImsi(array $imsis): \Illuminate\Database\Eloquent\Collection
+    public function selectImsisByImsi(array $imsis): Collection
     {
         return Imsi::query()
             ->whereIn('imsi', $imsis)
             ->get();
+    }
+
+    public function selectNumberByNumber(array $numbers): Collection
+    {
+        return Number::query()
+            ->whereIn('number', $numbers)
+            ->get();
+    }
+
+    public function createNumber(FileBulkStarterPack $row): Number | null
+    {
+        $exist = Number::query()
+            ->where('number', $row->number)
+            ->first();
+        if ($exist) {
+            return $exist;
+        }
+
+        return Number::create([
+            'number' => $row->number,
+            'number_type_id' => \App\Models\NumberType::PREPAID,
+            'number_category_id' => \App\Models\NumberCategory::NORMAL,
+            'number_status_id' => \App\Models\NumberStatus::AVAILABLE,
+        ]);
+    }
+
+    public function getExistingImsis(Collection $rows): array
+    {
+        $imsis = $rows->pluck('imsi');
+        $exists = $this->selectImsisByImsi($imsis->all());
+
+        return $exists->pluck('imsi')->all();
+    }
+
+    public function getExistingNumber(Collection $rows): array
+    {
+        $numbers = $rows->pluck('number');
+        $exists = $this->selectNumberByNumber($numbers->all());
+
+        return $exists->pluck('number')->all();
     }
 }

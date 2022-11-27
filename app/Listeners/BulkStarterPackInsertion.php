@@ -2,7 +2,9 @@
 
 namespace App\Listeners;
 
+use App\Enum\Error;
 use App\Events\BulkStarterPackStored;
+use App\Models\RowStatus;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class BulkStarterPackInsertion implements ShouldQueue
@@ -25,20 +27,33 @@ class BulkStarterPackInsertion implements ShouldQueue
         \Illuminate\Support\Facades\Log::debug(__METHOD__);
         $file = $event->getFile();
         foreach ($this->repo->selectUnprocessedRows($file->id) as $rows) {
-            $imsis = $rows->pluck('imsi');
-            $exists = $this->repo->selectImsisByImsi($imsis->all());
-            $exists_imsis = $exists->pluck('imsi');
+            $exists_imsis = $this->repo->getExistingImsis($rows);
+            $exists_numbers = $this->repo->getExistingNumber($rows);
+
             foreach ($rows as $row) {
-                if (! in_array($row->imsi, $exists_imsis->all())) {
-                    $row->row_status_id = \App\Models\RowStatus::SUCCESS;
-                    // provisioning checker should go here
-                    $this->repo->createImsi($row);
-                    $this->repo->save($row);
+                if (in_array($row->imsi, $exists_imsis)) {
+                    $row->row_status_id = RowStatus::FAIL;
+                    $row->error = Error::IMSI_EXISTS;
+                    $this->repo->save();
 
                     continue;
                 }
-                $row->row_status_id = \App\Models\RowStatus::FAIL;
-                $this->bulkRepo->save($row);
+                if (in_array($row->number, $exists_numbers)) {
+                    $row->row_status_id = RowStatus::FAIL;
+                    $row->error = Error::NUMBER_EXISTS;
+                    $this->repo->save();
+
+                    continue;
+                }
+
+                // @TODO: provisioning checker should go here
+
+                $imsi = $this->repo->createImsi($row);
+                $number = $this->repo->createNumber($row);
+                $row->imsi_id = $imsi->id;
+                $row->number_id = $number->id;
+                $row->row_status_id = RowStatus::SUCCESS;
+                $this->repo->save($row);
             }
         }
     }

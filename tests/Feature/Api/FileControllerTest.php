@@ -8,6 +8,7 @@ use App\Models\FileBulkStarterPack;
 use App\Models\FileCategory;
 use App\Models\FileRelationType;
 use App\Models\Imsi;
+use App\Models\Number;
 use App\Models\RowStatus;
 use App\Models\User;
 use Database\Seeders\FileSeeder;
@@ -130,8 +131,9 @@ class FileControllerTest extends TestCase
         Storage::fake('s3');
         $this->seed([
             \Database\Seeders\ImsiTypeStatusSeeder::class,
-            FileSeeder::class,
+            \Database\Seeders\NumberTypeStatusCategorySeeder::class,
             \Database\Seeders\RowStatusSeeder::class,
+            FileSeeder::class,
         ]);
         $user = User::factory()->create();
         Sanctum::actingAs($user);
@@ -151,6 +153,7 @@ class FileControllerTest extends TestCase
         ])->assertStatus(201);
         $this->assertEquals(2, FileBulkStarterPack::count());
         $this->assertEquals(2, Imsi::count());
+        $this->assertEquals(2, Number::count());
     }
 
     public function test_users_can_update_uploaded_file()
