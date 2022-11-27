@@ -45,13 +45,22 @@ class BulkStarterPackInsertion implements ShouldQueue
 
                     continue;
                 }
+                if (($product = $row->product) === null) {
+                    $row->row_status_id = RowStatus::FAIL;
+                    $row->error = Error::PRODUCT_NOT_EXISTS;
+                    $this->repo->save();
+
+                    continue;
+                }
 
                 // @TODO: provisioning checker should go here
 
                 $imsi = $this->repo->createImsi($row);
                 $number = $this->repo->createNumber($row);
+
                 $row->imsi_id = $imsi->id;
                 $row->number_id = $number->id;
+                $this->repo->createPack($row);
                 $row->row_status_id = RowStatus::SUCCESS;
                 $this->repo->save($row);
             }

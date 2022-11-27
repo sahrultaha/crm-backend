@@ -133,6 +133,10 @@ class FileControllerTest extends TestCase
             \Database\Seeders\ImsiTypeStatusSeeder::class,
             \Database\Seeders\NumberTypeStatusCategorySeeder::class,
             \Database\Seeders\RowStatusSeeder::class,
+            \Database\Seeders\PackTypeSeeder::class,
+            \Database\Seeders\ProductProfileNetworkSeeder::class,
+            \Database\Seeders\ProductSeeder::class,
+
             FileSeeder::class,
         ]);
         $user = User::factory()->create();
@@ -154,6 +158,7 @@ class FileControllerTest extends TestCase
         $this->assertEquals(2, FileBulkStarterPack::count());
         $this->assertEquals(2, Imsi::count());
         $this->assertEquals(2, Number::count());
+        $this->assertEquals(2, \App\Models\Pack::count());
     }
 
     public function test_users_can_update_uploaded_file()

@@ -5,6 +5,8 @@ namespace App\Repositories;
 use App\Models\FileBulkStarterPack;
 use App\Models\Imsi;
 use App\Models\Number;
+use App\Models\Pack;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Collection;
 
 class FileBulkStarterPackRepository extends BaseRepository
@@ -12,6 +14,8 @@ class FileBulkStarterPackRepository extends BaseRepository
     use TraitSelectUnprocessedRows;
 
     protected $imsi_types = [];
+
+    protected $products = [];
 
     public function __construct()
     {
@@ -94,5 +98,31 @@ class FileBulkStarterPackRepository extends BaseRepository
         $exists = $this->selectNumberByNumber($numbers->all());
 
         return $exists->pluck('number')->all();
+    }
+
+    public function createPack(FileBulkStarterPack $row): Pack | null
+    {
+        $product = $this->getProductByName($row->product);
+
+        return Pack::create([
+            'number_id' => $row->number_id,
+            'imsi_id' => $row->imsi_id,
+            'product_id' => $product->id,
+            'pack_type_id' => 1,
+            'installation_date' => date('Y-m-d'),
+            'expiry_date' => \Carbon\Carbon::now()->addYear(1)->format('Y-m-d'),
+        ]);
+    }
+
+    public function getProductByName(string $name): Product| null
+    {
+        if (isset($this->products[$name])) {
+            return $this->products[$name];
+        }
+        $product = Product::query()
+            ->where('name', $name)
+            ->first();
+
+        return $this->products['name'] = $product;
     }
 }
