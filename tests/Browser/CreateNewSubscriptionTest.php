@@ -20,6 +20,7 @@ class CreateNewSubscriptionTest extends CustomDuskTestCase
         $this->browse(function (Browser $browser) {
             $this->loginAsAdmin($browser);
             $today = now()->addYears(5);
+            $birthdate = now()->subYears(13);
             $browser
                 ->visit(env('FRONTEND_URL').'/subscriptions/create')
                 ->waitForText('Ic Number')
@@ -33,9 +34,9 @@ class CreateNewSubscriptionTest extends CustomDuskTestCase
                 ->typeSlowly('#name', 'Lorem')
                 ->select('#countryId', '1')
                 ->select('#accountCategoryId', '1')
-                ->keys('#birthDate', $today->day)
-                ->keys('#birthDate', $today->month)
-                ->keys('#birthDate', $today->year)
+                ->keys('#birthDate', $birthdate->day)
+                ->keys('#birthDate', $birthdate->month)
+                ->keys('#birthDate', $birthdate->year)
                 ->attach('#icFront', base_path('tests/Browser/photos/600x300.png'))
                 ->attach('#icBack', base_path('tests/Browser/photos/600x300.png'))
                 ->press('CREATE')
