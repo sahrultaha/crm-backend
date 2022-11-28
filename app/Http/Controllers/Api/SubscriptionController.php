@@ -20,11 +20,11 @@ class SubscriptionController extends Controller
 
     private SubscriptionRepository $repo;
 
-    public function __construct(SubscriptionRepository $repo)
+    public function __construct()
     {
         $this->subRepository = new SubscriptionRepository(new Subscription());
         $this->subNumberRepository = new BaseRepository(new SubscriptionNumber());
-        $this->repo = $repo;
+        $this->repo = new SubscriptionRepository(new Subscription);
     }
 
     public function index(Request $request): AnonymousResourceCollection
