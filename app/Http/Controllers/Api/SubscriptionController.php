@@ -18,15 +18,18 @@ class SubscriptionController extends Controller
 
     private BaseRepository $subNumberRepository;
 
+    private SubscriptionRepository $repo;
+
     public function __construct()
     {
         $this->subRepository = new SubscriptionRepository(new Subscription());
         $this->subNumberRepository = new BaseRepository(new SubscriptionNumber());
+        $this->repo = new SubscriptionRepository(new Subscription);
     }
 
     public function index(Request $request)
     {
-        return $this->subRepository->getListOfSubscriptions($request->query());
+        return $this->repo->getListOfSubscriptions($request->query());
     }
 
     public function store(SubscriptionStoreRequest $request): JsonResponse
@@ -53,6 +56,6 @@ class SubscriptionController extends Controller
 
     public function customerSubscriptions($customer_id): AnonymousResourceCollection
     {
-        return $this->subRepository->getCustomerSubscriptions($customer_id);
+        return $this->repo->getCustomerSubscriptions($customer_id);
     }
 }

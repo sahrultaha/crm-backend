@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\DistrictController;
 use App\Http\Controllers\Api\FileController;
 use App\Http\Controllers\Api\ImsiController;
 use App\Http\Controllers\Api\MukimController;
+use App\Http\Controllers\Api\NumberController;
 use App\Http\Controllers\Api\PackController;
 use App\Http\Controllers\Api\PostalCodeController;
 use App\Http\Controllers\Api\ProductController;
@@ -68,5 +69,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
     Route::controller(CountryController::class)->group(function () {
         Route::get('/country', 'listCountry');
+    });
+    Route::controller(NumberController::class)->group(function () {
+        Route::post('/msisdn', 'store');
     });
 });
