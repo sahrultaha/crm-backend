@@ -7,6 +7,7 @@ use App\Models\NumberCategory;
 use App\Models\NumberStatus;
 use App\Models\NumberType;
 use App\Models\User;
+use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\NumberTypeStatusCategorySeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
@@ -64,5 +65,38 @@ class NumberControllerTest extends TestCase
         $this->assertDatabaseCount('number', 1);
         $new_number = Number::first();
         $response->assertJsonPath('id', $new_number->id);
+    }
+
+    public function test_guests_cannot_view_msisdn_list()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $response = $this->getJson('/api/msisdn');
+
+        $response->assertUnauthorized();
+    }
+
+    public function test_users_can_view_msisdn_list()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        Sanctum::actingAs(User::factory()->create());
+
+        $this->getJson('/api/msisdn/')
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => [
+                        'id',
+                        'number',
+                        'number_type_id',
+                        'number_status_id',
+                        'number_category_id',
+                        'created_at',
+                        'updated_at',
+                        'deleted_at',
+                    ],
+                ],
+            ]);
     }
 }
