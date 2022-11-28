@@ -9,6 +9,8 @@ class SubscriptionType extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     public const PREPAID = 1;
 
     protected $table = 'subscription_type';

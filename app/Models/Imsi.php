@@ -23,6 +23,6 @@ class Imsi extends Model
 
     public function subscriptionNumber()
     {
-        return $this->belongsTo(SubscriptionNumber::class, 'imsi_id');
+        return $this->Has(SubscriptionNumber::class, 'imsi_id');
     }
 }

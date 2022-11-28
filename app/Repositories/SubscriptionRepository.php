@@ -3,13 +3,17 @@
 namespace App\Repositories;
 
 use App\Http\Resources\SubscriptionNumberResource;
-use App\Http\Resources\SubscriptionResource;
 use App\Models\Subscription;
 use App\Models\SubscriptionNumber;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class SubscriptionRepository extends BaseRepository
 {
+    public function __construct()
+    {
+        parent::__construct(new Subscription());
+    }
+
     public function getListOfSubscriptions($query): AnonymousResourceCollection
     {
         $limit = $query['limit'] ?? 10;
@@ -30,18 +34,15 @@ class SubscriptionRepository extends BaseRepository
         );
     }
 
-    public function getCustomerSubscriptions($query): AnonymousResourceCollection
+    public function selectNumbers(int $customer_id)
     {
-        $builder = Subscription::query();
-        if (env('DB_CONNECTION') === 'pgsql') {
-            $builder->where('customer_id', 'iLike', $query);
-        } else {
-            $builder->where('customer_id', 'like', "%{$query}%");
-        }
-        $subs_id = SubscriptionResource::collection(
-            $builder->get()
-        );
+        $number = SubscriptionNumber::with('subscription', 'number')
+                        ->whereHas('subscription', function ($q) use ($customer_id) {
+                            $q->where('customer_id', '=', $customer_id);
+                        })->get();
 
-        return $subs_id;
+        return SubscriptionNumberResource::collection(
+            $number
+        );
     }
 }
