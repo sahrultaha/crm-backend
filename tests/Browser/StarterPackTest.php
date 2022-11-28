@@ -32,6 +32,11 @@ class StarterPackTest extends CustomDuskTestCase
                 ->attach('fileUpload', base_path('tests/Browser/photos/600x300.png'))
                 ->press('SUBMIT')
                 ->waitForText('Invalid');
+
+            $browser->visit(env('FRONTEND_URL').'/starter-packs/upload')
+                ->attach('fileUpload', base_path('tests/Browser/files/csv/starter-pack.csv'))
+                ->press('SUBMIT')
+                ->waitForText('Successfully upload');
         });
     }
 }
