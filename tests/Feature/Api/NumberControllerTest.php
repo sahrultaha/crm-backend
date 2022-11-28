@@ -3,9 +3,9 @@
 namespace Tests\Feature\Api;
 
 use App\Models\Number;
+use App\Models\NumberCategory;
 use App\Models\NumberStatus;
 use App\Models\NumberType;
-use App\Models\NumberCategory;
 use App\Models\User;
 use Database\Seeders\NumberTypeStatusCategorySeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
