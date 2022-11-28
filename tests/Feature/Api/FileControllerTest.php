@@ -125,6 +125,33 @@ class FileControllerTest extends TestCase
         $this->assertEquals(3, FileBulkImsi::query()->where('row_status_id', RowStatus::SUCCESS)->count());
     }
 
+    public function test_invalid_file()
+    {
+        \Illuminate\Support\Facades\Log::debug(__METHOD__);
+        Storage::fake('s3');
+        $this->seed([
+            \Database\Seeders\ImsiTypeStatusSeeder::class,
+            \Database\Seeders\NumberTypeStatusCategorySeeder::class,
+            \Database\Seeders\RowStatusSeeder::class,
+            \Database\Seeders\PackTypeSeeder::class,
+            \Database\Seeders\ProductProfileNetworkSeeder::class,
+            \Database\Seeders\ProductSeeder::class,
+
+            FileSeeder::class,
+        ]);
+
+        $fake_file = UploadedFile::fake()->image('image.jpg');
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $this->assertEquals(0, FileBulkStarterPack::query()->count());
+        $this->assertEquals(0, Imsi::query()->count());
+        $this->postJson('/api/files', [
+            'file' => $fake_file,
+            'file_category_id' => FileCategory::BULK_STARTER_PACK,
+        ])->assertStatus(422);
+    }
+
     public function test_starter_pack()
     {
         \Illuminate\Support\Facades\Log::debug(__METHOD__);

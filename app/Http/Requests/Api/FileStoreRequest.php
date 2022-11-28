@@ -28,6 +28,7 @@ class FileStoreRequest extends FormRequest
                 'required',
                 'file',
                 'max:5000',
+                'file_category:file_category_id',
             ],
             'relation_id' => [
                 'integer',
