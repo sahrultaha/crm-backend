@@ -6,22 +6,28 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerStoreRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    private function getIcNumberRules(): array
+    {
+        $is_personal_ic_type = $this->request->get('ic_type_id') === 1;
+        $ic_number_rules = [
+            'required',
+            'string',
+        ];
+
+        if ($is_personal_ic_type) {
+            $ic_number_rules[] = 'starts_with:00,01,30,31,50,51';
+            $ic_number_rules[] = 'regex:/[0-9]{8}/';
+        }
+
+        return $ic_number_rules;
+    }
+
+    public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => [
@@ -40,10 +46,7 @@ class CustomerStoreRequest extends FormRequest
                 'nullable',
                 'integer',
             ],
-            'ic_number' => [
-                'required',
-                'string',
-            ],
+            'ic_number' => $this->getIcNumberRules(),
             'ic_type_id' => [
                 'required',
                 'numeric',

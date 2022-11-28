@@ -19,17 +19,18 @@ class CreateNewSubscriptionTest extends CustomDuskTestCase
         $this->assertDatabaseCount('subscription', 0);
         $this->browse(function (Browser $browser) {
             $this->loginAsAdmin($browser);
-            $today = now()->addYears(5);
+
             $birthdate = now()->subYears(13);
+            $date = now()->addYears(5);
+
             $browser
                 ->visit(env('FRONTEND_URL').'/subscriptions/create')
                 ->waitForText('Ic Number')
-                ->typeSlowly('#icNumber', '91098765')
+                ->typeSlowly('#icNumber', '00000001')
                 ->select('#icTypeId', '1')
-                ->select('#icColorId', '1')
-                ->keys('#icExpiryDate', $today->day)
-                ->keys('#icExpiryDate', $today->month)
-                ->keys('#icExpiryDate', $today->year)
+                ->select('#icColorId', '1');
+            $this->setAntDesignDatePicker($browser, '#icExpiryDate', $date);
+            $browser
                 ->waitForText('CREATE')
                 ->typeSlowly('#name', 'Lorem')
                 ->select('#countryId', '1')
@@ -50,12 +51,12 @@ class CreateNewSubscriptionTest extends CustomDuskTestCase
                 ->typeSlowly('#puk1', '99770082')
                 ->typeSlowly('#puk2', '99770083')
                 ->select('#productId', '1')
-                ->keys('#installationDate', $today->day)
-                ->keys('#installationDate', $today->month)
-                ->keys('#installationDate', $today->year)
-                ->keys('#expiryDate', $today->day)
-                ->keys('#expiryDate', $today->month)
-                ->keys('#expiryDate', $today->year)
+                ->keys('#installationDate', $date->day)
+                ->keys('#installationDate', $date->month)
+                ->keys('#installationDate', $date->year)
+                ->keys('#expiryDate', $date->day)
+                ->keys('#expiryDate', $date->month)
+                ->keys('#expiryDate', $date->year)
                 ->press('CREATE PACK')
                 ->waitForText('CREATE SUBSCRIPTION')
                 ->press('CREATE SUBSCRIPTION')
