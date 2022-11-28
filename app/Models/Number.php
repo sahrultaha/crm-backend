@@ -26,6 +26,6 @@ class Number extends Model
 
     public function subscriptionNumber()
     {
-        return $this->belongsTo(SubscriptionNumber::class, 'number_id');
+        return $this->has(SubscriptionNumber::class, 'number_id');
     }
 }

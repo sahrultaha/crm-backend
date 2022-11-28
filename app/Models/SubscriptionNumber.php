@@ -11,6 +11,8 @@ class SubscriptionNumber extends Model
 
     protected $table = 'subscription_number';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'subscription_id',
         'number_id',

@@ -27,7 +27,7 @@ class SubscriptionController extends Controller
         $this->repo = new SubscriptionRepository(new Subscription);
     }
 
-    public function index(Request $request)
+    public function index(Request $request): AnonymousResourceCollection
     {
         return $this->repo->getListOfSubscriptions($request->query());
     }
@@ -54,8 +54,10 @@ class SubscriptionController extends Controller
         ], 201);
     }
 
-    public function customerSubscriptions($customer_id): AnonymousResourceCollection
+    public function customerSubscriptions($customer_id)
     {
-        return $this->repo->getCustomerSubscriptions($customer_id);
+        $numbers = $this->repo->selectNumbers($customer_id);
+
+        return $numbers;
     }
 }

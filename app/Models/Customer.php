@@ -41,4 +41,9 @@ class Customer extends Model
     {
         return $this->belongsToMany(CustomerAddress::class, 'customer_address');
     }
+
+    public function subscription()
+    {
+        return $this->Has(Subscription::class, 'customer_id');
+    }
 }
