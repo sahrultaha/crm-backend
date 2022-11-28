@@ -22,4 +22,16 @@ class StarterPackTest extends CustomDuskTestCase
                 ->waitForText($pack->number->number);
         });
     }
+
+    public function test_upload()
+    {
+        $this->browse(function (Browser $browser) {
+            $this->loginAsAdmin($browser);
+
+            $browser->visit(env('FRONTEND_URL').'/starter-packs/upload')
+                ->attach('fileUpload', base_path('tests/Browser/photos/600x300.png'))
+                ->press('SUBMIT')
+                ->waitForText('Invalid');
+        });
+    }
 }

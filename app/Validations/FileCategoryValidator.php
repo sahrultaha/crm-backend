@@ -19,7 +19,7 @@ class FileCategoryValidator extends Validator
         switch ((int) $file_category) {
             case 3:
             case 4:
-                return $this->validateMimetypes($attribute, $value, ['text', 'csv']);
+                return $this->validateMimetypes($attribute, $value, ['text', 'csv', 'text/csv']);
             default:
                 return true;
         }
