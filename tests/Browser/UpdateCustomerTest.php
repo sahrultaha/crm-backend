@@ -59,6 +59,7 @@ class UpdateCustomerTest extends CustomDuskTestCase
                 ->keys('#unit', $new_customer_unit)
                 ->attach('#icFront', base_path('tests/Browser/photos/600x300.png'))
                 ->attach('#icBack', base_path('tests/Browser/photos/600x300.png'))
+                ->pause(1000)
                 ->press('SAVE CHANGES')
                 ->assertDialogOpened('Are you sure to update customer?')
                 ->pause(1000)
@@ -69,8 +70,8 @@ class UpdateCustomerTest extends CustomDuskTestCase
 
             $browser
             ->press('EDIT')
-            ->pause(1000)
             ->waitForText('SAVE CHANGES')
+            ->pause(2000)
             ->assertValue('#name', $new_customer_name)
             ->assertValue('#icNumber', $new_customer_ic_number)
             ->assertValue('#icTypeId', '1')
