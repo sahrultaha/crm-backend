@@ -40,6 +40,7 @@ class CreateNewSubscriptionTest extends CustomDuskTestCase
                 ->attach('#icFront', base_path('tests/Browser/photos/600x300.png'))
                 ->attach('#icBack', base_path('tests/Browser/photos/600x300.png'))
                 ->press('CREATE')
+                ->pause(1000)
                 ->waitForText('MSISDN')
                 ->typeSlowly('#number', '3908765')
                 ->waitForText('Do you want to create a new pack?')
