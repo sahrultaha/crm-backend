@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Listeners\ProcessBulkFileImsi;
+use App\Listeners\ProcessBulkFile;
 use Illuminate\Contracts\Filesystem\Factory;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,12 +15,12 @@ class ProcessBulkFileImsiProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(ProcessBulkFileImsi::class, function ($app) {
-            return new ProcessBulkFileImsi(
-                $this->app->get(Factory::class),
-                new \App\Repositories\BaseRepository(new \App\Models\FileBulkImsi()),
+        $this->app->singleton(ProcessBulkFile::class, function ($app) {
+            return new ProcessBulkFile(
+                $app->get(Factory::class),
+                new \App\Listeners\Handlers\BulkHandlerFactory(),
                 new \App\Events\Dispatcher(),
-                $this->app->get(\Illuminate\Log\Logger::class)
+                $app->get(\Illuminate\Log\Logger::class)
             );
         });
     }
