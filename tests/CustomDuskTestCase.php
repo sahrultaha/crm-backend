@@ -24,11 +24,12 @@ class CustomDuskTestCase extends DuskTestCase
             ->visit(env('FRONTEND_URL').'/login')
             ->waitForText('Email')
             ->waitForText('Remember me')
-            ->typeSlowly('#email', env('ADMIN_EMAIL'))
-            ->typeSlowly('#password', env('ADMIN_PASSWORD'))
+            ->type('#email', env('ADMIN_EMAIL'))
+            ->type('#password', env('ADMIN_PASSWORD'))
             ->press('LOGIN')
+            ->pause(500)
             ->waitForText('Customers Index')
-            ->assertPathIs('/customers');
+            ->assertPathIsNot('/login');
     }
 
     public function createNewCustomer(Browser $browser, $ic_number = '01987651'): void

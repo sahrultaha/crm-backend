@@ -4,23 +4,22 @@ namespace App\Listeners;
 
 use App\Events\Dispatcher;
 use App\Events\FileUploaded;
-use App\Models\FileCategory;
-use App\Repositories\RepositoryInterface;
 use App\Traits\LogAwareTraits;
 use Illuminate\Contracts\Filesystem\Factory;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Log\Logger;
 use Illuminate\Queue\InteractsWithQueue;
 use Psr\Log\LogLevel;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
-class ProcessBulkFileImsi implements ShouldQueue
+class ProcessBulkFile implements ShouldQueue
 {
     use InteractsWithQueue;
     use LogAwareTraits;
 
     protected $manager;
 
-    protected $repo;
+    protected $factory;
 
     protected $logger;
 
@@ -31,11 +30,11 @@ class ProcessBulkFileImsi implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Factory $manager, RepositoryInterface $repo, Dispatcher $dispatcher, ?Logger $logger = null)
+    public function __construct(Factory $manager, Handlers\BulkHandlerFactory $factory, Dispatcher $dispatcher, ?Logger $logger = null)
     {
         $this->manager = $manager;
         $this->logger = $logger;
-        $this->repo = $repo;
+        $this->factory = $factory;
         $this->dispatcher = $dispatcher;
     }
 
@@ -47,12 +46,12 @@ class ProcessBulkFileImsi implements ShouldQueue
      */
     public function handle(FileUploaded $event)
     {
+        $this->log(LogLevel::DEBUG, __METHOD__);
         $file = $event->getFile();
-
-        if ((int) $file->file_category_id !== FileCategory::BULK_IMSI_FILE) {
+        if (! $this->factory->isCapable((int) $file->file_category_id)) {
             return;
         }
-        $this->log(LogLevel::DEBUG, __METHOD__."processing {$file->id} {$file->filename}");
+
         $tmp = tempnam(sys_get_temp_dir(), 'bulkimsi');
         $content = $this->manager->disk('s3')->get($file->filepath);
         if (! $content) {
@@ -64,12 +63,14 @@ class ProcessBulkFileImsi implements ShouldQueue
         $csv->setFlags(\SplFileObject::READ_CSV | \SplFileObject::SKIP_EMPTY);
         $id = 0;
         $header = [];
-
+        $handler = $this->factory->factory($file->file_category_id);
         foreach ($csv as $row) {
             if ($id === 0) {
-                $this->checkHeaders($row);
+                if (! $handler->checkHeader($row)) {
+                    throw new UnprocessableEntityHttpException('Invalid CSV header '.implode(',', $row));
+                }
                 $id++;
-                $header = ['file_id', 'imsi_type_id', ...$row];
+                $header = $row;
 
                 continue;
             }
@@ -77,19 +78,9 @@ class ProcessBulkFileImsi implements ShouldQueue
                 continue;
             }
 
-            switch($row[6]) {
-                case '3G':
-                    $network = 1;
-                    break;
-                case '5G':
-                    $network = 3;
-                    break;
-                default:
-                    $network = \App\Models\ImsiType::FOUR_G;
-            }
-            $this->repo->create(array_combine($header, [$file->id, $network, ...$row]));
+            $handler->createRow($file->id, array_combine($header, $row));
         }
-        $this->dispatcher->dispatch(\App\Events\BulkFileImsiStored::class, $file);
+        $this->dispatcher->dispatch($handler->getDispatchClass(), $file);
         if (file_exists($tmp)) {
             unlink($tmp);
         }
@@ -105,13 +96,6 @@ class ProcessBulkFileImsi implements ShouldQueue
     {
         $file = $event->getFile();
 
-        return (int) $file->file_category_id === FileCategory::BULK_IMSI_FILE;
-    }
-
-    protected function checkHeaders(array $row)
-    {
-        if ($row !== ['id', 'imsi', 'pin', 'puk_1', 'puk_2', 'ki', 'network']) {
-            throw new \RuntimeException('header is not the same as the template');
-        }
+        return $this->factory->isCapable($file->file_category_id);
     }
 }

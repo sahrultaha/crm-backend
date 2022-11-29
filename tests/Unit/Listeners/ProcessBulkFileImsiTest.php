@@ -3,8 +3,7 @@
 namespace Tests\Unit\Listeners;
 
 use App\Events\FileUploaded;
-use App\Listeners\ProcessBulkFileImsi as Obj;
-use App\Repositories\RepositoryInterface;
+use App\Listeners\ProcessBulkFile as Obj;
 use Illuminate\Contracts\Filesystem\Factory as FileSystemManager;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use PHPUnit\Framework\TestCase;
@@ -23,6 +22,8 @@ class ProcessBulkFileImsiTest extends TestCase
 
     protected $repository;
 
+    protected $factory;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -36,11 +37,16 @@ class ProcessBulkFileImsiTest extends TestCase
         $this->manager->expects($this->any())
             ->method('disk')
             ->willReturn($this->filesystem);
-        $this->repository = $this->getMockBuilder(RepositoryInterface::class)
+        $this->repository = $this->getMockBuilder(\App\Listeners\Handlers\BulkHandler::class)
+            ->getMock();
+        $this->factory = $this->getMockBuilder(\App\Listeners\Handlers\BulkHandlerFactory::class)
             ->getMock();
         $this->dispatcher = $this->getMockBuilder(\App\Events\Dispatcher::class)
             ->getMock();
-        $this->obj = new Obj($this->manager, $this->repository, $this->dispatcher);
+        $this->factory->expects($this->any())
+            ->method('factory')
+            ->willReturn($this->repository);
+        $this->obj = new Obj($this->manager, $this->factory, $this->dispatcher);
     }
 
     public function test_instance()
@@ -70,13 +76,18 @@ class ProcessBulkFileImsiTest extends TestCase
         ];
 
         $this->setFile($file);
-
+        $this->factory->expects($this->once())
+            ->method('isCapable')
+            ->willReturn(true);
         $this->obj->handle($this->event);
     }
 
     public function test_upload_invalid_header()
     {
         $this->expectException(\RuntimeException::class);
+        $this->factory->expects($this->once())
+            ->method('isCapable')
+            ->willReturn(true);
         $file = (object) [
             'id' => 1,
             'filepath' => 'filepath',
@@ -86,8 +97,12 @@ class ProcessBulkFileImsiTest extends TestCase
 
         $this->setFile($file);
         $content = <<<'EOD'
-        id,imsi,pin,puk_1,puk_2,ki,network,xxx
+        id,imsi,pin,puk_1,puk_2,ki,network,xxx,yyyyyy
+        
         EOD;
+        $this->repository->expects($this->exactly(1))
+            ->method('checkHeader')
+            ->willReturn(false);
         $this->setFileContent($content);
 
         $this->obj->handle($this->event);
@@ -95,6 +110,9 @@ class ProcessBulkFileImsiTest extends TestCase
 
     public function test_upload_success_4G()
     {
+        $this->factory->expects($this->once())
+            ->method('isCapable')
+            ->willReturn(true);
         $file = (object) [
             'id' => 1,
             'filepath' => 'filepath',
@@ -112,18 +130,10 @@ class ProcessBulkFileImsiTest extends TestCase
         EOD;
         $this->setFileContent($content);
         $this->repository->expects($this->exactly(1))
-            ->method('create')
-            ->with($this->equalTo([
-                'file_id' => 1,
-                'imsi_type_id' => 2,
-                'id' => '1',
-                'imsi' => '123456789012340',
-                'pin' => '12345',
-                'puk_1' => '123456',
-                'puk_2' => '123456',
-                'ki' => 'ABCDEF012345',
-                'network' => '4G',
-            ]));
+            ->method('checkHeader')
+            ->willReturn(true);
+        $this->repository->expects($this->exactly(1))
+            ->method('createRow');
         $this->dispatcher->expects($this->once())
             ->method('dispatch');
         $this->obj->handle($this->event);
