@@ -69,20 +69,21 @@ class UpdateCustomerTest extends CustomDuskTestCase
             //check the value is changed
 
             $browser
-            ->press('EDIT')
-            ->waitForText('SAVE CHANGES')
-            ->pause(2000)
-            ->assertValue('#name', $new_customer_name)
-            ->assertValue('#icNumber', $new_customer_ic_number)
-            ->assertValue('#icTypeId', '1')
-            ->assertValue('#countryId', '2')
-            ->assertValue('#accountCategoryId', '2')
-            ->assertValue('#house_number', $new_customer_house_number)
-            ->assertValue('#street', $new_customer_street)
-            ->assertValue('#building_name', $new_customer_building_name)
-            ->assertValue('#block', $new_customer_block)
-            ->assertValue('#floor', $new_customer_floor)
-            ->assertValue('#unit', $new_customer_unit);
+                ->press('EDIT')
+                ->waitForText('SAVE CHANGES');
+            sleep(2);
+            $browser
+                ->assertValue('#name', $new_customer_name)
+                ->assertValue('#icNumber', $new_customer_ic_number)
+                ->assertValue('#icTypeId', '1')
+                ->assertValue('#countryId', '2')
+                ->assertValue('#accountCategoryId', '2')
+                ->assertValue('#house_number', $new_customer_house_number)
+                ->assertValue('#street', $new_customer_street)
+                ->assertValue('#building_name', $new_customer_building_name)
+                ->assertValue('#block', $new_customer_block)
+                ->assertValue('#floor', $new_customer_floor)
+                ->assertValue('#unit', $new_customer_unit);
         });
     }
 
