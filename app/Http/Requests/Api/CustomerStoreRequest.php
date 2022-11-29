@@ -15,8 +15,7 @@ class CustomerStoreRequest extends FormRequest
         ];
 
         if ($is_personal_ic_type) {
-            $ic_number_rules[] = 'starts_with:00,01,30,31,50,51';
-            $ic_number_rules[] = 'regex:/[0-9]{8}/';
+            $ic_number_rules[] = 'regex:/^(00|01|30|31|50|51)\d{6}$/';
         }
 
         return $ic_number_rules;

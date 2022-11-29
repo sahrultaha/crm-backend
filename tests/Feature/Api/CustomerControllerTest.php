@@ -108,6 +108,7 @@ class CustomerControllerTest extends TestCase
         return [
             '60123456', // first two digits cannot be 60
             '001', // length must be 8
+            '3098218717210', // length must be 8
             '01abcdef', // no alphabets
             '50-876213', // no dashes
             '30 76543', // no spaces
@@ -330,7 +331,7 @@ class CustomerControllerTest extends TestCase
 
             $response->assertCreated();
         }
-        $this->assertDatabaseCount('customer', 5);
+        $this->assertDatabaseCount('customer', 6);
     }
 
     public function test_users_can_create_new_customer_without_email()
