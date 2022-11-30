@@ -20,5 +20,6 @@ class FileBulkImsi extends Model
         'row_status_id',
         'file_id',
         'imsi_id',
+        'error',
     ];
 }

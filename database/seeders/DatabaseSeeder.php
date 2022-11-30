@@ -25,15 +25,17 @@ class DatabaseSeeder extends Seeder
             AddressSeeder::class,
             FileSeeder::class,
             RowStatusSeeder::class,
+            ProductSeeder::class,
         ]);
 
         if (env('APP_ENV') === 'local') {
             $this->call([
                 CustomerSeeder::class,
+                SubscriptionSeeder::class,
                 NumberSeeder::class,
                 ImsiSeeder::class,
-                ProductSeeder::class,
                 PackSeeder::class,
+                SubscriptionNumberSeeder::class,
             ]);
         }
     }

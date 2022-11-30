@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('ki')->nullable();
             $table->bigInteger('imsi_id')->nullable()->index();
             $table->bigInteger('file_id')->index();
+            $table->string('error')->nullable();
             $table->smallInteger('imsi_type_id')->index();
             $table->smallInteger('row_status_id')->default(1)->index();
 

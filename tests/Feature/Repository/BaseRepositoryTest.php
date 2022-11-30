@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\Repository;
 
-use App\Models\File;
-use App\Models\FileCategory;
 use App\Models\User;
 use App\Repositories\BaseRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -41,12 +39,10 @@ class BaseRepositoryTest extends TestCase
             \Database\Seeders\RowStatusSeeder::class,
         ]);
 
-        File::factory()->count(15)->create();
-        File::factory()->count(5)->create(['file_category_id' => FileCategory::BULK_IMSI_FILE]);
+        User::factory()->count(15)->create();
 
-        $repo = new BaseRepository(new File());
-        $paginator = $repo->paginate(10, 'desc', 1, [['file_category_id' => FileCategory::BULK_IMSI_FILE]]);
-        $this->assertEquals(5, $paginator->total());
-        $this->assertEquals(20, $paginator->items()[0]['id']);
+        $repo = new BaseRepository(new User());
+        $paginator = $repo->paginate(10, 'desc', 1, [['id' => 1]]);
+        $this->assertEquals(1, $paginator->total());
     }
 }

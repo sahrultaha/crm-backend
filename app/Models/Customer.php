@@ -22,8 +22,28 @@ class Customer extends Model
         return $this->belongsTo(AccountCategory::class, 'account_category_id');
     }
 
+    public function ic_type()
+    {
+        return $this->belongsTo(IcType::class, 'ic_type_id');
+    }
+
+    public function ic_color()
+    {
+        return $this->belongsTo(IcColor::class, 'ic_color_id');
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class, 'country_id');
+    }
+
     public function customerAddress()
     {
-        return $this->belolngsToMany(CustomerAddress::class, 'customer_address');
+        return $this->belongsToMany(CustomerAddress::class, 'customer_address');
+    }
+
+    public function subscription()
+    {
+        return $this->Has(Subscription::class, 'customer_id');
     }
 }

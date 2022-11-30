@@ -6,22 +6,27 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerStoreRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    private function getIcNumberRules(): array
+    {
+        $is_personal_ic_type = $this->request->get('ic_type_id') === 1;
+        $ic_number_rules = [
+            'required',
+            'string',
+        ];
+
+        if ($is_personal_ic_type) {
+            $ic_number_rules[] = 'regex:/^(00|01|30|31|50|51)\d{6}$/';
+        }
+
+        return $ic_number_rules;
+    }
+
+    public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => [
@@ -32,14 +37,15 @@ class CustomerStoreRequest extends FormRequest
                 'nullable',
                 'email',
             ],
+            'country_code' => [
+                'nullable',
+                'integer',
+            ],
             'mobile_number' => [
                 'nullable',
-                'string',
+                'integer',
             ],
-            'ic_number' => [
-                'required',
-                'string',
-            ],
+            'ic_number' => $this->getIcNumberRules(),
             'ic_type_id' => [
                 'required',
                 'numeric',
@@ -53,6 +59,7 @@ class CustomerStoreRequest extends FormRequest
             'ic_expiry_date' => [
                 'required',
                 'date',
+                'after:today',
             ],
             'country_id' => [
                 'required',
@@ -71,6 +78,7 @@ class CustomerStoreRequest extends FormRequest
             'birth_date' => [
                 'required',
                 'date',
+                'before_or_equal: '.date('Y-m-d', strtotime('-12 year')),
             ],
             'village_id' => [
                 'nullable',

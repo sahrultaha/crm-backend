@@ -17,7 +17,7 @@ class UpdateImsiTest extends CustomDuskTestCase
         $this->browse(function (Browser $browser) {
             $this->loginAsAdmin($browser);
             $this->createNewImsi($browser);
-            $imsi_id = 4;
+            $imsi_id = \App\Models\Imsi::count();
 
             $old_imsi_number = '1234567890';
             $new_imsi_number = '1234567891';
@@ -26,6 +26,7 @@ class UpdateImsiTest extends CustomDuskTestCase
                 ->visit(env('FRONTEND_URL')."/imsi/$imsi_id/edit")
                 ->waitForText('Update Imsi')
                 ->waitForText('UPDATE')
+                ->pause(1000)
                 ->assertValue('#imsi', $old_imsi_number)
                 ->assertValue('#imsiStatusId', '1')
                 ->assertValue('#imsiTypeId', '1')
@@ -44,6 +45,7 @@ class UpdateImsiTest extends CustomDuskTestCase
                 ->visit(env('FRONTEND_URL')."/imsi/$imsi_id/edit")
                 ->waitForText('Update Imsi')
                 ->waitForText('UPDATE')
+                ->pause(1000)
                 ->assertValue('#imsi', $new_imsi_number)
                 ->assertValue('#imsiStatusId', '1')
                 ->assertValue('#imsiTypeId', '1')

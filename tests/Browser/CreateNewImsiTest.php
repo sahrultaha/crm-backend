@@ -15,10 +15,10 @@ class CreateNewImsiTest extends CustomDuskTestCase
     public function test_can_create_new_imsi(): void
     {
         $this->browse(function (Browser $browser) {
-            $this->assertDatabaseCount('imsi', 3);
+            $count = \App\Models\Imsi::count();
             $this->loginAsAdmin($browser);
             $this->createNewImsi($browser);
-            $this->assertDatabaseCount('imsi', 4);
+            $this->assertDatabaseCount('imsi', $count + 1);
         });
     }
 }

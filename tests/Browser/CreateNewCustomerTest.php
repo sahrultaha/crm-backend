@@ -11,7 +11,7 @@ class CreateNewCustomerTest extends CustomDuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $this->loginAsAdmin($browser);
-            $this->createNewCustomer($browser, '77661234');
+            $this->createNewCustomer($browser, '00000001');
         });
     }
 }

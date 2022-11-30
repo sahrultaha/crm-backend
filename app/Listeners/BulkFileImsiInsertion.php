@@ -34,7 +34,7 @@ class BulkFileImsiInsertion implements ShouldQueue
     {
         $file = $event->getFile();
         /* @var $rows \Illuminate\Database\Eloquent\Collection */
-        foreach ($this->bulkRepo->getUnprocessedRows($file->id) as $rows) {
+        foreach ($this->bulkRepo->selectUnprocessedRows($file->id) as $rows) {
             $imsis = $rows->pluck('imsi');
             $exists = $this->bulkRepo->checkExistingsImsi($imsis->all());
             $exists_imsis = $exists->pluck('imsi');

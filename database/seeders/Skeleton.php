@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class Skeleton extends Seeder
 {
+    use TraitAlterSequence;
+
     /**
      * Run the database seeds.
      *
@@ -28,6 +30,7 @@ class Skeleton extends Seeder
                 'name' => 'Passport',
             ],
         ]);
+        $this->alterSequence('ic_type');
         DB::table('ic_color')->insert([
             [
                 'id' => 1,
@@ -39,9 +42,10 @@ class Skeleton extends Seeder
             ],
             [
                 'id' => 3,
-                'name' => 'Purple',
+                'name' => 'Red',
             ],
         ]);
+        $this->alterSequence('ic_color');
         DB::table('communication_channel')->insert([
             [
                 'id' => 1,
@@ -56,6 +60,7 @@ class Skeleton extends Seeder
                 'name' => 'WhatsApp',
             ],
         ]);
+        $this->alterSequence('communication_channel');
         DB::table('account_category')->insert([
             [
                 'id' => 1,
@@ -78,6 +83,7 @@ class Skeleton extends Seeder
                 'name' => 'Government',
             ],
         ]);
+        $this->alterSequence('account_category');
         DB::table('customer_title')->insert([
             [
                 'id' => 1,
@@ -104,12 +110,14 @@ class Skeleton extends Seeder
                 'name' => 'Dr',
             ],
         ]);
+        $this->alterSequence('customer_title');
         DB::table('subscription_type')->insert([
             [
                 'id' => 1,
                 'name' => 'Prepaid',
             ],
         ]);
+        $this->alterSequence('subscription_type');
         DB::table('subscription_status')->insert([
             [
                 'id' => 1,
@@ -132,6 +140,7 @@ class Skeleton extends Seeder
                 'name' => 'Terminated',
             ],
         ]);
+        $this->alterSequence('subscription_status');
         DB::table('order_status')->insert([
             [
                 'id' => 1,
@@ -154,6 +163,7 @@ class Skeleton extends Seeder
                 'name' => 'Invoiced',
             ],
         ]);
+        $this->alterSequence('order_status');
         DB::table('address_type')->insert([
             [
                 'id' => 1,
@@ -164,5 +174,6 @@ class Skeleton extends Seeder
                 'name' => 'Service Address',
             ],
         ]);
+        $this->alterSequence('address_type');
     }
 }

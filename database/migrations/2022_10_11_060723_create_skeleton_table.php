@@ -41,6 +41,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('email')->nullable();
+            $table->smallInteger('country_code')->nullable();
             $table->string('mobile_number')->nullable();
             $table->string('ic_number');
             $table->smallInteger('ic_type_id');
@@ -215,7 +216,7 @@ return new class extends Migration
                 ->on('product_profile');
             $table->foreign('product_network_id')
                 ->references('id')
-                ->on('product_profile');
+                ->on('product_network');
             $table->index('product_profile_id');
             $table->index('product_network_id');
         });

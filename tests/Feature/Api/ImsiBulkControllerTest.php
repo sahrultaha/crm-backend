@@ -30,7 +30,7 @@ class ImsiBulkControllerTest extends TestCase
             \Database\Seeders\RowStatusSeeder::class,
             \Database\Seeders\ImsiTypeStatusSeeder::class,
         ]);
-        File::factory()->count(5)->create(['file_category_id' => FileCategory::BULK_IMSI_FILE]);
+        File::factory()->count(5)->create(['file_category_id' => FileCategory::BULK_IMSI]);
         FileBulkImsi::factory()->count(3)->create(['file_id' => 5]);
         FileBulkImsi::factory()->count(2)->create(['file_id' => 5, 'row_status_id' => RowStatus::FAIL]);
         FileBulkImsi::factory()->count(1)->create(['file_id' => 5, 'row_status_id' => RowStatus::SUCCESS]);

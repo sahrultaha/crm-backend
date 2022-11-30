@@ -3,9 +3,11 @@
 namespace Tests\Feature\Api;
 
 use App\Models\AccountCategory;
+use App\Models\Address;
 use App\Models\AddressType;
 use App\Models\Country;
 use App\Models\Customer;
+use App\Models\CustomerAddress;
 use App\Models\CustomerTitle;
 use App\Models\District;
 use App\Models\File;
@@ -14,10 +16,11 @@ use App\Models\FileRelationType;
 use App\Models\IcColor;
 use App\Models\IcType;
 use App\Models\Mukim;
-use App\Models\PostalCode; //test Address factory
+use App\Models\PostalCode;
 use App\Models\User;
 use App\Models\Village;
 use Database\Seeders\FileSeeder;
+use Database\Seeders\Skeleton;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -28,18 +31,24 @@ class CustomerControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed([Skeleton::class]);
+    }
+
     private function generateCustomerPostData(): array
     {
-        $ic_type = IcType::factory()->create();
-        $ic_color = IcColor::factory()->create();
+        $ic_type = IcType::find(1); // Personal
+        $ic_color = IcColor::find(1); // Yellow
         $country = Country::factory()->create();
         $customer_title = CustomerTitle::factory()->create();
         $account_category = AccountCategory::factory()->create();
         $village = Village::factory()->create();
         $address_type = AddressType::factory()->create();
-        // $mukim = Mukim::factory()->create(); //test address factory
-        // $district = District::factory()->create();
-        // $postalcode = PostalCode::factory()->create();
+        $mukim = Mukim::factory()->create(); //test address factory
+        $district = District::factory()->create();
+        $postalcode = PostalCode::factory()->create();
 
         $customer_name = 'Abc';
         $customer_email = 'test@mail.com';
@@ -54,9 +63,9 @@ class CustomerControllerTest extends TestCase
         $customer_birth_date = '2000-01-20';
         $customer_village = $village->id;
         $village = $village->name;
-        $customer_mukim_id = null;
-        $customer_district_id = null;
-        $customer_postal_code_id = null;
+        $customer_mukim_id = $mukim->id;
+        $customer_district_id = $district->id;
+        $customer_postal_code_id = $postalcode->id;
         $customer_house_number = 'No 1';
         $customer_simpang = 'Simpang 5';
         $customer_street = 'Jalan Utara';
@@ -91,6 +100,18 @@ class CustomerControllerTest extends TestCase
             $customer_floor,
             $customer_unit,
             $address_type_id,
+        ];
+    }
+
+    private function getInvalidPersonalIcValues(): array
+    {
+        return [
+            '60123456', // first two digits cannot be 60
+            '001', // length must be 8
+            '3098218717210', // length must be 8
+            '01abcdef', // no alphabets
+            '50-876213', // no dashes
+            '30 76543', // no spaces
         ];
     }
 
@@ -178,6 +199,139 @@ class CustomerControllerTest extends TestCase
         $this->assertEquals($customer->customer_title_id, $customer_title_id);
         $this->assertEquals($customer->account_category_id, $customer_account_category_id);
         $this->assertEquals($customer->birth_date, $customer_birth_date);
+    }
+
+    public function test_users_cannot_create_new_customer_with_invalid_ics()
+    {
+        $user = User::factory()->create();
+
+        [
+            $customer_name,
+            $customer_email,
+            $customer_mobile_number,
+            $customer_ic_number,
+            $customer_ic_type_id,
+            $customer_ic_color_id,
+            $customer_ic_expiry_date,
+            $customer_country_id,
+            $customer_title_id,
+            $customer_account_category_id,
+            $customer_birth_date,
+            $customer_village,
+            $village,
+            $customer_mukim_id,
+            $customer_district_id,
+            $customer_postal_code_id,
+            $customer_house_number,
+            $customer_simpang,
+            $customer_street,
+            $customer_building_name,
+            $customer_block,
+            $customer_floor,
+            $customer_unit,
+            $address_type_id,
+        ] = $this->generateCustomerPostData();
+
+        Sanctum::actingAs($user);
+        $this->assertDatabaseCount('customer', 0);
+
+        foreach ($this->getInvalidPersonalIcValues() as $ic) {
+            $response = $this->postJson('/api/customers', [
+                'name' => $customer_name,
+                'email' => $customer_email,
+                'mobile_number' => $customer_mobile_number,
+                'ic_number' => $ic,
+                'ic_type_id' => $customer_ic_type_id,
+                'ic_color_id' => $customer_ic_color_id,
+                'ic_expiry_date' => $customer_ic_expiry_date,
+                'country_id' => $customer_country_id,
+                'customer_title_id' => $customer_title_id,
+                'account_category_id' => $customer_account_category_id,
+                'birth_date' => $customer_birth_date,
+                'village_id' => $customer_village,
+                'district_id' => $customer_district_id,
+                'mukim_id' => $customer_mukim_id,
+                'postal_code_id' => $customer_postal_code_id,
+                'house_number' => $customer_house_number,
+                'simpang' => $customer_simpang,
+                'street' => $customer_street,
+                'building_name' => $customer_building_name,
+                'block' => $customer_block,
+                'floor' => $customer_floor,
+                'unit' => $customer_unit,
+                'address_type_id' => $address_type_id,
+            ]);
+
+            $response->assertStatus(422)
+                ->assertJsonValidationErrorFor('ic_number');
+            $this->assertDatabaseCount('customer', 0);
+        }
+    }
+
+    public function test_users_can_create_customer_without_following_strict_ic_rules_when_using_non_personal_ic_type()
+    {
+        $user = User::factory()->create();
+
+        [
+            $customer_name,
+            $customer_email,
+            $customer_mobile_number,
+            $customer_ic_number,
+            $customer_ic_type_id,
+            $customer_ic_color_id,
+            $customer_ic_expiry_date,
+            $customer_country_id,
+            $customer_title_id,
+            $customer_account_category_id,
+            $customer_birth_date,
+            $customer_village,
+            $village,
+            $customer_mukim_id,
+            $customer_district_id,
+            $customer_postal_code_id,
+            $customer_house_number,
+            $customer_simpang,
+            $customer_street,
+            $customer_building_name,
+            $customer_block,
+            $customer_floor,
+            $customer_unit,
+            $address_type_id,
+        ] = $this->generateCustomerPostData();
+
+        Sanctum::actingAs($user);
+        $this->assertDatabaseCount('customer', 0);
+
+        foreach ($this->getInvalidPersonalIcValues() as $ic) {
+            $response = $this->postJson('/api/customers', [
+                'name' => $customer_name,
+                'email' => $customer_email,
+                'mobile_number' => $customer_mobile_number,
+                'ic_number' => $ic,
+                'ic_type_id' => 2, // Company
+                'ic_color_id' => $customer_ic_color_id,
+                'ic_expiry_date' => $customer_ic_expiry_date,
+                'country_id' => $customer_country_id,
+                'customer_title_id' => $customer_title_id,
+                'account_category_id' => $customer_account_category_id,
+                'birth_date' => $customer_birth_date,
+                'village_id' => $customer_village,
+                'district_id' => $customer_district_id,
+                'mukim_id' => $customer_mukim_id,
+                'postal_code_id' => $customer_postal_code_id,
+                'house_number' => $customer_house_number,
+                'simpang' => $customer_simpang,
+                'street' => $customer_street,
+                'building_name' => $customer_building_name,
+                'block' => $customer_block,
+                'floor' => $customer_floor,
+                'unit' => $customer_unit,
+                'address_type_id' => $address_type_id,
+            ]);
+
+            $response->assertCreated();
+        }
+        $this->assertDatabaseCount('customer', 6);
     }
 
     public function test_users_can_create_new_customer_without_email()
@@ -913,5 +1067,483 @@ class CustomerControllerTest extends TestCase
             ->assertOk()
             ->assertJsonPath('id', $id);
         $this->assertTrue($customer->fresh()->trashed());
+    }
+
+    public function test_users_can_update_existing_customer()
+    {
+        $user = User::factory()->create();
+
+        [
+            $customer_name,
+            $customer_email,
+            $customer_mobile_number,
+            $customer_ic_number,
+            $customer_ic_type_id,
+            $customer_ic_color_id,
+            $customer_ic_expiry_date,
+            $customer_country_id,
+            $customer_title_id,
+            $customer_account_category_id,
+            $customer_birth_date,
+            $customer_village,
+            $village,
+            $customer_mukim_id,
+            $customer_district_id,
+            $customer_postal_code_id,
+            $customer_house_number,
+            $customer_simpang,
+            $customer_street,
+            $customer_building_name,
+            $customer_block,
+            $customer_floor,
+            $customer_unit,
+            $address_type_id,
+        ] = $this->generateCustomerPostData();
+
+        Sanctum::actingAs($user);
+        $this->assertDatabaseCount('customer', 0);
+
+        $response = $this->postJson('/api/customers', [
+            'name' => $customer_name,
+            'email' => $customer_email,
+            'mobile_number' => $customer_mobile_number,
+            'ic_number' => $customer_ic_number,
+            'ic_type_id' => $customer_ic_type_id,
+            'ic_color_id' => $customer_ic_color_id,
+            'ic_expiry_date' => date('Y-m-d', strtotime('+5 year')),
+            'country_id' => $customer_country_id,
+            'customer_title_id' => $customer_title_id,
+            'account_category_id' => $customer_account_category_id,
+            'birth_date' => date('Y-m-d', strtotime('-12 year')),
+            'village_id' => $customer_village,
+            'district_id' => $customer_district_id,
+            'mukim_id' => $customer_mukim_id,
+            'postal_code_id' => $customer_postal_code_id,
+            'house_number' => $customer_house_number,
+            'simpang' => $customer_simpang,
+            'street' => $customer_street,
+            'building_name' => $customer_building_name,
+            'block' => $customer_block,
+            'floor' => $customer_floor,
+            'unit' => $customer_unit,
+            'address_type_id' => $address_type_id,
+        ]);
+
+        $response->assertCreated();
+
+        $this->assertDatabaseCount('customer', 1);
+        $this->assertDatabaseCount('customer_address', 1);
+        $this->assertDatabaseCount('address', 1);
+
+        $customer = Customer::first();
+        $customer_address = CustomerAddress::first();
+        $old_address = Address::first();
+        Mukim::factory()->count(5)->create();
+        Village::factory()->count(5)->create();
+        District::factory()->count(5)->create();
+        PostalCode::factory()->count(5)->create();
+
+        $old_customer_id = $customer->id;
+        $old_address_id = $customer_address->address_id;
+        $new_customer_name = 'Hello';
+        $new_customer_email = 'a@gmail.com';
+        $new_customer_mobile_number = '8953076';
+        $new_customer_ic_number = '01001234';
+        $new_customer_ic_type_id = 1;
+        $new_customer_ic_color_id = 1;
+        $new_customer_ic_expiry_date = now()->addYears(2);
+        $new_customer_country_id = 1;
+        $new_customer_title_id = 1;
+        $new_customer_account_category_id = 1;
+        $new_customer_birth_date = now()->subYears(12)->format('d-M-Y');
+        $new_customer_village_id = 1;
+        $new_customer_mukim_id = 2;
+        $new_customer_district_id = 1;
+        $new_customer_postal_code_id = 1;
+        $new_customer_house_number = 'No 10';
+        $new_customer_simpang = 'Simpang 99';
+        $new_customer_street = 'Jalan Pasir Berakas';
+        $new_customer_building_name = 'At Taqwa';
+        $new_customer_block = 'Block C';
+        $new_customer_floor = '2nd Floor';
+        $new_customer_unit = 'Unit 2A';
+        $new_customer_address_type_id = 1;
+
+        $update_response = $this->putJson('/api/customers/update',
+            [
+                'id' => $old_customer_id,
+                'name' => $new_customer_name,
+                'email' => $new_customer_email,
+                'mobile_number' => $new_customer_mobile_number,
+                'ic_number' => $new_customer_ic_number,
+                'ic_type_id' => $new_customer_ic_type_id,
+                'ic_color_id' => $new_customer_ic_color_id,
+                'ic_expiry_date' => $new_customer_ic_expiry_date,
+                'country_id' => $new_customer_country_id,
+                'customer_title_id' => $new_customer_title_id,
+                'account_category_id' => $new_customer_account_category_id,
+                'birth_date' => $new_customer_birth_date,
+                'village_id' => $new_customer_village_id,
+                'district_id' => $new_customer_district_id,
+                'mukim_id' => $new_customer_mukim_id,
+                'postal_code_id' => $new_customer_postal_code_id,
+                'house_number' => $new_customer_house_number,
+                'simpang' => $new_customer_simpang,
+                'street' => $new_customer_street,
+                'building_name' => $new_customer_building_name,
+                'block' => $new_customer_block,
+                'floor' => $new_customer_floor,
+                'unit' => $new_customer_unit,
+                'address_id' => $old_address_id,
+            ]);
+
+        $new_address = CustomerAddress::with('address')
+            ->where('customer_id', $old_customer_id)
+            ->first();
+
+        $update_response->assertStatus(201);
+
+        $new_customer = Customer::find($old_customer_id);
+        // dd($new_customer);
+        $this->assertEquals($new_customer->name, $new_customer_name);
+        $this->assertEquals($new_customer->email, $new_customer_email);
+        $this->assertEquals($new_customer->mobile_number, $new_customer_mobile_number);
+        $this->assertEquals($new_customer->ic_number, $new_customer_ic_number);
+        $this->assertEquals($new_customer->ic_type_id, $new_customer_ic_type_id);
+        $this->assertEquals($new_customer->ic_color_id, $new_customer_ic_color_id);
+
+        $this->assertEquals(date('d-M-Y', strtotime($new_customer->ic_expiry_date)),
+            $new_customer_ic_expiry_date->format('d-M-Y'));
+        $this->assertEquals($new_customer->country_id, $new_customer_country_id);
+        $this->assertEquals($new_customer->customer_title_id, $new_customer_title_id);
+        $this->assertEquals($new_customer->account_category_id, $new_customer_account_category_id);
+        $this->assertEquals(date('d-M-Y', strtotime($new_customer->birth_date)),
+            $new_customer_birth_date);
+        $this->assertEquals($new_address->address->village_id, $new_customer_village_id);
+        $this->assertEquals($new_address->address->district_id, $new_customer_district_id);
+        $this->assertEquals($new_address->address->mukim_id, $new_customer_mukim_id);
+        $this->assertEquals($new_address->address->postal_code_id, $new_customer_postal_code_id);
+        $this->assertEquals($new_address->address->house_number, $new_customer_house_number);
+        $this->assertEquals($new_address->address->simpang, $new_customer_simpang);
+        $this->assertEquals($new_address->address->street, $new_customer_street);
+        $this->assertEquals($new_address->address->building_name, $new_customer_building_name);
+        $this->assertEquals($new_address->address->block, $new_customer_block);
+        $this->assertEquals($new_address->address->floor, $new_customer_floor);
+        $this->assertEquals($new_address->address->unit, $new_customer_unit);
+    }
+
+    public function test_users_cannot_create_new_customer_with_invalid_ic_expiry_date()
+    {
+        $user = User::factory()->create();
+
+        [
+            $customer_name,
+            $customer_email,
+            $customer_mobile_number,
+            $customer_ic_number,
+            $customer_ic_type_id,
+            $customer_ic_color_id,
+            $customer_ic_expiry_date,
+            $customer_country_id,
+            $customer_title_id,
+            $customer_account_category_id,
+            $customer_birth_date,
+            $customer_village,
+            $village,
+            $customer_mukim_id,
+            $customer_district_id,
+            $customer_postal_code_id,
+            $customer_house_number,
+            $customer_simpang,
+            $customer_street,
+            $customer_building_name,
+            $customer_block,
+            $customer_floor,
+            $customer_unit,
+            $address_type_id,
+        ] = $this->generateCustomerPostData();
+
+        Sanctum::actingAs($user);
+
+        $response = $this->postJson('/api/customers', [
+            'name' => $customer_name,
+            'email' => $customer_email,
+            'mobile_number' => $customer_mobile_number,
+            'ic_number' => $customer_ic_number,
+            'ic_type_id' => $customer_ic_type_id,
+            'ic_color_id' => $customer_ic_color_id,
+            'ic_expiry_date' => '2010-01-01',
+            'country_id' => $customer_country_id,
+            'customer_title_id' => $customer_title_id,
+            'account_category_id' => $customer_account_category_id,
+            'birth_date' => $customer_birth_date,
+            'village_id' => $customer_village,
+            'district_id' => $customer_district_id,
+            'mukim_id' => $customer_mukim_id,
+            'postal_code_id' => $customer_postal_code_id,
+            'house_number' => $customer_house_number,
+            'simpang' => $customer_simpang,
+            'street' => $customer_street,
+            'building_name' => $customer_building_name,
+            'block' => $customer_block,
+            'floor' => $customer_floor,
+            'unit' => $customer_unit,
+            'address_type_id' => $address_type_id,
+        ]);
+        $response->assertStatus(422);
+    }
+
+    public function test_users_cannot_update_existing_customer_with_invalid_ic_expiry_date()
+    {
+        $user = User::factory()->create();
+
+        [
+            $customer_name,
+            $customer_email,
+            $customer_mobile_number,
+            $customer_ic_number,
+            $customer_ic_type_id,
+            $customer_ic_color_id,
+            $customer_ic_expiry_date,
+            $customer_country_id,
+            $customer_title_id,
+            $customer_account_category_id,
+            $customer_birth_date,
+            $customer_village,
+            $village,
+            $customer_mukim_id,
+            $customer_district_id,
+            $customer_postal_code_id,
+            $customer_house_number,
+            $customer_simpang,
+            $customer_street,
+            $customer_building_name,
+            $customer_block,
+            $customer_floor,
+            $customer_unit,
+            $address_type_id,
+        ] = $this->generateCustomerPostData();
+
+        Sanctum::actingAs($user);
+        $this->assertDatabaseCount('customer', 0);
+
+        $response = $this->postJson('/api/customers', [
+            'name' => $customer_name,
+            'email' => $customer_email,
+            'mobile_number' => $customer_mobile_number,
+            'ic_number' => $customer_ic_number,
+            'ic_type_id' => $customer_ic_type_id,
+            'ic_color_id' => $customer_ic_color_id,
+            'ic_expiry_date' => $customer_ic_expiry_date,
+            'country_id' => $customer_country_id,
+            'customer_title_id' => $customer_title_id,
+            'account_category_id' => $customer_account_category_id,
+            'birth_date' => $customer_birth_date,
+            'village_id' => $customer_village,
+            'district_id' => $customer_district_id,
+            'mukim_id' => $customer_mukim_id,
+            'postal_code_id' => $customer_postal_code_id,
+            'house_number' => $customer_house_number,
+            'simpang' => $customer_simpang,
+            'street' => $customer_street,
+            'building_name' => $customer_building_name,
+            'block' => $customer_block,
+            'floor' => $customer_floor,
+            'unit' => $customer_unit,
+            'address_type_id' => $address_type_id,
+        ]);
+
+        $response->assertCreated();
+
+        $this->assertDatabaseCount('customer', 1);
+        $this->assertDatabaseCount('customer_address', 1);
+
+        $customer = Customer::first();
+        $customer_address = CustomerAddress::first();
+        $old_address = Address::first();
+        Mukim::factory()->count(5)->create();
+        Village::factory()->count(5)->create();
+        District::factory()->count(5)->create();
+        PostalCode::factory()->count(5)->create();
+
+        $old_customer_id = $customer->id;
+        $old_address_id = $customer_address->address_id;
+        $new_customer_name = 'Hello';
+        $new_customer_email = 'a@gmail.com';
+        $new_customer_mobile_number = '8953076';
+        $new_customer_ic_number = '01001234';
+        $new_customer_ic_type_id = 1;
+        $new_customer_ic_color_id = 1;
+
+        $new_customer_country_id = 1;
+        $new_customer_title_id = 1;
+        $new_customer_account_category_id = 1;
+        $new_customer_birth_date = now()->addYears(3);
+        $new_customer_village_id = 1;
+        $new_customer_mukim_id = 2;
+        $new_customer_district_id = 1;
+        $new_customer_postal_code_id = 1;
+        $new_customer_house_number = 'No 10';
+        $new_customer_simpang = 'Simpang 99';
+        $new_customer_street = 'Jalan Pasir Berakas';
+        $new_customer_building_name = 'At Taqwa';
+        $new_customer_block = 'Block C';
+        $new_customer_floor = '2nd Floor';
+        $new_customer_unit = 'Unit 2A';
+        $new_customer_address_type_id = 1;
+
+        $update_response = $this->putJson('/api/customers/update',
+            [
+                'id' => $old_customer_id,
+                'name' => $new_customer_name,
+                'email' => $new_customer_email,
+                'mobile_number' => $new_customer_mobile_number,
+                'ic_number' => $new_customer_ic_number,
+                'ic_type_id' => $new_customer_ic_type_id,
+                'ic_color_id' => $new_customer_ic_color_id,
+                'ic_expiry_date' => '2010-01-01',
+                'country_id' => $new_customer_country_id,
+                'customer_title_id' => $new_customer_title_id,
+                'account_category_id' => $new_customer_account_category_id,
+                'birth_date' => $new_customer_birth_date,
+                'village_id' => $new_customer_village_id,
+                'district_id' => $new_customer_district_id,
+                'mukim_id' => $new_customer_mukim_id,
+                'postal_code_id' => $new_customer_postal_code_id,
+                'house_number' => $new_customer_house_number,
+                'simpang' => $new_customer_simpang,
+                'street' => $new_customer_street,
+                'building_name' => $new_customer_building_name,
+                'block' => $new_customer_block,
+                'floor' => $new_customer_floor,
+                'unit' => $new_customer_unit,
+                'address_id' => $old_address_id,
+            ]);
+        $update_response->assertStatus(422);
+    }
+
+    public function test_users_can_create_new_customer_with_correct_birthdate()
+    {
+        $user = User::factory()->create();
+
+        [
+            $customer_name,
+            $customer_email,
+            $customer_mobile_number,
+            $customer_ic_number,
+            $customer_ic_type_id,
+            $customer_ic_color_id,
+            $customer_ic_expiry_date,
+            $customer_country_id,
+            $customer_title_id,
+            $customer_account_category_id,
+            $customer_birth_date,
+            $customer_village,
+            $village,
+            $customer_mukim_id,
+            $customer_district_id,
+            $customer_postal_code_id,
+            $customer_house_number,
+            $customer_simpang,
+            $customer_street,
+            $customer_building_name,
+            $customer_block,
+            $customer_floor,
+            $customer_unit,
+            $address_type_id,
+        ] = $this->generateCustomerPostData();
+
+        Sanctum::actingAs($user);
+        $this->assertDatabaseCount('customer', 0);
+
+        $response = $this->postJson('/api/customers', [
+            'name' => $customer_name,
+            'email' => $customer_email,
+            'mobile_number' => $customer_mobile_number,
+            'ic_number' => $customer_ic_number,
+            'ic_type_id' => $customer_ic_type_id,
+            'ic_color_id' => $customer_ic_color_id,
+            'ic_expiry_date' => $customer_ic_expiry_date,
+            'country_id' => $customer_country_id,
+            'customer_title_id' => $customer_title_id,
+            'account_category_id' => $customer_account_category_id,
+            'birth_date' => date('Y-m-d', strtotime('-12 year')),
+            'village_id' => $customer_village,
+            'district_id' => $customer_district_id,
+            'mukim_id' => $customer_mukim_id,
+            'postal_code_id' => $customer_postal_code_id,
+            'house_number' => $customer_house_number,
+            'simpang' => $customer_simpang,
+            'street' => $customer_street,
+            'building_name' => $customer_building_name,
+            'block' => $customer_block,
+            'floor' => $customer_floor,
+            'unit' => $customer_unit,
+            'address_type_id' => $address_type_id,
+        ]);
+        $response->assertCreated();
+        $this->assertDatabaseCount('customer', 1);
+    }
+
+    public function test_users_cannot_create_new_customer_with_wrong_birthdate()
+    {
+        $user = User::factory()->create();
+
+        [
+            $customer_name,
+            $customer_email,
+            $customer_mobile_number,
+            $customer_ic_number,
+            $customer_ic_type_id,
+            $customer_ic_color_id,
+            $customer_ic_expiry_date,
+            $customer_country_id,
+            $customer_title_id,
+            $customer_account_category_id,
+            $customer_birth_date,
+            $customer_village,
+            $village,
+            $customer_mukim_id,
+            $customer_district_id,
+            $customer_postal_code_id,
+            $customer_house_number,
+            $customer_simpang,
+            $customer_street,
+            $customer_building_name,
+            $customer_block,
+            $customer_floor,
+            $customer_unit,
+            $address_type_id,
+        ] = $this->generateCustomerPostData();
+
+        Sanctum::actingAs($user);
+        $this->assertDatabaseCount('customer', 0);
+
+        $response = $this->postJson('/api/customers', [
+            'name' => $customer_name,
+            'email' => $customer_email,
+            'mobile_number' => $customer_mobile_number,
+            'ic_number' => $customer_ic_number,
+            'ic_type_id' => $customer_ic_type_id,
+            'ic_color_id' => $customer_ic_color_id,
+            'ic_expiry_date' => $customer_ic_expiry_date,
+            'country_id' => $customer_country_id,
+            'customer_title_id' => $customer_title_id,
+            'account_category_id' => $customer_account_category_id,
+            'birth_date' => date('Y-m-d', strtotime('-1 year')),
+            'village_id' => $customer_village,
+            'district_id' => $customer_district_id,
+            'mukim_id' => $customer_mukim_id,
+            'postal_code_id' => $customer_postal_code_id,
+            'house_number' => $customer_house_number,
+            'simpang' => $customer_simpang,
+            'street' => $customer_street,
+            'building_name' => $customer_building_name,
+            'block' => $customer_block,
+            'floor' => $customer_floor,
+            'unit' => $customer_unit,
+            'address_type_id' => $address_type_id,
+        ]);
+        $response->assertStatus(422);
     }
 }

@@ -64,7 +64,7 @@ class File extends Model
 
     protected function getFileBulkImsiCount(): array
     {
-        if (! $this->exists || $this->file_category_id !== FileCategory::BULK_IMSI_FILE) {
+        if (! $this->exists || $this->file_category_id !== FileCategory::BULK_IMSI) {
             return $this->bulk_imsi_count = [];
         }
 
