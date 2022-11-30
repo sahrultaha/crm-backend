@@ -15,16 +15,10 @@ class SearchCustomerTest extends CustomDuskTestCase
     public function testSearch()
     {
         $this->browse(function (Browser $browser) {
+            $this->loginAsAdmin($browser);
             $customer = \App\Models\Customer::first();
 
-            $browser->visit(env('FRONTEND_URL').'/login')
-                ->waitForText('Email')
-                ->waitForText('Remember me')
-                ->typeSlowly('#email', env('ADMIN_EMAIL'))
-                ->typeSlowly('#password', env('ADMIN_PASSWORD'))
-                ->press('LOGIN')
-                ->waitForText('Customers Index')
-                ->assertPathIs('/customers')
+            $browser->visit(env('FRONTEND_URL').'/customers')
                 ->typeSlowly('#search', $customer->email)
                 ->press('Search')
                 ->waitForText($customer->name);

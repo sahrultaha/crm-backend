@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Illuminate\Support\Carbon;
 use Laravel\Dusk\Browser;
 
 class CustomDuskTestCase extends DuskTestCase
@@ -23,27 +24,29 @@ class CustomDuskTestCase extends DuskTestCase
             ->visit(env('FRONTEND_URL').'/login')
             ->waitForText('Email')
             ->waitForText('Remember me')
-            ->typeSlowly('#email', env('ADMIN_EMAIL'))
-            ->typeSlowly('#password', env('ADMIN_PASSWORD'))
+            ->type('#email', env('ADMIN_EMAIL'))
+            ->type('#password', env('ADMIN_PASSWORD'))
             ->press('LOGIN')
+            ->pause(500)
             ->waitForText('Customers Index')
-            ->assertPathIs('/customers');
+            ->assertPathIsNot('/login');
     }
 
     public function createNewCustomer(Browser $browser, $ic_number = '01987651'): void
     {
         $today = now()->subYears(13);
-        $new_expiry_date = now()->addYears(5);
+        $ic_expiry_date = now()->addYears(5);
 
         $browser
             ->visit(env('FRONTEND_URL').'/customers/create')
             ->waitForText('Please enter ic details.')
             ->typeSlowly('#icNumber', $ic_number)
             ->select('#icTypeId', '1')
-            ->select('#icColorId', '1')
-            ->keys('#icExpiryDate', $new_expiry_date->day)
-            ->keys('#icExpiryDate', $new_expiry_date->month)
-            ->keys('#icExpiryDate', $new_expiry_date->year)
+            ->select('#icColorId', '1');
+
+        $this->setAntDesignDatePicker($browser, '#icExpiryDate', $ic_expiry_date);
+
+        $browser
             ->waitForText('CREATE')
             ->typeSlowly('#name', 'Lorem')
             ->select('#countryId', '1')
@@ -90,5 +93,32 @@ class CustomDuskTestCase extends DuskTestCase
             ->press('CREATE')
             ->waitForText('Create New IMSI')
             ->assertPathIs('/imsi');
+    }
+
+    public function setAntDesignDatePicker(Browser $browser, string $selector, Carbon $date): void
+    {
+        $year_month_day_string = $date->year.'-'.$date->month.'-'.$date->day;
+        $pause_value_in_ms = 100;
+
+        $browser
+            ->click($selector)
+            ->pause($pause_value_in_ms)
+            ->click('.ant-picker-year-btn')
+            ->pause($pause_value_in_ms)
+            ->click('.ant-picker-cell-in-view[title="'.$date->year.'"]')
+            ->pause($pause_value_in_ms)
+            ->click('.ant-picker-month-btn')
+            ->pause($pause_value_in_ms)
+            ->click('.ant-picker-cell-in-view[title="'.$date->year.'-'.$date->month.'"]')
+            ->pause($pause_value_in_ms)
+            ->click('.ant-picker-cell-in-view[title="'.$year_month_day_string.'"]');
+    }
+
+    public function setAntDesignSelect(Browser $browser, string $selector, string $option_title)
+    {
+        $browser
+            ->click($selector.' .ant-select-selector')
+            ->pause(100)
+            ->click('.ant-select-item-option[title="'.$option_title.'"]');
     }
 }

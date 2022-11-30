@@ -12,7 +12,6 @@ use App\Models\CustomerTitle;
 use App\Models\District;
 use App\Models\File;
 use App\Models\FileCategory;
-//test Address factory
 use App\Models\FileRelationType;
 use App\Models\IcColor;
 use App\Models\IcType;
@@ -21,6 +20,7 @@ use App\Models\PostalCode;
 use App\Models\User;
 use App\Models\Village;
 use Database\Seeders\FileSeeder;
+use Database\Seeders\Skeleton;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -31,10 +31,16 @@ class CustomerControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed([Skeleton::class]);
+    }
+
     private function generateCustomerPostData(): array
     {
-        $ic_type = IcType::factory()->create();
-        $ic_color = IcColor::factory()->create();
+        $ic_type = IcType::find(1); // Personal
+        $ic_color = IcColor::find(1); // Yellow
         $country = Country::factory()->create();
         $customer_title = CustomerTitle::factory()->create();
         $account_category = AccountCategory::factory()->create();
@@ -94,6 +100,18 @@ class CustomerControllerTest extends TestCase
             $customer_floor,
             $customer_unit,
             $address_type_id,
+        ];
+    }
+
+    private function getInvalidPersonalIcValues(): array
+    {
+        return [
+            '60123456', // first two digits cannot be 60
+            '001', // length must be 8
+            '3098218717210', // length must be 8
+            '01abcdef', // no alphabets
+            '50-876213', // no dashes
+            '30 76543', // no spaces
         ];
     }
 
@@ -181,6 +199,139 @@ class CustomerControllerTest extends TestCase
         $this->assertEquals($customer->customer_title_id, $customer_title_id);
         $this->assertEquals($customer->account_category_id, $customer_account_category_id);
         $this->assertEquals($customer->birth_date, $customer_birth_date);
+    }
+
+    public function test_users_cannot_create_new_customer_with_invalid_ics()
+    {
+        $user = User::factory()->create();
+
+        [
+            $customer_name,
+            $customer_email,
+            $customer_mobile_number,
+            $customer_ic_number,
+            $customer_ic_type_id,
+            $customer_ic_color_id,
+            $customer_ic_expiry_date,
+            $customer_country_id,
+            $customer_title_id,
+            $customer_account_category_id,
+            $customer_birth_date,
+            $customer_village,
+            $village,
+            $customer_mukim_id,
+            $customer_district_id,
+            $customer_postal_code_id,
+            $customer_house_number,
+            $customer_simpang,
+            $customer_street,
+            $customer_building_name,
+            $customer_block,
+            $customer_floor,
+            $customer_unit,
+            $address_type_id,
+        ] = $this->generateCustomerPostData();
+
+        Sanctum::actingAs($user);
+        $this->assertDatabaseCount('customer', 0);
+
+        foreach ($this->getInvalidPersonalIcValues() as $ic) {
+            $response = $this->postJson('/api/customers', [
+                'name' => $customer_name,
+                'email' => $customer_email,
+                'mobile_number' => $customer_mobile_number,
+                'ic_number' => $ic,
+                'ic_type_id' => $customer_ic_type_id,
+                'ic_color_id' => $customer_ic_color_id,
+                'ic_expiry_date' => $customer_ic_expiry_date,
+                'country_id' => $customer_country_id,
+                'customer_title_id' => $customer_title_id,
+                'account_category_id' => $customer_account_category_id,
+                'birth_date' => $customer_birth_date,
+                'village_id' => $customer_village,
+                'district_id' => $customer_district_id,
+                'mukim_id' => $customer_mukim_id,
+                'postal_code_id' => $customer_postal_code_id,
+                'house_number' => $customer_house_number,
+                'simpang' => $customer_simpang,
+                'street' => $customer_street,
+                'building_name' => $customer_building_name,
+                'block' => $customer_block,
+                'floor' => $customer_floor,
+                'unit' => $customer_unit,
+                'address_type_id' => $address_type_id,
+            ]);
+
+            $response->assertStatus(422)
+                ->assertJsonValidationErrorFor('ic_number');
+            $this->assertDatabaseCount('customer', 0);
+        }
+    }
+
+    public function test_users_can_create_customer_without_following_strict_ic_rules_when_using_non_personal_ic_type()
+    {
+        $user = User::factory()->create();
+
+        [
+            $customer_name,
+            $customer_email,
+            $customer_mobile_number,
+            $customer_ic_number,
+            $customer_ic_type_id,
+            $customer_ic_color_id,
+            $customer_ic_expiry_date,
+            $customer_country_id,
+            $customer_title_id,
+            $customer_account_category_id,
+            $customer_birth_date,
+            $customer_village,
+            $village,
+            $customer_mukim_id,
+            $customer_district_id,
+            $customer_postal_code_id,
+            $customer_house_number,
+            $customer_simpang,
+            $customer_street,
+            $customer_building_name,
+            $customer_block,
+            $customer_floor,
+            $customer_unit,
+            $address_type_id,
+        ] = $this->generateCustomerPostData();
+
+        Sanctum::actingAs($user);
+        $this->assertDatabaseCount('customer', 0);
+
+        foreach ($this->getInvalidPersonalIcValues() as $ic) {
+            $response = $this->postJson('/api/customers', [
+                'name' => $customer_name,
+                'email' => $customer_email,
+                'mobile_number' => $customer_mobile_number,
+                'ic_number' => $ic,
+                'ic_type_id' => 2, // Company
+                'ic_color_id' => $customer_ic_color_id,
+                'ic_expiry_date' => $customer_ic_expiry_date,
+                'country_id' => $customer_country_id,
+                'customer_title_id' => $customer_title_id,
+                'account_category_id' => $customer_account_category_id,
+                'birth_date' => $customer_birth_date,
+                'village_id' => $customer_village,
+                'district_id' => $customer_district_id,
+                'mukim_id' => $customer_mukim_id,
+                'postal_code_id' => $customer_postal_code_id,
+                'house_number' => $customer_house_number,
+                'simpang' => $customer_simpang,
+                'street' => $customer_street,
+                'building_name' => $customer_building_name,
+                'block' => $customer_block,
+                'floor' => $customer_floor,
+                'unit' => $customer_unit,
+                'address_type_id' => $address_type_id,
+            ]);
+
+            $response->assertCreated();
+        }
+        $this->assertDatabaseCount('customer', 6);
     }
 
     public function test_users_can_create_new_customer_without_email()
@@ -982,6 +1133,7 @@ class CustomerControllerTest extends TestCase
 
         $this->assertDatabaseCount('customer', 1);
         $this->assertDatabaseCount('customer_address', 1);
+        $this->assertDatabaseCount('address', 1);
 
         $customer = Customer::first();
         $customer_address = CustomerAddress::first();
@@ -1046,8 +1198,8 @@ class CustomerControllerTest extends TestCase
             ]);
 
         $new_address = CustomerAddress::with('address')
-        ->where('customer_id', $old_customer_id)
-        ->first();
+            ->where('customer_id', $old_customer_id)
+            ->first();
 
         $update_response->assertStatus(201);
 
@@ -1060,11 +1212,13 @@ class CustomerControllerTest extends TestCase
         $this->assertEquals($new_customer->ic_type_id, $new_customer_ic_type_id);
         $this->assertEquals($new_customer->ic_color_id, $new_customer_ic_color_id);
 
-        $this->assertEquals(date('d-M-Y', strtotime($new_customer->ic_expiry_date)), $new_customer_ic_expiry_date->format('d-M-Y'));
+        $this->assertEquals(date('d-M-Y', strtotime($new_customer->ic_expiry_date)),
+            $new_customer_ic_expiry_date->format('d-M-Y'));
         $this->assertEquals($new_customer->country_id, $new_customer_country_id);
         $this->assertEquals($new_customer->customer_title_id, $new_customer_title_id);
         $this->assertEquals($new_customer->account_category_id, $new_customer_account_category_id);
-        $this->assertEquals(date('d-M-Y', strtotime($new_customer->birth_date)), $new_customer_birth_date);
+        $this->assertEquals(date('d-M-Y', strtotime($new_customer->birth_date)),
+            $new_customer_birth_date);
         $this->assertEquals($new_address->address->village_id, $new_customer_village_id);
         $this->assertEquals($new_address->address->district_id, $new_customer_district_id);
         $this->assertEquals($new_address->address->mukim_id, $new_customer_mukim_id);
@@ -1076,7 +1230,6 @@ class CustomerControllerTest extends TestCase
         $this->assertEquals($new_address->address->block, $new_customer_block);
         $this->assertEquals($new_address->address->floor, $new_customer_floor);
         $this->assertEquals($new_address->address->unit, $new_customer_unit);
-        $this->assertEquals($old_address_id, $address_type_id);
     }
 
     public function test_users_cannot_create_new_customer_with_invalid_ic_expiry_date()

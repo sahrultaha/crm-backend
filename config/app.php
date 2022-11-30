@@ -198,6 +198,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ProcessBulkFileImsiProvider::class,
         App\Providers\BulkFileInsertionProvider::class,
+        App\Providers\BulkFileImsiHandlerProvider::class,
     ],
 
     /*

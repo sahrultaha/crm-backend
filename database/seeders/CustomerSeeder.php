@@ -21,7 +21,7 @@ class CustomerSeeder extends Seeder
                 'email' => fake()->unique()->safeEmail(),
                 'country_code' => '673',
                 'mobile_number' => fake()->numberBetween(7000000, 8000000),
-                'ic_number' => fake()->randomNumber(8),
+                'ic_number' => fake()->numberBetween(51000000, 51999999),
                 'ic_type_id' => 1,
                 'ic_color_id' => 1,
                 'ic_expiry_date' => now()->addYears(5),

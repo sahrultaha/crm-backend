@@ -3,10 +3,11 @@
 namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Log;
 
 class FileBulkImsiRepository extends BaseRepository
 {
+    use TraitSelectUnprocessedRows;
+
     protected $imsi;
 
     public function __construct()
@@ -21,34 +22,6 @@ class FileBulkImsiRepository extends BaseRepository
             ->where('file_id', $file_id)
             ->where('row_status_id', \App\Models\RowStatus::NEW)
             ->count();
-    }
-
-    /**
-     * return collection of
-     *
-     * @param  int  $file_id
-     * @return \Generator
-     */
-    public function getUnprocessedRows(int $file_id)
-    {
-        $id = 0;
-        for (; ;) {
-            /* @var $rows Collection */
-            $rows = $this->model->query()
-                ->where('file_id', $file_id)
-                ->where('id', '>', $id)
-                ->take(10)
-                ->orderBy('id')
-                ->get();
-            if ($rows->isEmpty()) {
-                break;
-            }
-
-            $id = $rows->last()->id;
-            Log::debug(__METHOD__."found {$rows->count()} row(s)");
-
-            yield $rows;
-        }
     }
 
     public function checkExistingsImsi(array $imsis): Collection

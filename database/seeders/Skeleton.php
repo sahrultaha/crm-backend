@@ -42,7 +42,7 @@ class Skeleton extends Seeder
             ],
             [
                 'id' => 3,
-                'name' => 'Purple',
+                'name' => 'Red',
             ],
         ]);
         $this->alterSequence('ic_color');

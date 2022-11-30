@@ -14,7 +14,9 @@ class FileCategory extends Model
 
     public const CUSTOMER_IC_BACK = 2;
 
-    public const BULK_IMSI_FILE = 3;
+    public const BULK_IMSI = 3;
+
+    public const BULK_STARTER_PACK = 4;
 
     public $timestamps = false;
 
