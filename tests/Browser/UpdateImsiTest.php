@@ -38,7 +38,8 @@ class UpdateImsiTest extends CustomDuskTestCase
                 ->type('#imsi', '')
                 ->typeSlowly('#imsi', $new_imsi_number)
                 ->press('UPDATE')
-                ->waitForText('Create New IMSI')
+                ->pause(1000)
+                ->waitForText('Create')
                 ->assertPathIs('/imsi');
 
             $browser
@@ -53,5 +54,23 @@ class UpdateImsiTest extends CustomDuskTestCase
                 ->assertValue('#puk1', '987654321')
                 ->assertValue('#puk2', '987654322');
         });
+    }
+
+    public function createNewImsi(Browser $browser): void
+    {
+        $browser
+            ->visit(env('FRONTEND_URL').'/imsi/create')
+            ->waitForText('Create Imsi')
+            ->waitForText('CREATE')
+            ->typeSlowly('#imsi', '1234567890')
+            ->select('#imsiStatusId', '1')
+            ->select('#imsiTypeId', '1')
+            ->typeSlowly('#pin', '1234')
+            ->typeSlowly('#puk1', '987654321')
+            ->typeSlowly('#puk2', '987654322')
+            ->press('CREATE')
+            ->pause(500)
+            ->waitForText('Create')
+            ->assertPathIs('/imsi');
     }
 }

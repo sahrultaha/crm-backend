@@ -24,6 +24,19 @@ class FileBulkImsiRepository extends BaseRepository
             ->count();
     }
 
+    /**
+     * @param  int  $file_id
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function selectByFileIdGroupByRowStatusID(int $file_id)
+    {
+        return $this->model->newQuery()
+            ->selectRaw('row_status_id, count(row_status_id) as count_by_row_status_id')
+            ->where('file_id', $file_id)
+            ->groupBy('row_status_id')
+            ->get();
+    }
+
     public function checkExistingsImsi(array $imsis): Collection
     {
         return $this->imsi->select(['imsi' => $imsis]);
