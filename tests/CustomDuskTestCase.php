@@ -91,7 +91,7 @@ class CustomDuskTestCase extends DuskTestCase
             ->typeSlowly('#puk1', '987654321')
             ->typeSlowly('#puk2', '987654322')
             ->press('CREATE')
-            ->waitForText('Create New IMSI')
+            ->pause(1000)
             ->assertPathIs('/imsi');
     }
 
