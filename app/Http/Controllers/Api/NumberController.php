@@ -38,11 +38,9 @@ class NumberController extends Controller
         ], 201);
     }
 
-    public function destroy(Number $number): JsonResponse
+    public function destroy($id): JsonResponse
     {
-        $id = $number->id;
-
-        $number->delete();
+        Number::destroy($id);
 
         return response()->json([
             'id' => $id,

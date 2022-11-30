@@ -99,4 +99,29 @@ class NumberControllerTest extends TestCase
                 ],
             ]);
     }
+
+    public function test_users_can_delete_numbers()
+    {
+        $this->seed(NumberTypeStatusCategorySeeder::class);
+        $number_type = NumberType::first();
+        $number_status = NumberStatus::first();
+        $number_category = NumberCategory::first();
+        $created_at = now()->subYear(1);
+        $user = User::factory()->create();
+        $number = Number::factory()->create([
+            'number' => 8000001,
+            'number_type_id' => $number_type->id,
+            'number_status_id' => $number_status->id,
+            'number_category_id' => $number_category->id,
+            'created_at' => $created_at,
+        ]);
+        $id = $number->id;
+        $this->assertFalse($number->fresh()->trashed());
+        Sanctum::actingAs($user);
+        $response = $this->deleteJson("/api/msisdn/{$id}");
+        $response->assertOk();
+        $this->assertSoftDeleted($number);
+        $this->assertDatabaseCount('number', 1);
+        $this->assertTrue($number->fresh()->trashed());
+    }
 }
