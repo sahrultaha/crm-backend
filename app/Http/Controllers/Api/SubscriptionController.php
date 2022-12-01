@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\SubscriptionStatusUpdateRequest;
 use App\Http\Requests\Api\SubscriptionStoreRequest;
 use App\Models\Subscription;
 use App\Models\SubscriptionNumber;
@@ -70,9 +71,11 @@ class SubscriptionController extends Controller
         return $numbers;
     }
 
-    public function updateSubscriptionStatus(Request $request)
+    public function update(Subscription $subscription, SubscriptionStatusUpdateRequest $request)
     {
-        // return $request['subscription_status_id'];
-        return $this->repo->updateSubStatus($request['id'], $request['subscription_status_id']);
+        $validated = $request->validated();
+        $response = $this->repo->updateSubscriptionStatus($subscription, $validated);
+
+        return response()->json($response->toArray());
     }
 }

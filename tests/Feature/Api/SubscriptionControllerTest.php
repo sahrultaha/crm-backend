@@ -154,8 +154,7 @@ class SubscriptionControllerTest extends TestCase
         $this->assertDatabaseCount('subscription', 1);
         $this->assertDatabaseCount('subscription_number', 1);
 
-        $response = $this->postJson('/api/subscriptions/status/update', [
-            'id' => 1,
+        $response = $this->postJson('/api/subscriptions/1', [
             'subscription_status_id' => 2,
             '_method' => 'PATCH',
         ])

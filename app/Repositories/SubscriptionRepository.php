@@ -63,10 +63,9 @@ class SubscriptionRepository extends BaseRepository
         );
     }
 
-    public function updateSubStatus($subscription_id, $subscription_status_id)
+    public function updateSubscriptionStatus(Subscription $subscription, array $validated)
     {
-        $subscription = Subscription::find($subscription_id);
-        $subscription->subscription_status_id = $subscription_status_id;
+        $subscription->subscription_status_id = $validated['subscription_status_id'];
         $subscription->save();
 
         return $subscription;
