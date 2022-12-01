@@ -78,5 +78,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::controller(NumberController::class)->group(function () {
         Route::get('/msisdn', 'index');
         Route::post('/msisdn', 'store');
+        Route::delete('/msisdn/{msisdn}', 'destroy');
     });
 });

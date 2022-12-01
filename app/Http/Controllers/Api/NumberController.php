@@ -39,4 +39,13 @@ class NumberController extends Controller
             'id' => $number->id,
         ], 201);
     }
+
+    public function destroy($id): JsonResponse
+    {
+        Number::destroy($id);
+
+        return response()->json([
+            'id' => $id,
+        ]);
+    }
 }
