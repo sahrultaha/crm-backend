@@ -98,7 +98,6 @@ class CustomDuskTestCase extends DuskTestCase
 
     public function setAntDesignDatePicker(Browser $browser, string $selector, Carbon $date): void
     {
-        $year_month_day_string = $date->year.'-'.$date->month.'-'.$date->day;
         $pause_value_in_ms = 100;
 
         $browser
@@ -112,7 +111,7 @@ class CustomDuskTestCase extends DuskTestCase
             ->pause($pause_value_in_ms)
             ->click('.ant-picker-cell-in-view[title="'.$date->year.'-'.$date->month.'"]')
             ->pause($pause_value_in_ms)
-            ->click('.ant-picker-cell-in-view[title="'.$year_month_day_string.'"]');
+            ->click('.ant-picker-cell-in-view[title="'.$date->toDateString().'"]');
     }
 
     public function setAntDesignSelect(Browser $browser, string $selector, string $option_title)
