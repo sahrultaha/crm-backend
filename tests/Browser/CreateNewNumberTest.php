@@ -29,6 +29,7 @@ class CreateNewNumberTest extends CustomDuskTestCase
                 ->select('#numberCategoryId', '1')
                 ->waitForText('CREATE')
                 ->press('CREATE')
+                ->pause(1000)
                 ->waitForText('MSISDN');
         });
         $this->assertDatabaseCount('number', 1);

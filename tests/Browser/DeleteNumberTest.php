@@ -36,6 +36,7 @@ class DeleteNumberTest extends CustomDuskTestCase
             ->acceptDialog()
             ->waitForText('MSISDN')
             ->assertPathIs('/msisdn');
+            sleep(1);
 
             $this->assertSoftDeleted($number);
         });
