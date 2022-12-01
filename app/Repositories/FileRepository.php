@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Models\File;
 use App\Models\FileRelation;
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class FileRepository
@@ -62,5 +64,10 @@ class FileRepository
     public function generateTemporaryUrl(File $file): string
     {
         return Storage::temporaryUrl($file->filepath, now()->addMinutes(30));
+    }
+
+    public function performGetRequest(string $url): Response
+    {
+        return Http::get($url);
     }
 }

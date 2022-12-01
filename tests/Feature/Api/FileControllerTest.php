@@ -14,6 +14,7 @@ use App\Models\User;
 use Database\Seeders\FileSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
@@ -53,6 +54,7 @@ class FileControllerTest extends TestCase
     public function test_users_can_retrieve_file()
     {
         Storage::fake('s3');
+        // Http::fake();
         $this->seed(FileSeeder::class);
         $user = User::factory()->create();
         $file_category = FileCategory::first();
@@ -67,10 +69,7 @@ class FileControllerTest extends TestCase
 
         $new_file = File::first();
         $this->getJson('/api/files/'.$new_file->id)
-            ->assertOk()
-            ->assertJsonStructure([
-                'url',
-            ]);
+            ->assertOk();
     }
 
     public function test_upload_bulk_success()
