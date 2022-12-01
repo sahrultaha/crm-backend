@@ -29,4 +29,19 @@ class Number extends Model
     {
         return $this->has(SubscriptionNumber::class, 'number_id');
     }
+
+    public function numberStatus()
+    {
+        return $this->belongsTo(NumberStatus::class, 'number_status_id');
+    }
+
+    public function numberType()
+    {
+        return $this->belongsTo(NumberType::class, 'number_type_id');
+    }
+
+    public function numberCategory()
+    {
+        return $this->belongsTo(NumberCategory::class, 'number_category_id');
+    }
 }

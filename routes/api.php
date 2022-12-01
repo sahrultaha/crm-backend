@@ -67,7 +67,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::controller(SubscriptionController::class)->group(function () {
         Route::get('/subscriptions', 'index');
         Route::post('/subscriptions', 'store');
+        Route::get('/subscriptions/status', 'subscriptionStatus');
         Route::get('/subscriptions/{customer_id}', 'customerSubscriptions');
+        Route::patch('/subscriptions/status/update', 'updateSubscriptionStatus');
     });
     Route::controller(ProductController::class)->group(function () {
         Route::get('/products', 'index');

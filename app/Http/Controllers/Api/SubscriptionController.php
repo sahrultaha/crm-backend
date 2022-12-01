@@ -54,10 +54,25 @@ class SubscriptionController extends Controller
         ], 201);
     }
 
+    public function subscriptionStatus(): JsonResponse
+    {
+        $subs_status = $this->repo->getSubStatusList();
+
+        return response()->json([
+            'data' => $subs_status,
+        ]);
+    }
+
     public function customerSubscriptions($customer_id)
     {
         $numbers = $this->repo->selectNumbers($customer_id);
 
         return $numbers;
+    }
+
+    public function updateSubscriptionStatus(Request $request)
+    {
+        // return $request['subscription_status_id'];
+        return $this->repo->updateSubStatus($request['id'], $request['subscription_status_id']);
     }
 }
