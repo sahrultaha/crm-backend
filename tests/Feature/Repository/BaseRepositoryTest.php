@@ -45,4 +45,19 @@ class BaseRepositoryTest extends TestCase
         $paginator = $repo->paginate(10, 'desc', 1, [['id' => 1]]);
         $this->assertEquals(1, $paginator->total());
     }
+
+    public function test_paginate_soft_delete()
+    {
+        $this->seed([
+            \Database\Seeders\NumberTypeStatusCategorySeeder::class,
+            \Database\Seeders\NumberSeeder::class,
+        ]);
+
+        $repo = new BaseRepository(new \App\Models\Number());
+        $paginator = $repo->paginate();
+        $total = $paginator->total();
+        $number = \App\Models\Number::first();
+        $repo->delete($number->id);
+        $this->assertEquals($total - 1, $repo->paginate()->total());
+    }
 }

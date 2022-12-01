@@ -72,7 +72,7 @@ class BaseRepository implements RepositoryInterface
         if ($sort !== 'asc' && $sort !== 'desc') {
             $sort = 'desc';
         }
-        $builder = $this->model->newModelQuery();
+        $builder = $this->model->newQuery();
         foreach ($attributes as $attribute) {
             foreach ($attribute as $key => $value) {
                 $builder->where($key, $value);
