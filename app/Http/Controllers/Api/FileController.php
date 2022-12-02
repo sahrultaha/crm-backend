@@ -7,8 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FileStoreRequest;
 use App\Models\File;
 use App\Repositories\FileRepository;
-use Illuminate\Http\Client\Response;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
@@ -31,15 +31,23 @@ class FileController extends Controller
         ], 201);
     }
 
-    public function show(File $file): Response
-    {
-        $url = $this->repository->generateTemporaryUrl($file);
+//    public function show(File $file): Response
+//    {
+//        $url = $this->repository->generateTemporaryUrl($file);
 //        $url_segments = parse_url($url);
 //        $url_segments['host'] = env('APP_SERVICE');
 //        $url_segments['port'] = '80';
 //        $url = sprintf('%s://%s:%s%s?%s', $url_segments['scheme'], $url_segments['host'], $url_segments['port'],
 //            $url_segments['path'], $url_segments['query']);
-        return $this->repository->performGetRequest($url);
+//        return $this->repository->performGetRequest($url);
+//    }
+
+    public function show(File $file): \Symfony\Component\HttpFoundation\Response
+    {
+        $filename = tempnam(sys_get_temp_dir(), 'download___');
+        file_put_contents($filename, Storage::disk('s3')->get($file->filepath));
+
+        return response()->download($filename)->deleteFileAfterSend();
     }
 
     public function update(FileStoreRequest $request): JsonResponse
