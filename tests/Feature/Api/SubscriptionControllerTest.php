@@ -94,4 +94,72 @@ class SubscriptionControllerTest extends TestCase
                 ],
             ]);
     }
+
+    public function test_user_can_fetch_subscription_status_list()
+    {
+        $this->seed([
+            DatabaseSeeder::class,
+            NumberSeeder::class,
+            ImsiSeeder::class,
+            ProductSeeder::class,
+            PackSeeder::class,
+        ]);
+
+        Sanctum::actingAs(User::factory()->create());
+        $response = $this->getJson('/api/subscriptions/status')
+        ->assertOk()
+        ->assertStatus(200)
+        ->assertJsonStructure([
+            'data' => [
+                '*' => [
+                    'id',
+                    'name',
+                ],
+            ],
+        ]);
+    }
+
+    public function test_user_can_update_subscription_status()
+    {
+        $this->seed([
+            DatabaseSeeder::class,
+            NumberSeeder::class,
+            ImsiSeeder::class,
+            ProductSeeder::class,
+            PackSeeder::class,
+        ]);
+        Sanctum::actingAs(User::factory()->create());
+        $user = User::factory()->create();
+        $customer = Customer::factory()->create();
+        $sub_status = SubscriptionStatus::first();
+        $sub_type = SubscriptionType::first();
+        $pack = Pack::first();
+
+        $this->assertDatabaseCount('subscription', 0);
+        $this->assertDatabaseCount('subscription_number', 0);
+
+        $today = now();
+
+        Sanctum::actingAs($user);
+        $this->postJson('/api/subscriptions', [
+            'customer_id' => $customer->id,
+            'registration_date' => $today->subHours(2),
+            'subscription_status_id' => $sub_status->id,
+            'subscription_type_id' => $sub_type->id,
+            'number_id' => $pack->number_id,
+            'imsi_id' => $pack->imsi_id,
+            'activation_date' => $today->subHour(),
+        ])->assertCreated();
+
+        $this->assertDatabaseCount('subscription', 1);
+        $this->assertDatabaseCount('subscription_number', 1);
+
+        $response = $this->postJson('/api/subscriptions/1', [
+            'subscription_status_id' => 2,
+            '_method' => 'PATCH',
+        ])
+        ->assertOk()
+        ->assertStatus(200);
+        $this->assertEquals($response['subscription_status_id'], 2);
+    }
 }

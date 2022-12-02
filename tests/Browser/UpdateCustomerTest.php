@@ -2,7 +2,6 @@
 
 namespace Tests\Browser;
 
-use App\Models\Customer;
 use Laravel\Dusk\Browser;
 use Tests\CustomDuskTestCase;
 
@@ -16,11 +15,10 @@ class UpdateCustomerTest extends CustomDuskTestCase
     public function test_can_update_existing_customer(): void
     {
         $this->browse(function (Browser $browser) {
-            $today = now()->addYears(7);
-            $birthday = now()->subYears(12);
+            $expiry_date = now()->addYears(7);
+            $new_birthday = now()->subYears(21);
             $this->loginAsAdmin($browser);
             $this->createNewCustomer($browser, '00000001');
-            $customer = Customer::find(1);
             $browser
                 ->waitForText('EDIT')
                 ->press('EDIT');
@@ -43,26 +41,25 @@ class UpdateCustomerTest extends CustomDuskTestCase
                 ->typeSlowly('#name', $new_customer_name)
                 ->typeSlowly('#icNumber', $new_customer_ic_number)
                 ->select('#icTypeId', '1')
-                ->keys('#icExpiryDate', $today->day)
-                ->keys('#icExpiryDate', $today->month)
-                ->keys('#icExpiryDate', $today->year)
+                ->keys('#icExpiryDate', $expiry_date->format('d'))
+                ->keys('#icExpiryDate', $expiry_date->format('m'))
+                ->keys('#icExpiryDate', $expiry_date->format('Y'))
                 ->select('#countryId', '2')
                 ->select('#accountCategoryId', '2')
-                ->keys('#birthDate', $birthday->day)
-                ->keys('#birthDate', $birthday->month)
-                ->keys('#birthDate', $birthday->year)
-                ->keys('#house_number', $new_customer_house_number)
-                ->keys('#street', $new_customer_street)
-                ->keys('#building_name', $new_customer_building_name)
-                ->keys('#block', $new_customer_block)
-                ->keys('#floor', $new_customer_floor)
-                ->keys('#unit', $new_customer_unit)
+                ->keys('#birthDate', $new_birthday->format('d'))
+                ->keys('#birthDate', $new_birthday->format('m'))
+                ->keys('#birthDate', $new_birthday->format('Y'))
+                ->typeSlowly('#house_number', $new_customer_house_number)
+                ->typeSlowly('#street', $new_customer_street)
+                ->typeSlowly('#building_name', $new_customer_building_name)
+                ->typeSlowly('#block', $new_customer_block)
+                ->typeSlowly('#floor', $new_customer_floor)
+                ->typeSlowly('#unit', $new_customer_unit)
                 ->attach('#icFront', base_path('tests/Browser/photos/600x300.png'))
                 ->attach('#icBack', base_path('tests/Browser/photos/600x300.png'))
                 ->pause(1000)
                 ->press('SAVE CHANGES')
                 ->assertDialogOpened('Are you sure to update customer?')
-                ->pause(1000)
                 ->acceptDialog()
                 ->waitForText('Customer with')
                 ->assertPathIs('/customers/*');
@@ -127,7 +124,8 @@ class UpdateCustomerTest extends CustomDuskTestCase
     public function test_user_cannot_update_when_enter_birthdate_12_years_below(): void
     {
         $this->browse(function (Browser $browser) {
-            $new_expiry_date = now();
+            $birthday = now();
+            $day = date('d');
             $this->loginAsAdmin($browser);
             $this->createNewCustomer($browser, '30123241');
             $browser
@@ -136,10 +134,9 @@ class UpdateCustomerTest extends CustomDuskTestCase
                 ->press('EDIT')
                 ->waitForText('Update Customer Details')
                 ->pause(1000)
-                ->keys('#birthDate', $new_expiry_date->day)
-                ->keys('#birthDate', $new_expiry_date->month)
-                ->keys('#birthDate', $new_expiry_date->year)
-                ->waitForDialog(1)
+                ->keys('#birthDate', $birthday->format('d'))
+                ->keys('#birthDate', $birthday->format('m'))
+                ->keys('#birthDate', $birthday->format('Y'))
                 ->assertDialogOpened('Age must be 12 years old and above');
         });
     }
