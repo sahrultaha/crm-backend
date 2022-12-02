@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\SubscriptionStatusUpdateRequest;
 use App\Http\Requests\Api\SubscriptionStoreRequest;
 use App\Models\Subscription;
 use App\Models\SubscriptionNumber;
@@ -54,10 +55,28 @@ class SubscriptionController extends Controller
         ], 201);
     }
 
+    public function subscriptionStatus(): JsonResponse
+    {
+        $subs_status = $this->repo->getSubStatusList();
+
+        return response()->json([
+            'data' => $subs_status,
+        ]);
+    }
+
     public function customerSubscriptions($customer_id)
     {
         $numbers = $this->repo->selectNumbers($customer_id);
 
         return $numbers;
+    }
+
+    public function update(Subscription $subscription, SubscriptionStatusUpdateRequest $request)
+    {
+        $validated = $request->validated();
+
+        $this->repo->update($subscription->id, $validated);
+
+        return response()->json($this->repo->find($subscription->id));
     }
 }
