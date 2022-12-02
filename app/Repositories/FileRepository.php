@@ -58,9 +58,4 @@ class FileRepository
 
         return $file_model;
     }
-
-    public function generateTemporaryUrl(File $file): string
-    {
-        return Storage::temporaryUrl($file->filepath, now()->addMinutes(30));
-    }
 }
