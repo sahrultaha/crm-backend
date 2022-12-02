@@ -59,8 +59,6 @@ class FileControllerTest extends TestCase
 
         $fake_content = 'Hello world!';
         $fake_file = UploadedFile::fake()->createWithContent('image.jpg', $fake_content);
-        $fake_file_size = filesize($fake_file);
-        $fake_file_hash = hash_file('sha1', $fake_file);
 
         Sanctum::actingAs($user);
         $this->postJson('/api/files', [
