@@ -62,12 +62,4 @@ class SubscriptionRepository extends BaseRepository
             $number
         );
     }
-
-    public function updateSubscriptionStatus(Subscription $subscription, array $validated)
-    {
-        $subscription->subscription_status_id = $validated['subscription_status_id'];
-        $subscription->save();
-
-        return $subscription;
-    }
 }
