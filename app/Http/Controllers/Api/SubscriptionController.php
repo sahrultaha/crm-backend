@@ -74,7 +74,7 @@ class SubscriptionController extends Controller
     public function update(Subscription $subscription, SubscriptionStatusUpdateRequest $request)
     {
         $validated = $request->validated();
-       
+
         $this->repo->update($subscription->id, $validated);
 
         return response()->json($this->repo->find($subscription->id));
